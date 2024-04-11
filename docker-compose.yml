@@ -1,0 +1,10 @@
+services:
+  node:
+    build: .
+    container_name: hlm_fe_node
+    tty: true
+    ports:
+      - 46500:${APP_PORT}
+    volumes:
+      - ./:/work
+      - /work/node_modules
