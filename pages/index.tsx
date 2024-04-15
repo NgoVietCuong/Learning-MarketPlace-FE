@@ -19,7 +19,7 @@ export default function Home() {
               <Text className="text-white-primary">
                 HoaLearn is a great platform that will teach you in a more interesting way
               </Text>
-              <Link href="/login">
+              <Link href="/sign-up">
                 <Text
                   size="sm"
                   as="p"

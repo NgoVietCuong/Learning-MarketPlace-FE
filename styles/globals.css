@@ -65,15 +65,7 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
-}
 
-@layer base {
-  /* * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  } */
   * {
     font-family: 'Poppins', sans-serif;
   }
@@ -97,5 +89,46 @@
   ::-webkit-scrollbar-thumb {
     background: #6b6b6b;
     border-radius: 10px;
+  }
+
+  [type="text"],
+  input:where(:not([type])),
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
+  [multiple],
+  textarea,
+  select {
+    appearance: none;
+    background-color: transparent;
+    border-color: unset;
+    border-width: 0;
+    border-radius: unset;
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+  }
+
+  [type="text"]:focus,
+  [type="email"]:focus,
+  [type="url"]:focus,
+  [type="password"]:focus,
+  [type="number"]:focus,
+  [type="date"]:focus,
+  [type="search"]:focus,
+  [type="checkbox"]:focus,
+  [type="radio"]:focus,
+  textarea:focus,
+  select:focus {
+    border: none;
+    outline: none;
   }
 }

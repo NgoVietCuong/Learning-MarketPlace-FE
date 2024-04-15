@@ -5,7 +5,7 @@ import { Heading } from '@/components/ui/heading';
 
 const NavBar = () => {
   return (
-    <header className="w-full">
+    <header className="w-full bg-white-primary shadow-lg">
       <div className="w-[85%] flex mx-auto items-center justify-between gap-5 px-[150px] my-[10px]">
         <div className="flex items-center justify-center gap-10  z-50">
           <div className="flex items-center justify-center md:w-full">

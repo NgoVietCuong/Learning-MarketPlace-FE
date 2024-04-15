@@ -4,35 +4,49 @@ import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import { FiMail, FiLock } from "react-icons/fi";
-import { FaEyeSlash } from "react-icons/fa"; 
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
+import { FiMail, FiLock } from 'react-icons/fi';
+import { FaEyeSlash } from 'react-icons/fa';
 
-const Login = () => {
+const VerifySignUp = () => {
   return (
     <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
       <div className="w-full h-full flex flex-col items-center justify-center">
         <div className="w-[25%] bg-white-primary rounded-xl flex flex-col items-center justify-center shadow-lg">
           <div className="w-[75%] flex flex-col items-center gap-4 py-10">
-            <Heading className="mb-[12px] text-gray-700">Login</Heading>
+            <Heading className="mb-[12px] text-gray-700">Veriy Your Account</Heading>
             <div className="flex flex-col items-center gap-3">
-              <Input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                className="mb-[5px] pr-[100px]"
-                prefix={<FiMail size={20} color="#6b7280" />}
-              />
-              <Input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                className="mb-[5px] pr-[100px]"
-                prefix={<FiLock size={20} color="#6b7280" />}
-                suffix={<FaEyeSlash size={18} color="#6b7280" />}
-              />
-              <Button variant={"ghost"} className='mt-[-10px] p-0 self-end font-medium text-teal-500'>Forgot password?</Button>
+              <InputOTP maxLength={6}>
+                <InputOTPGroup>
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  <InputOTPSlot index={2} />
+                  <InputOTPSlot index={3} />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup>
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5} />
+                </InputOTPGroup>
+              </InputOTP>
+              <Button
+                variant={'ghost'}
+                className="mt-[-10px] p-0 self-end font-medium text-teal-500"
+              >
+                Forgot password?
+              </Button>
             </div>
-            <Button className="w-full text-white-primary bg-teal-secondary active:scale-[98%]">Login</Button>
+            <Button className="w-full text-white-primary bg-teal-secondary active:scale-[98%]">
+              Login
+            </Button>
 
             <div className="w-full flex items-center">
               <div className="flex-1 border-t-2 border-gray-200"></div>
@@ -56,4 +70,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default VerifySignUp;

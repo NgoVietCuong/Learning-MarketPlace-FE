@@ -62,7 +62,8 @@ const config = {
           "secondary": "#2f327d",
         },
         gray: {
-          "primary": "#696983"
+          "primary": "#696983",
+          "border": "#b7b8bf"
         },
         light_blue: {
           "primary": "#28b9e6",
