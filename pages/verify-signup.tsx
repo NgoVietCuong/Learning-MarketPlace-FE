@@ -17,52 +17,37 @@ const VerifySignUp = () => {
   return (
     <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
       <div className="w-full h-full flex flex-col items-center justify-center">
-        <div className="w-[25%] bg-white-primary rounded-xl flex flex-col items-center justify-center shadow-lg">
-          <div className="w-[75%] flex flex-col items-center gap-4 py-10">
-            <Heading className="mb-[12px] text-gray-700">Veriy Your Account</Heading>
+        <div className="w-[24%] bg-white-primary rounded-xl flex flex-col items-center justify-center shadow-lg">
+          <div className="w-[75%] flex flex-col items-center gap-3 py-10">
+            <Heading className="text-gray-700">Verify Your Email</Heading>
+            <Text size="xs" as="p" className="text-center mb-[12px]">Enter the verification code sent to hangongon2000@gmail.com</Text>
+            <div className="w-full flex justify-between items-center">
+              <Text size="xs" as="p" className="font-medium">Verify code</Text>
+              <Button
+                variant={'ghost'}
+                className="mt-[-10px] p-0 self-end text-xs text-teal-500"
+              >
+                Resend? 59s
+              </Button>
+            </div>
             <div className="flex flex-col items-center gap-3">
               <InputOTP maxLength={6}>
                 <InputOTPGroup>
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
-                </InputOTPGroup>
-                <InputOTPSeparator />
-                <InputOTPGroup>
                   <InputOTPSlot index={2} />
-                  <InputOTPSlot index={3} />
                 </InputOTPGroup>
                 <InputOTPSeparator />
                 <InputOTPGroup>
+                  <InputOTPSlot index={3} />
                   <InputOTPSlot index={4} />
                   <InputOTPSlot index={5} />
                 </InputOTPGroup>
               </InputOTP>
-              <Button
-                variant={'ghost'}
-                className="mt-[-10px] p-0 self-end font-medium text-teal-500"
-              >
-                Forgot password?
-              </Button>
             </div>
             <Button className="w-full text-white-primary bg-teal-secondary active:scale-[98%]">
-              Login
+              Verify
             </Button>
-
-            <div className="w-full flex items-center">
-              <div className="flex-1 border-t-2 border-gray-200"></div>
-              <span className="text-sm px-3 text-gray-primary bg-white">or Login with</span>
-              <div className="flex-1 border-t-2 border-gray-200"></div>
-            </div>
-
-            <Button className="border-gray-100 active:scale-95">
-              <Img src="images/img_google.svg" className="w-[24px]" />
-            </Button>
-            <Text size="xs" as="p" className="text-center mt-[10px]">
-              Not a member yet?{' '}
-              <Link href="/login" className="font-medium text-teal-500">
-                Sign up for free
-              </Link>
-            </Text>
           </div>
         </div>
       </div>

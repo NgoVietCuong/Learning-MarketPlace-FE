@@ -14,7 +14,7 @@ const Login = () => {
         <div className="w-[25%] bg-white-primary rounded-xl flex flex-col items-center justify-center shadow-lg">
           <div className="w-[75%] flex flex-col items-center gap-4 py-10">
             <Heading className="mb-[12px] text-gray-700">Login</Heading>
-            <div className="flex flex-col items-center gap-3">
+            <div className="w-full flex flex-col items-center gap-3">
               <Input
                 type="email"
                 id="email"
@@ -30,7 +30,7 @@ const Login = () => {
                 prefix={<FiLock size={20} color="#6b7280" />}
                 suffix={<FaEyeSlash size={18} color="#6b7280" />}
               />
-              <Button variant={"ghost"} className='mt-[-10px] p-0 self-end font-medium text-teal-500'>Forgot password?</Button>
+              <Button variant={"ghost"} className='mt-[-10px] p-0 self-end text-xs font-medium text-teal-500'>Forgot password?</Button>
             </div>
             <Button className="w-full text-white-primary bg-teal-secondary active:scale-[98%]">Login</Button>
 

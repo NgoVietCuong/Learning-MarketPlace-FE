@@ -14,7 +14,7 @@ const SignUp = () => {
         <div className="w-[25%] bg-white-primary rounded-xl flex flex-col items-center justify-center shadow-lg">
           <div className="w-[75%] flex flex-col items-center gap-4 py-10">
             <Heading className="mb-[12px] text-gray-700">Sign up</Heading>
-            <div className="flex flex-col items-center gap-3">
+            <div className="w-full flex flex-col items-center gap-3">
               <Input
                 type="text"
                 id="username"
