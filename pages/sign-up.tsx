@@ -38,7 +38,7 @@ const SignUp = () => {
               />
               <Input
                 type="password"
-                id="confirmpassword"
+                id="confirm_password"
                 placeholder="Confirm password"
                 prefix={<FiCheckSquare fontSize="20px" color="#6b7280" />}
                 suffix={<FaEyeSlash size={18} color="#6b7280" />}

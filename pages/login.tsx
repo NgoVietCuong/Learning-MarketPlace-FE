@@ -32,7 +32,7 @@ const Login = () => {
               />
               <Button variant={"ghost"} className='mt-[-10px] p-0 self-end text-xs font-medium text-teal-500'>Forgot password?</Button>
             </div>
-            <Button className="w-full text-white-primary bg-teal-secondary active:scale-[98%]">Login</Button>
+            <Button className="mt-[-10px] w-full text-white-primary bg-teal-secondary active:scale-[98%]">Login</Button>
 
             <div className="w-full flex items-center">
               <div className="flex-1 border-t-2 border-gray-200"></div>
