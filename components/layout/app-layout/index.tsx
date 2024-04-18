@@ -5,7 +5,7 @@ interface AppLayoutProps {
   children: React.ReactNode;
 }
 
-const AppLayout = ({ children }: AppLayoutProps) => {
+export default function AppLayout({ children }: AppLayoutProps) {
   return (
     <>
       <NavBar />
@@ -16,5 +16,3 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     </>
   );
 };
-
-export default AppLayout;

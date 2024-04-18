@@ -4,10 +4,10 @@ import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import { FiUser, FiMail, FiLock, FiCheckSquare } from "react-icons/fi";
-import { FaEyeSlash } from "react-icons/fa"; 
+import { FiUser, FiMail, FiLock, FiCheckSquare } from 'react-icons/fi';
+import { FaEyeSlash } from 'react-icons/fa';
 
-const SignUp = () => {
+export default function SignUp() {
   return (
     <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
       <div className="w-full h-full flex flex-col items-center justify-center">
@@ -44,7 +44,9 @@ const SignUp = () => {
                 suffix={<FaEyeSlash size={18} color="#6b7280" />}
               />
             </div>
-            <Button className="w-full my-[7px] text-white-primary bg-teal-secondary active:scale-[98%]">Sign up</Button>
+            <Button className="w-full my-[7px] text-white-primary bg-teal-secondary active:scale-[98%]">
+              Sign up
+            </Button>
 
             <div className="w-full flex items-center">
               <div className="flex-1 border-t-2 border-gray-200"></div>
@@ -67,6 +69,4 @@ const SignUp = () => {
       </div>
     </div>
   );
-};
-
-export default SignUp;
+}

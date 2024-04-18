@@ -3,7 +3,7 @@ import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Heading } from '@/components/ui/heading';
 
-const NavBar = () => {
+export default function NavBar() {
   return (
     <header className="w-full bg-white-primary shadow-lg">
       <div className="w-[85%] flex mx-auto items-center justify-between gap-5 px-[150px] my-[10px]">
@@ -60,5 +60,3 @@ const NavBar = () => {
     </header>
   );
 };
-
-export default NavBar;

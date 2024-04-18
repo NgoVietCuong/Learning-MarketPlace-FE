@@ -11,7 +11,7 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 
-const VerifySignUp = () => {
+export default function VerifySignUp() {
   return (
     <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
       <div className="w-full h-full flex flex-col items-center justify-center">
@@ -56,6 +56,4 @@ const VerifySignUp = () => {
       </div>
     </div>
   );
-};
-
-export default VerifySignUp;
+}

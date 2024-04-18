@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import { FiLock, FiCheckSquare } from "react-icons/fi";
-import { FaEyeSlash } from "react-icons/fa"; 
+import { FiLock, FiCheckSquare } from 'react-icons/fi';
+import { FaEyeSlash } from 'react-icons/fa';
 
-const ResetPassword = () => {
+export default function ResetPassword() {
   return (
     <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
       <div className="w-full h-full flex flex-col items-center justify-center">
@@ -44,6 +44,4 @@ const ResetPassword = () => {
       </div>
     </div>
   );
-};
-
-export default ResetPassword;
+}

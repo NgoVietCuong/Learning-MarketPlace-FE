@@ -2,7 +2,7 @@ import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Heading } from '@/components/ui/heading';
 
-const Footer = () => {
+export default function Footer() {
   return (
     <footer className="w-full bottom-0 bg-blue_gray-primary">
       <div className="w-[85%] h-full mx-auto">
@@ -26,5 +26,3 @@ const Footer = () => {
     </footer>
   );
 };
-
-export default Footer;
