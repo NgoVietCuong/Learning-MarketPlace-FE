@@ -7,13 +7,16 @@ import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { FiMail, FiLock } from 'react-icons/fi';
 import { FaEyeSlash } from 'react-icons/fa';
+import axiosClient from '@/services/axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    const test = await axiosClient.post('http://localhost:46501/auth/sign-up');
 
+    console.log('test', test)
   };
 
   return (
@@ -47,7 +50,7 @@ export default function Login() {
                 Forgot password?
               </Button>
             </div>
-            <Button className="mt-[-10px] w-full text-white-primary bg-teal-secondary active:scale-[98%]">
+            <Button onClick={handleLogin} className="mt-[-10px] w-full text-white-primary bg-teal-secondary active:scale-[98%]">
               Login
             </Button>
 

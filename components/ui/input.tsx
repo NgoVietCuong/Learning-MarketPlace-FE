@@ -24,7 +24,6 @@ type InputProps = Omit<
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, prefix, suffix, onChange, size = 'xs', ...props }, ref) => {
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      console.log(e.target.value)
       if (onChange) onChange(e?.target?.value);
     };
 
