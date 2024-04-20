@@ -3,19 +3,18 @@ import httpProxy from 'http-proxy';
 import Cookies from 'cookies';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const proxy = httpProxy.createProxyServer();
-
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
+const proxy = httpProxy.createProxyServer();
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   return new Promise((resolve, reject) => {
     req.headers.cookie = '';
     req.url = req.url!.replace(/^\/api/, '');
-    console.log(req.url);
 
     proxy.once('proxyRes', function (proxyRes: http.IncomingMessage) {
       handleLoginResponse(proxyRes, req, res);
@@ -24,10 +23,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     proxy.once('error', reject);
 
     proxy.web(req, res, {
-      target: "http://localhost:46501",
+      target: process.env.SERVER_URL,
       autoRewrite: false,
       changeOrigin: true,
-      selfHandleResponse: true,
+      selfHandleResponse: true
     });
 
     function handleLoginResponse(
@@ -38,6 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       let responseBody = '';
 
       proxyRes.on('data', (chunk: string) => {
+        console.log("chunk", chunk)
         responseBody += chunk;
       });
 
@@ -45,25 +45,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       proxyRes.on('end', () => {
         try {
-          console.log('test', JSON.parse(responseBody));
           const { data } = JSON.parse(responseBody);
-          const cookies = new Cookies(req, res, {
-            secure: process.env.NODE_ENV !== 'development',
-          });
+          console.log('data', data)
+          // const cookies = new Cookies(req, res, {
+          //   secure: process.env.NODE_ENV !== 'development',
+          // });
 
-          cookies.set('access_token', data.accessToken, {
-            httpOnly: true,
-            sameSite: 'lax',
-          });
-          cookies.set('refresh_token', data.refreshToken, {
-            httpOnly: true,
-            sameSite: 'lax',
-          });
+          // cookies.set('access_token', data.accessToken, {
+          //   httpOnly: true,
+          //   sameSite: 'lax',
+          // });
+          // cookies.set('refresh_token', data.refreshToken, {
+          //   httpOnly: true,
+          //   sameSite: 'lax',
+          // });
 
           res.status(200).json({ message: 'Login successfully' });
-          resolve(1);
+          resolve(true);
         } catch (e) {
-          console.log('e', e)
           res.status(500).json({ message: 'Internal Server Error' });
           reject(e);
         }

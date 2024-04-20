@@ -1,13 +1,94 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { FiUser, FiMail, FiLock, FiCheckSquare } from 'react-icons/fi';
-import { FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Loader2, AlertCircle } from 'lucide-react';
+import axiosClient from '@/services/axios';
+import { Response } from '@/types/response';
 
 export default function SignUp() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [loading, setLoading] = useState(false);
+  const [visibility, setVisibility] = useState(false);
+  const [confirmVisibility, setConfirmVisibility] = useState(false);
+
+  const [usernameError, setUsernameError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmError, setConfirmError] = useState('');
+  const [apiError, setApiError] = useState('');
+
+  const handleViewPassword = () => {
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      setVisibility(true);
+    } else {
+      passwordInput.type = 'password';
+      setVisibility(false);
+    }
+  };
+
+  const handleViewConfirmPassword = () => {
+    const confirmPasswordInput = document.getElementById('confirm_password') as HTMLInputElement;
+    if (confirmPasswordInput.type === 'password') {
+      confirmPasswordInput.type = 'text';
+      setConfirmVisibility(true);
+    } else {
+      confirmPasswordInput.type = 'password';
+      setConfirmVisibility(false);
+    }
+  };
+
+  const handleSignUp = async () => {
+    let hasError = false;
+    const spaceRegex = /\s/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (username.trim() === '') (hasError = true), setUsernameError('Username cannot be empty');
+    else if (spaceRegex.test(username)) (hasError = true), setUsernameError('Username cannot contain spaces');
+    else (hasError = false), setUsernameError('');
+
+    if (email.trim() === '') (hasError = true), setEmailError('Email cannot be empty');
+    else if (email.length && !emailRegex.test(email)) (hasError = true), setEmailError('Invalid email');
+    else (hasError = false), setEmailError('');
+
+    if (password.trim() === '') (hasError = true), setPasswordError('Password cannot be empty');
+    else (hasError = false), setPasswordError('');
+
+    if (confirmPassword.trim() === '') (hasError = true), setConfirmError('Please confirm your password');
+    else if (password !== confirmPassword) (hasError = true), setConfirmError('Passwords do not match');
+    else (hasError = false), setConfirmError('');
+    
+    setApiError('');
+    if (hasError) return;
+
+    setLoading(true);
+    const signUpResponse: Response = await axiosClient.post('/auth/sign-up', {
+      username,
+      email,
+      password,
+    });
+    setLoading(false);
+
+    if (signUpResponse.error) {
+      setApiError(signUpResponse.message);
+    } else {
+    }
+
+    console.log('check', signUpResponse);
+  };
+
   return (
     <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
       <div className="w-full h-full flex flex-col items-center justify-center">
@@ -15,36 +96,97 @@ export default function SignUp() {
           <div className="w-[75%] flex flex-col items-center gap-4 py-10">
             <Heading className="mb-[12px] text-gray-700">Sign up</Heading>
             <div className="w-full flex flex-col items-center gap-3">
-              <Input
-                type="text"
-                id="username"
-                placeholder="Enter your username"
-                prefix={<FiUser size={20} color="#6b7280" />}
-              />
-              <Input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                className="mb-[5px] pr-[100px]"
-                prefix={<FiMail size={20} color="#6b7280" />}
-              />
-              <Input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                className="mb-[5px] pr-[100px]"
-                prefix={<FiLock size={20} color="#6b7280" />}
-                suffix={<FaEyeSlash size={18} color="#6b7280" />}
-              />
-              <Input
-                type="password"
-                id="confirm_password"
-                placeholder="Confirm password"
-                prefix={<FiCheckSquare fontSize="20px" color="#6b7280" />}
-                suffix={<FaEyeSlash size={18} color="#6b7280" />}
-              />
+              <div className="w-full flex flex-col gap-1">
+                <Input
+                  type="text"
+                  id="username"
+                  placeholder="Enter your username"
+                  prefix={<FiUser size={20} color="#6b7280" />}
+                  onChange={(value: string) => setUsername(value)}
+                />
+                {usernameError && (
+                  <Text size="xs" as="p" className="text-red-400 font-medium">
+                    {usernameError}
+                  </Text>
+                )}
+              </div>
+
+              <div className="w-full flex flex-col gap-1">
+                <Input
+                  type="email"
+                  id="email"
+                  placeholder="Enter your email"
+                  className="mb-[5px] pr-[100px]"
+                  prefix={<FiMail size={20} color="#6b7280" />}
+                  onChange={(value: string) => setEmail(value)}
+                />
+                {emailError && (
+                  <Text size="xs" as="p" className="text-red-400 font-medium">
+                    {emailError}
+                  </Text>
+                )}
+              </div>
+
+              <div className="w-full flex flex-col gap-1">
+                <Input
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  className="mb-[5px] pr-[100px]"
+                  prefix={<FiLock size={20} color="#6b7280" />}
+                  suffix={
+                    <Button variant={'ghost'} className="p-0" onClick={handleViewPassword}>
+                      {visibility ? <FaEye size={18} color="#6b7280" /> : <FaEyeSlash size={18} color="#6b7280" />}
+                    </Button>
+                  }
+                  onChange={(value: string) => setPassword(value)}
+                />
+                {passwordError && (
+                  <Text size="xs" as="p" className="text-red-400 font-medium">
+                    {passwordError}
+                  </Text>
+                )}
+              </div>
+
+              <div className="w-full flex flex-col gap-1">
+                <Input
+                  type="password"
+                  id="confirm_password"
+                  placeholder="Confirm password"
+                  prefix={<FiCheckSquare fontSize="20px" color="#6b7280" />}
+                  suffix={
+                    <Button variant={'ghost'} className="p-0" onClick={handleViewConfirmPassword}>
+                      {confirmVisibility ? (
+                        <FaEye size={18} color="#6b7280" />
+                      ) : (
+                        <FaEyeSlash size={18} color="#6b7280" />
+                      )}
+                    </Button>
+                  }
+                  onChange={(value: string) => setConfirmPassword(value)}
+                />
+                {confirmError && (
+                  <Text size="xs" as="p" className="text-red-400 font-medium">
+                    {confirmError}
+                  </Text>
+                )}
+              </div>
             </div>
-            <Button className="w-full my-[7px] text-white-primary bg-teal-secondary active:scale-[98%]">
+
+            {apiError && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>{apiError}</AlertDescription>
+              </Alert>
+            )}
+
+            <Button
+              disabled={loading}
+              className="w-full my-[7px] text-white-primary bg-teal-secondary active:scale-[98%]"
+              onClick={handleSignUp}
+            >
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Sign up
             </Button>
 

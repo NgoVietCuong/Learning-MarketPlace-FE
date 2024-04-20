@@ -1,11 +1,38 @@
-import Link from 'next/link';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { FiLock, FiCheckSquare } from 'react-icons/fi';
-import { FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export default function ResetPassword() {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [visibility, setVisibility] = useState(false);
+  const [confirmVisibility, setConfirmVisibility] = useState(false);
+
+  const handleViewPassword = () => {
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      setVisibility(true);
+    } else {
+      passwordInput.type = 'password';
+      setVisibility(false);
+    }
+  };
+
+  const handleViewConfirmPassword = () => {
+    const confirmPasswordInput = document.getElementById('confirm_password') as HTMLInputElement;
+    if (confirmPasswordInput.type === 'password') {
+      confirmPasswordInput.type = 'text';
+      setConfirmVisibility(true);
+    } else {
+      confirmPasswordInput.type = 'password';
+      setConfirmVisibility(false);
+    }
+  };
+
   return (
     <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
       <div className="w-full h-full flex flex-col items-center justify-center">
@@ -16,10 +43,19 @@ export default function ResetPassword() {
               <Input
                 type="password"
                 id="password"
-                placeholder="Enter your email"
+                placeholder="Enter your password"
                 className="mb-[5px] pr-[100px]"
                 prefix={<FiLock size={20} color="#6b7280" />}
-                suffix={<FaEyeSlash size={18} color="#6b7280" />}
+                suffix={
+                  <Button variant={'ghost'} className="p-0" onClick={handleViewPassword}>
+                    {visibility ? (
+                      <FaEye size={18} color="#6b7280" />
+                    ) : (
+                      <FaEyeSlash size={18} color="#6b7280" />
+                    )}
+                  </Button>
+                }
+                onChange={(value: string) => setPassword(value)}
               />
               <Input
                 type="password"
@@ -27,7 +63,16 @@ export default function ResetPassword() {
                 placeholder="Confirm password"
                 className="mb-[5px] pr-[100px]"
                 prefix={<FiCheckSquare size={20} color="#6b7280" />}
-                suffix={<FaEyeSlash size={18} color="#6b7280" />}
+                suffix={
+                  <Button variant={'ghost'} className="p-0" onClick={handleViewConfirmPassword}>
+                    {confirmVisibility ? (
+                      <FaEye size={18} color="#6b7280" />
+                    ) : (
+                      <FaEyeSlash size={18} color="#6b7280" />
+                    )}
+                  </Button>
+                }
+                onChange={(value: string) => setConfirmPassword(value)}
               />
               <Button
                 variant={'ghost'}

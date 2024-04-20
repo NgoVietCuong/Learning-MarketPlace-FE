@@ -6,17 +6,32 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { FiMail, FiLock } from 'react-icons/fi';
-import { FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axiosClient from '@/services/axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [visibility, setVisibility] = useState(false);
+
+  const handleViewPassword = () => {
+    const passwordInput = document.getElementById('password') as HTMLInputElement;
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      setVisibility(true);
+    } else {
+      passwordInput.type = 'password';
+      setVisibility(false);
+    }
+  };
 
   const handleLogin = async () => {
-    const test = await axiosClient.post('http://localhost:46501/auth/sign-up');
+    const test = await axiosClient.post('/auth/login', {
+      email,
+      password,
+    });
 
-    console.log('test', test)
+    console.log('check', test);
   };
 
   return (
@@ -40,7 +55,15 @@ export default function Login() {
                 placeholder="Enter your password"
                 className="mb-[5px] pr-[100px]"
                 prefix={<FiLock size={20} color="#6b7280" />}
-                suffix={<FaEyeSlash size={18} color="#6b7280" />}
+                suffix={
+                  <Button variant={'ghost'} className="p-0" onClick={handleViewPassword}>
+                    {visibility ? (
+                      <FaEye size={18} color="#6b7280" />
+                    ) : (
+                      <FaEyeSlash size={18} color="#6b7280" />
+                    )}
+                  </Button>
+                }
                 onChange={(value: string) => setPassword(value)}
               />
               <Button
@@ -50,7 +73,10 @@ export default function Login() {
                 Forgot password?
               </Button>
             </div>
-            <Button onClick={handleLogin} className="mt-[-10px] w-full text-white-primary bg-teal-secondary active:scale-[98%]">
+            <Button
+              onClick={handleLogin}
+              className="mt-[-10px] w-full text-white-primary bg-teal-secondary active:scale-[98%]"
+            >
               Login
             </Button>
 
@@ -74,4 +100,4 @@ export default function Login() {
       </div>
     </div>
   );
-};
+}

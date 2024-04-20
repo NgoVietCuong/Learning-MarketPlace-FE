@@ -1,27 +1,57 @@
-import url from 'url';
+import http from 'http';
 import Cookies from 'cookies';
 import httpProxy from 'http-proxy';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-
-
 export const config = {
-	api: {
-		bodyParser: false,
-	},
-}
+  api: {
+    bodyParser: false,
+  },
+};
 
 const proxy = httpProxy.createProxyServer();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	// const SERVER_URL = process.env.SERVER_URL;
-  // console.log('test', typeof SERVER_URL)
   return new Promise((resolve, reject) => {
-		proxy.web(req, res, { target: 'http://localhost:46501', changeOrigin: true }, (err) => {
-			if (err) {
-				return reject(err)
-			}
-			resolve(1)
-		})
-	})
+    req.headers.cookie = '';
+    req.url = req.url!.replace(/^\/api/, '');
+		console.log(req.url);
+
+    if (!req.url.includes("auth")) {
+
+		}
+
+    proxy.on('proxyRes', function (proxyRes: http.IncomingMessage) {
+      handleResponse(proxyRes, req, res);
+    });
+
+		proxy.web(req, res, {
+      target: process.env.SERVER_URL,
+      autoRewrite: false,
+      changeOrigin: true,
+      selfHandleResponse: true
+    });
+
+		function handleResponse(
+      proxyRes: http.IncomingMessage,
+      req: NextApiRequest,
+      res: NextApiResponse,
+    ) {
+      let responseBody: Uint8Array[] = [];
+      proxyRes.on('data', function (chunk: Uint8Array) {
+        responseBody.push(chunk);
+      });
+      
+      proxyRes.on('end', function () {
+        try {
+          const data = JSON.parse(Buffer.concat(responseBody).toString());
+          res.status(data.statusCode).json({ ...data });
+          resolve(data)
+        } catch (e) {
+          res.status(500).json({ message: 'Internal Server Error' });
+          reject(e);
+        }
+      });
+    }
+  });
 }
