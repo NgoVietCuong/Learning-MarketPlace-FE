@@ -23,7 +23,7 @@ export default function Home() {
                 <Text
                   size="sm"
                   as="p"
-                  className="max-w-max px-[15px] py-[10px] text-teal-600 bg-slate-100 rounded-md shadow-lg active:scale-95"
+                  className="max-w-max px-[15px] py-[10px] text-teal-600 bg-white-primary rounded-md shadow-lg active:scale-95"
                 >
                   Join for free
                 </Text>

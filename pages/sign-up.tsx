@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
@@ -13,6 +14,7 @@ import axiosClient from '@/services/axios';
 import { Response } from '@/types/response';
 
 export default function SignUp() {
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -69,7 +71,7 @@ export default function SignUp() {
     if (confirmPassword.trim() === '') (hasError = true), setConfirmError('Please confirm your password');
     else if (password !== confirmPassword) (hasError = true), setConfirmError('Passwords do not match');
     else (hasError = false), setConfirmError('');
-    
+
     setApiError('');
     if (hasError) return;
 
@@ -84,6 +86,7 @@ export default function SignUp() {
     if (signUpResponse.error) {
       setApiError(signUpResponse.message);
     } else {
+      router.push({ pathname: '/verify-signup', query: { email: encodeURIComponent(email) } });
     }
 
     console.log('check', signUpResponse);
