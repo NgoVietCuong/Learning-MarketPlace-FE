@@ -6,12 +6,11 @@ import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { FiUser, FiMail, FiLock, FiCheckSquare } from 'react-icons/fi';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Loader2, AlertCircle } from 'lucide-react';
-import axiosClient from '@/services/axios';
-import { Response } from '@/types/response';
+import FailedAlert from '@/components/alert/failed';
+import { authApi } from '@/services/axios/authApi';
 
 export default function SignUp() {
   const router = useRouter();
@@ -76,7 +75,7 @@ export default function SignUp() {
     if (hasError) return;
 
     setLoading(true);
-    const signUpResponse: Response = await axiosClient.post('/auth/sign-up', {
+    const signUpResponse = await authApi.signUp({
       username,
       email,
       password,
@@ -176,13 +175,7 @@ export default function SignUp() {
               </div>
             </div>
 
-            {apiError && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{apiError}</AlertDescription>
-              </Alert>
-            )}
+            {apiError && <FailedAlert title={'Sign up failed'} message={apiError} />}
 
             <Button
               disabled={loading}

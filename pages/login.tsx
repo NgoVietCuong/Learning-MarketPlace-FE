@@ -91,7 +91,7 @@ export default function Login() {
             </Button>
             <Text size="xs" as="p" className="text-center mt-[10px]">
               Not a member yet?{' '}
-              <Link href="/login" className="font-medium text-teal-500">
+              <Link href="/sign-up" className="font-medium text-teal-500">
                 Sign up for free
               </Link>
             </Text>
