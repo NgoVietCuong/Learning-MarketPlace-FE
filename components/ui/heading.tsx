@@ -42,7 +42,7 @@ const Heading: React.FC<React.PropsWithChildren<HeadingProps>> = ({
 
   return (
     <Component
-      className={`text-teal-300_03 font-poppins ${className} ${sizes[size]}`}
+      className={`font-poppins ${className} ${sizes[size]}`}
       {...restProps}
     >
       {children}

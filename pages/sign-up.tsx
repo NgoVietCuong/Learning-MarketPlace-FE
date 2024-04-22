@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { FiUser, FiMail, FiLock, FiCheckSquare } from 'react-icons/fi';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { Loader2, AlertCircle } from 'lucide-react';
-import FailedAlert from '@/components/alert/failed';
+import { Loader2 } from 'lucide-react';
+import FailedAlert from '@/components/alert/Failed';
 import { authApi } from '@/services/axios/authApi';
 
 export default function SignUp() {
