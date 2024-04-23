@@ -87,8 +87,6 @@ export default function SignUp() {
     } else {
       router.push({ pathname: '/verify-signup', query: { email: encodeURIComponent(email) } });
     }
-
-    console.log('check', signUpResponse);
   };
 
   return (

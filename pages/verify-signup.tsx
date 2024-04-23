@@ -8,7 +8,7 @@ import { Heading } from '@/components/ui/heading';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
 import FailedAlert from '@/components/alert/Failed';
 import SuccessAlert from '@/components/alert/Success';
-import LoginModal from '@/components/modal/Login';
+import LoginMessageModal from '@/components/modal/LoginMessage';
 import { authApi } from '@/services/axios/authApi';
 
 interface VerifySignUpPageProps {
@@ -69,7 +69,7 @@ export default function VerifySignUpPage({ queryEmail }: VerifySignUpPageProps) 
     <>
       <div className="w-full grow bg-[url('/images/img_background.jpg')] bg-center">
         <div className="w-full h-full flex flex-col items-center justify-center">
-          <div className="w-[24%] bg-white-primary rounded-xl flex flex-col items-center justify-center shadow-lg">
+          <div className="w-[25%] bg-white-primary rounded-xl flex flex-col items-center justify-center shadow-lg">
             <div className="w-[75%] flex flex-col items-center gap-3 py-10">
               <Heading className="text-gray-700">Enter verification code</Heading>
               <Text size="xs" as="p" className="text-center mb-[12px]">
@@ -129,7 +129,11 @@ export default function VerifySignUpPage({ queryEmail }: VerifySignUpPageProps) 
           </div>
         </div>
       </div>
-      <LoginModal open={verifySuccess} title={'Verification Success'} message={'Your email has been verified successfully. Now you can login to dicover a variety of quality courses'} />
+      <LoginMessageModal
+        open={verifySuccess}
+        title={'Verification Success'}
+        message={'Your email has been verified successfully. Now you can login to dicover a variety of quality courses'}
+      />
     </>
   );
 }

@@ -10,13 +10,13 @@ import {
 import { CheckCircle } from 'lucide-react';
 import { Button } from '../ui/button';
 
-interface LoginModalProps {
+interface LoginMessageModalProps {
   open: boolean;
   title: string;
   message: string;
 }
 
-export default function LoginModal({ open, title, message }: LoginModalProps) {
+export default function LoginMessageModal({ open, title, message }: LoginMessageModalProps) {
   const router = useRouter();
 
   return (
