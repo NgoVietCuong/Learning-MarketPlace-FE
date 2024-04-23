@@ -1,15 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { GetServerSidePropsContext } from 'next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { FiLock, FiCheckSquare } from 'react-icons/fi';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { authApi } from '@/services/axios/authApi';
 
-export default function ResetPassword() {
+interface ResetPasswordProps {
+  queryEmail: string;
+  queryCode: string;
+}
+
+export default function ResetPassword({ queryEmail, queryCode }: ResetPasswordProps) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [visibility, setVisibility] = useState(false);
   const [confirmVisibility, setConfirmVisibility] = useState(false);
+
+  useEffect(() => {}, []);
 
   const handleViewPassword = () => {
     const passwordInput = document.getElementById('password') as HTMLInputElement;
@@ -48,11 +57,7 @@ export default function ResetPassword() {
                 prefix={<FiLock size={20} color="#6b7280" />}
                 suffix={
                   <Button variant={'ghost'} className="p-0" onClick={handleViewPassword}>
-                    {visibility ? (
-                      <FaEye size={18} color="#6b7280" />
-                    ) : (
-                      <FaEyeSlash size={18} color="#6b7280" />
-                    )}
+                    {visibility ? <FaEye size={18} color="#6b7280" /> : <FaEyeSlash size={18} color="#6b7280" />}
                   </Button>
                 }
                 onChange={(value: string) => setPassword(value)}
@@ -65,19 +70,12 @@ export default function ResetPassword() {
                 prefix={<FiCheckSquare size={20} color="#6b7280" />}
                 suffix={
                   <Button variant={'ghost'} className="p-0" onClick={handleViewConfirmPassword}>
-                    {confirmVisibility ? (
-                      <FaEye size={18} color="#6b7280" />
-                    ) : (
-                      <FaEyeSlash size={18} color="#6b7280" />
-                    )}
+                    {confirmVisibility ? <FaEye size={18} color="#6b7280" /> : <FaEyeSlash size={18} color="#6b7280" />}
                   </Button>
                 }
                 onChange={(value: string) => setConfirmPassword(value)}
               />
-              <Button
-                variant={'ghost'}
-                className="mt-[-10px] p-0 self-end text-xs font-medium text-teal-500"
-              >
+              <Button variant={'ghost'} className="mt-[-10px] p-0 self-end text-xs font-medium text-teal-500">
                 Forgot password?
               </Button>
             </div>
@@ -89,4 +87,16 @@ export default function ResetPassword() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { query } = context;
+  const { email, code } = query;
+
+  return {
+    props: {
+      queryEmail: email || null,
+      queryCode: code || null,
+    },
+  };
 }

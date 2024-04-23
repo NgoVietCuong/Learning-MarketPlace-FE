@@ -56,7 +56,7 @@ export default function Login() {
     setLoggingIn(false);
 
     if (loginResponse.error) {
-      setLoginError(loginResponse.error);
+      setLoginError(loginResponse.message);
     } else {
     }
   };

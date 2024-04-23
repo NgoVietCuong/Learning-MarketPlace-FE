@@ -20,7 +20,7 @@ interface EmailProviderProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   title: string;
-  apiHandler: (body: SendResetEmailBody | SendVerifyEmailBody) => Promise<Response>;
+  apiHandler: (body: any) => Promise<Response>;
   url?: string;
 }
 
@@ -32,6 +32,7 @@ export default function EmailProvider({ open, setOpen, title, apiHandler, url }:
   const [sendSuccess, setSendSuccess] = useState(false);
 
   useEffect(() => {
+    setEmail('');
     setEmailError('');
     setSendError('');
     setSendSuccess(false);
@@ -54,7 +55,7 @@ export default function EmailProvider({ open, setOpen, title, apiHandler, url }:
     setSending(false);
 
     if (sendMailResponse.error) {
-      setSendError(sendMailResponse.error);
+      setSendError(sendMailResponse.message);
     } else {
       setSendSuccess(true);
     }
@@ -93,7 +94,7 @@ export default function EmailProvider({ open, setOpen, title, apiHandler, url }:
             className="bg-teal-secondary text-white-primary px-[30px]"
             onClick={handleSendEmail}
           >
-            {sending && <Loader2 className="ml-1 h-4 w-4 animate-spin" />}
+            {sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Send
           </Button>
         </DialogFooter>
