@@ -58,6 +58,7 @@ export default function Login() {
     if (loginResponse.error) {
       setLoginError(loginResponse.message);
     } else {
+      router.push('/');
     }
   };
 
@@ -108,16 +109,19 @@ export default function Login() {
 
                 <Button
                   variant={'ghost'}
-                  className="mt-[-10px] p-0 self-end text-xs font-medium text-teal-500"
+                  className="my-[-10px] p-0 self-end text-xs font-medium text-teal-500"
                   onClick={handleOpenModal}
                 >
                   Forgot password?
                 </Button>
               </div>
+
+              {logInEror && <FailedAlert title={'Sign up failed'} message={logInEror} />}
+
               <Button
                 disabled={loggingIn}
                 onClick={handleLogin}
-                className="mt-[-10px] w-full text-white-primary bg-teal-secondary active:scale-[98%]"
+                className="mt-[-5px] w-full text-white-primary bg-teal-secondary active:scale-[98%]"
               >
                 {loggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Login
@@ -142,7 +146,13 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <EmailProvider open={openModal} setOpen={setOpenModal} title={'Request Password Reset'} apiHandler={authApi.sendResetEmail} url={`${process.env.NEXT_PUBLIC_APP_URL}/reset-password`} />
+      <EmailProvider
+        open={openModal}
+        setOpen={setOpenModal}
+        title={'Request Password Reset'}
+        apiHandler={authApi.sendResetEmail}
+        url={`${process.env.NEXT_PUBLIC_APP_URL}/reset-password`}
+      />
     </>
   );
 }

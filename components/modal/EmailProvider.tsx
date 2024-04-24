@@ -13,7 +13,6 @@ import { FiMail } from 'react-icons/fi';
 import { Loader2 } from 'lucide-react';
 import FailedAlert from '../alert/Failed';
 import SuccessAlert from '../alert/Success';
-import { SendResetEmailBody, SendVerifyEmailBody } from '@/types/request';
 import { Response } from '@/types/response';
 
 interface EmailProviderProps {
