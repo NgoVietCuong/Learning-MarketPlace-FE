@@ -13,20 +13,13 @@ const proxy = httpProxy.createProxyServer();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   return new Promise((resolve, reject) => {
-    req.headers.cookie = '';
-
-    const newUrl = req.url!.replace(/^\/api/, '');
-    req.url = newUrl
-    console.log('ahihi',req.url);
-
-    const cookies = new Cookies(req, res, {
-      secure: process.env.NODE_ENV !== 'development',
-    });
-    
+    const cookies = new Cookies(req, res);
     const accessToken = cookies.get('access_token');
     if (accessToken) {
       req.headers.authorization = `Bearer ${accessToken}`;
     }
+    req.headers.cookie = '';
+    req.url = req.url!.replace(/^\/api/, '');
 
     proxy.on('proxyRes', function (proxyRes: http.IncomingMessage) {
       handleResponse(proxyRes, req, res);

@@ -1,9 +1,16 @@
 import Link from 'next/link';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Heading } from '@/components/ui/heading';
+import HeaderSkeleton from '@/components/skeleton/HeaderSkeleton';
+import useUser from '@/hooks/useUser';
 
 export default function NavBar() {
+  const { user, isLoading } = useUser();
+  console.log('user', user);
+  console.log('isLoading', isLoading);
+
   return (
     <header className="w-full bg-white-primary shadow-lg">
       <div className="w-[85%] flex mx-auto items-center justify-between gap-5 px-[150px] my-[10px]">
@@ -37,26 +44,38 @@ export default function NavBar() {
             </Link>
           </div>
         </div>
-
         <div className="flex items-center justify-end gap-10 pl-100 z-50">
-          <div className="flex items-center gap-7">
-            <Link href="/login">
-              <Text size="sm" as="p" className="font-medium text-gray-700 hover:text-teal-primary">
-                Login
-              </Text>
-            </Link>
-            <Link href="/sign-up">
-              <Text
-                size="sm"
-                as="p"
-                className="font-medium !text-white-primary bg-teal-secondary px-[20px] py-[8px] rounded-md shadow-lg active:scale-95"
-              >
-                Sign up
-              </Text>
-            </Link>
-          </div>
+          {isLoading ? (
+            <HeaderSkeleton />
+          ) : user.data ? (
+            <div className="flex items-center gap-7">
+              <Avatar className='h-11 w-11'>
+                <AvatarImage src="${user.data.avatar as string}" />
+                <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-lg">
+                  {user.data.username.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          ) : (
+            <div className="flex items-center gap-7">
+              <Link href="/login">
+                <Text size="sm" as="p" className="font-medium text-gray-700 hover:text-teal-primary">
+                  Login
+                </Text>
+              </Link>
+              <Link href="/sign-up">
+                <Text
+                  size="sm"
+                  as="p"
+                  className="font-medium !text-white-primary bg-teal-secondary px-[20px] py-[8px] rounded-md shadow-lg active:scale-95"
+                >
+                  Sign up
+                </Text>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </header>
   );
-};
+}
