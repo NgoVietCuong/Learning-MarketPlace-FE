@@ -8,8 +8,6 @@ import useUser from '@/hooks/useUser';
 
 export default function NavBar() {
   const { user, isLoading } = useUser();
-  console.log('user', user);
-  console.log('isLoading', isLoading);
 
   return (
     <header className="w-full bg-white-primary shadow-lg">
@@ -49,9 +47,9 @@ export default function NavBar() {
             <HeaderSkeleton />
           ) : user.data ? (
             <div className="flex items-center gap-7">
-              <Avatar className='h-11 w-11'>
-                <AvatarImage src="${user.data.avatar as string}" />
-                <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-lg">
+              <Avatar className='h-8 w-8'>
+                <AvatarImage src={user.data.avatar ? user.data.avatar : "${user.data.avatar as string}"} />
+                <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-sm">
                   {user.data.username.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>

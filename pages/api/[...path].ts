@@ -44,9 +44,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       proxyRes.on('end', function () {
         try {
-          const data = JSON.parse(Buffer.concat(responseBody).toString());
-          res.status(data.statusCode).json({ ...data });
-          resolve(data)
+          const body = JSON.parse(Buffer.concat(responseBody).toString());
+
+          if (req.url?.includes('login') && !body.error) {
+            cookies.set('access_token', body.data.accessToken, {
+              httpOnly: true,
+              sameSite: 'lax',
+            });
+            cookies.set('refresh_token', body.data.refreshToken, {
+              httpOnly: true,
+              sameSite: 'lax',
+            });
+          }
+          
+          res.status(body.statusCode).json({ ...body });
+          resolve(body)
         } catch (e) {
           res.status(500).json({ message: 'Internal Server Error' });
           reject(e);

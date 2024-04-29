@@ -18,11 +18,11 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
   function (response) {
-    console.log('response', response);
+    // console.log('response', response);
     return response.data;
   },
   function (error) {
-    console.log('error', error);
+    // console.log('error', error);
     return error.response.data;
   }
 );

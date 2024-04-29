@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Img } from '@/components/ui/img';
+import { GoogleLogin } from '@react-oauth/google';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -11,9 +11,11 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Loader2 } from 'lucide-react';
 import FailedAlert from '@/components/alert/Failed';
 import { authApi } from '@/services/axios/authApi';
+import useUser from '@/hooks/useUser';
 
 export default function SignUp() {
   const router = useRouter();
+  const { userMutate } = useUser();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -172,9 +174,7 @@ export default function SignUp() {
                 )}
               </div>
             </div>
-
             {apiError && <FailedAlert title={'Sign up failed'} message={apiError} />}
-
             <Button
               disabled={loading}
               className="w-full my-[7px] text-white-primary bg-teal-secondary active:scale-[98%]"
@@ -190,9 +190,23 @@ export default function SignUp() {
               <div className="flex-1 border-t-2 border-gray-200"></div>
             </div>
 
-            <Button className="border-gray-100 active:scale-95">
-              <Img src="images/img_google.svg" className="w-[24px]" />
-            </Button>
+            <GoogleLogin
+              type="icon"
+              theme="outline"
+              size="large"
+              shape="circle"
+              width="48px"
+              onSuccess={async (credentialResponse) => {
+                const googleLoginResponse = await authApi.googleLogin({ idToken: credentialResponse.credential as string });
+                if (googleLoginResponse.error) {
+                  setApiError(googleLoginResponse.message);
+                } else {
+                  userMutate();
+                  router.push('/');
+                }
+              }}
+              onError={() => setApiError('Google login failed. Please try again.')}
+            />
 
             <Text size="xs" as="p" className="text-center mt-[10px]">
               Already have an account?{' '}

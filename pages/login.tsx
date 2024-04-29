@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Img } from '@/components/ui/img';
+import { GoogleLogin } from '@react-oauth/google';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,9 +12,11 @@ import { Loader2 } from 'lucide-react';
 import FailedAlert from '@/components/alert/Failed';
 import EmailProvider from '@/components/modal/EmailProvider';
 import { authApi } from '@/services/axios/authApi';
+import useUser from '@/hooks/useUser';
 
 export default function Login() {
   const router = useRouter();
+  const { userMutate } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [visibility, setVisibility] = useState(false);
@@ -58,6 +60,7 @@ export default function Login() {
     if (loginResponse.error) {
       setLoginError(loginResponse.message);
     } else {
+      userMutate();
       router.push('/');
     }
   };
@@ -133,9 +136,26 @@ export default function Login() {
                 <div className="flex-1 border-t-2 border-gray-200"></div>
               </div>
 
-              <Button className="border-gray-100 active:scale-95">
-                <Img src="images/img_google.svg" className="w-[24px]" />
-              </Button>
+              <GoogleLogin
+                type="icon"
+                theme="outline"
+                size="large"
+                shape="circle"
+                width="48px"
+                onSuccess={async (credentialResponse) => {
+                  const googleLoginResponse = await authApi.googleLogin({
+                    idToken: credentialResponse.credential as string,
+                  });
+                  if (googleLoginResponse.error) {
+                    setLoginError(googleLoginResponse.message);
+                  } else {
+                    userMutate();
+                    router.push('/');
+                  }
+                }}
+                onError={() => setLoginError('Google login failed. Please try again.')}
+              />
+
               <Text size="xs" as="p" className="text-center mt-[10px]">
                 Not a member yet?{' '}
                 <Link href="/sign-up" className="font-medium text-teal-500">
