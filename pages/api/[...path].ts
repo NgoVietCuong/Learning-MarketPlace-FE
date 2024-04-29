@@ -56,6 +56,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               sameSite: 'lax',
             });
           }
+
+          if (req.url === '/auth/logout') {
+            cookies.set('access_token');
+            cookies.set('refresh_token');
+          }
           
           res.status(body.statusCode).json({ ...body });
           resolve(body)
