@@ -1,6 +1,6 @@
-export type Response = {
+export interface Response<Data = {}> {
   statusCode: number;
   message: string;
-  data?: any;
+  data?: Data;
   error?: string;
 }
