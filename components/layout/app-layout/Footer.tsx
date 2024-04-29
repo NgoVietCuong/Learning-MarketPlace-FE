@@ -2,11 +2,11 @@ import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Heading } from '@/components/ui/heading';
 
-const Footer = () => {
+export default function Footer() {
   return (
     <footer className="w-full bottom-0 bg-blue_gray-primary">
       <div className="w-[85%] h-full mx-auto">
-        <div className="m-auto flex h-max w-full flex-row items-center justify-between px-[150px] py-[20px]">
+        <div className="m-auto flex h-max w-full flex-row items-center justify-between px-[150px] py-[12px]">
           <div className="flex w-[50%] items-center md:w-full gap-10">
             <div className="flex items-center justify-center md:w-full">
               <Img src="images/img_refresh_cyan_a200.svg" alt="refresh_one" className="h-[54px] w-[54px] rounded-md" />
@@ -26,5 +26,3 @@ const Footer = () => {
     </footer>
   );
 };
-
-export default Footer;

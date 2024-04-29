@@ -8,3 +8,9 @@ services:
     volumes:
       - ./:/work
       - /work/node_modules
+    networks:
+      - hlm_network
+
+networks:
+  hlm_network:
+    external: true

@@ -19,11 +19,11 @@ export default function Home() {
               <Text className="text-white-primary">
                 HoaLearn is a great platform that will teach you in a more interesting way
               </Text>
-              <Link href="/login">
+              <Link href="/sign-up">
                 <Text
                   size="sm"
                   as="p"
-                  className="max-w-max px-[15px] py-[10px] text-teal-600 bg-slate-100 rounded-md shadow-lg active:scale-95"
+                  className="max-w-max px-[15px] py-[10px] text-teal-600 bg-white-primary rounded-md shadow-lg active:scale-95"
                 >
                   Join for free
                 </Text>

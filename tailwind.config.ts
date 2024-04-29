@@ -25,7 +25,7 @@ const config = {
         // input: "hsl(var(--input))",
         // ring: "hsl(var(--ring))",
         // background: "hsl(var(--background))",
-        // foreground: "hsl(var(--foreground))",
+        foreground: "hsl(var(--foreground))",
         // primary: {
         //   DEFAULT: "hsl(var(--primary))",
         //   foreground: "hsl(var(--primary-foreground))",
@@ -34,10 +34,14 @@ const config = {
         //   DEFAULT: "hsl(var(--secondary))",
         //   foreground: "hsl(var(--secondary-foreground))",
         // },
-        // destructive: {
-        //   DEFAULT: "hsl(var(--destructive))",
-        //   foreground: "hsl(var(--destructive-foreground))",
-        // },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
         // muted: {
         //   DEFAULT: "hsl(var(--muted))",
         //   foreground: "hsl(var(--muted-foreground))",
@@ -62,7 +66,8 @@ const config = {
           "secondary": "#2f327d",
         },
         gray: {
-          "primary": "#696983"
+          "primary": "#696983",
+          "border": "#b7b8bf"
         },
         light_blue: {
           "primary": "#28b9e6",
@@ -93,10 +98,15 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
     },
   },
