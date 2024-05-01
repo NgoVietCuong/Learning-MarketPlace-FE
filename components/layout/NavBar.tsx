@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useState } from 'react';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Heading } from '@/components/ui/heading';

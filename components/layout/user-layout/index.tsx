@@ -12,7 +12,7 @@ export default function UserLayout({ children }: UserLayoutProps) {
       <NavBar />
       <main className="w-full flex grow bg-slate-100">
         <div className='w-[90%] h-full mx-auto'>
-          <div className="m-auto flex flex-row h-full px-[150px] py-14 gap-10">
+          <div className="m-auto flex flex-row h-full px-[150px] py-14 gap-9">
             <UserSideBar />
             {children}
           </div>
