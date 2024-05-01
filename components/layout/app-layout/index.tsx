@@ -1,5 +1,5 @@
-import Footer from './Footer';
-import NavBar from './NavBar';
+import NavBar from "../NavBar";
+import Footer from "../Footer";
 
 interface AppLayoutProps {
   children: React.ReactNode;

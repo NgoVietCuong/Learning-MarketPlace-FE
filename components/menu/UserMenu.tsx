@@ -1,4 +1,5 @@
-import { LogOut } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { LogOut, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -19,6 +20,7 @@ interface UserMenuProps {
 }
 
 export default function UserMenu({ user, userMutate }: UserMenuProps) {
+  const router = useRouter();
   const handleLogout = async () => {
     const logoutResponse = await authApi.logout();
     if (!logoutResponse.error) {
@@ -41,6 +43,12 @@ export default function UserMenu({ user, userMutate }: UserMenuProps) {
       <DropdownMenuContent className="w-56 bg-white-primary">
         <DropdownMenuLabel className="font-medium">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className=" bg-slate-200" />
+        <DropdownMenuGroup>
+          <DropdownMenuItem className="text-gray-700" onClick={() => router.push('/user/edit-account')}>
+            <Settings className="mr-2 h-4 w-4" />
+            Account settings
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
         <DropdownMenuItem className="text-gray-700" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           Log out
