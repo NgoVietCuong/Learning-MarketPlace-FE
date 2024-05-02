@@ -44,7 +44,7 @@ export default function UserMenu({ user, userMutate }: UserMenuProps) {
         <DropdownMenuLabel className="font-medium">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className=" bg-slate-200" />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="text-gray-700" onClick={() => router.push('/user/edit-account')}>
+          <DropdownMenuItem className="text-gray-700" onClick={() => router.push('/user/account-settings')}>
             <Settings className="mr-2 h-4 w-4" />
             Account settings
           </DropdownMenuItem>
