@@ -7,6 +7,7 @@ import { Heading } from '@/components/ui/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AccountSkeleton from '@/components/skeleton/AccountSkeleton';
 import UserLayout from '@/components/layout/user-layout';
+import ChangePassword from "@/components/modal/ChangePassword";
 import useUser from '@/hooks/useUser';
 
 export default function EditAccount() {
@@ -19,7 +20,7 @@ export default function EditAccount() {
           <AccountSkeleton />
         ) : (
           <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-11 w-11">
               <AvatarImage src={user?.data?.avatar ? user.data.avatar : undefined} />
               <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-sm">
                 {user?.data?.username.slice(0, 2).toUpperCase()}
@@ -79,7 +80,8 @@ export default function EditAccount() {
                 </Text>
               </div>
             </div>
-            <Button className="text-white-primary bg-teal-secondary active:scale-[98%]">Change</Button>
+            {/* <Button className="text-white-primary bg-teal-secondary active:scale-[98%]">Change</Button> */}
+            <ChangePassword />
           </div>
         </div>
       </div>
