@@ -33,3 +33,13 @@ export interface SignUpBody extends LoginBody {
 export interface UpdatePasswordBody extends VerifyCodeBody {
   password: string;
 }
+
+// user body request
+export interface ChangePasswordBody {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ChangeAvatarBody {
+  avatar: string;
+}

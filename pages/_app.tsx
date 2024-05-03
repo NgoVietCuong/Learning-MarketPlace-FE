@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 import { SWRConfig } from 'swr';
 import axiosClient from '@/services/axios';
 import AppLayout from '@/components/layout/app-layout';
+import { Toaster } from "@/components/ui/toaster"
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 type Props = AppProps & {
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }: Props) {
       >
         <div className="w-full h-screen min-h-screen flex flex-col">
           {renderWithLayout(<Component {...pageProps} />)}
+          <Toaster />
         </div>
       </SWRConfig>
     </GoogleOAuthProvider>

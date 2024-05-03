@@ -1,15 +1,22 @@
+import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FiLock, FiCheckSquare } from 'react-icons/fi';
-import { useState } from 'react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Text } from '../ui/text';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import { Text } from '@/components/ui/text';
+import { Input } from '@/components//ui/input';
+import { Button } from '@/components//ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import FailedAlert from '@/components/alert/Failed';
-import SuccessAlert from '@/components/alert/Success';
+import { userApi } from '@/services/axios/userApi';
 
-export default function ChangePassword() {
+interface ChangePasswordProps {
+  userMutate: any;
+}
+
+export default function ChangePassword({ userMutate }: ChangePasswordProps) {
+  const { toast } = useToast()
+  const [open, setOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,14 +31,100 @@ export default function ChangePassword() {
 
   const [updating, setUpdating] = useState(false);
   const [updateError, setUpdateError] = useState('');
-  const [updateSuccess, setUpdateSuccess] = useState(false);
 
-  const handleUpdatePassword = async () => {};
+  useEffect(() => {
+    setPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+
+    setVisibility(false);
+    setNewVisibility(false);
+    setConfirmVisibility(false);
+
+    setPasswordError('');
+    setNewPasswordError('');
+    setConfirmError('');
+
+    setUpdating(false);
+    setUpdateError('');
+  }, [open]);
+
+  const handleOpenModal = () => setOpen(!open);
+
+  const handleViewPassword = () => {
+    const passwordInput = document.getElementById('current_password') as HTMLInputElement;
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      setVisibility(true);
+    } else {
+      passwordInput.type = 'password';
+      setVisibility(false);
+    }
+  };
+
+  const handleViewNewPassword = () => {
+    const passwordInput = document.getElementById('new_password') as HTMLInputElement;
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      setNewVisibility(true);
+    } else {
+      passwordInput.type = 'password';
+      setNewVisibility(false);
+    }
+  };
+
+  const handleViewConfirmPassword = () => {
+    const confirmPasswordInput = document.getElementById('confirm_password') as HTMLInputElement;
+    if (confirmPasswordInput.type === 'password') {
+      confirmPasswordInput.type = 'text';
+      setConfirmVisibility(true);
+    } else {
+      confirmPasswordInput.type = 'password';
+      setConfirmVisibility(false);
+    }
+  };
+
+  const handleUpdatePassword = async () => {
+    let hasError = false;
+    if (password.trim() === '') (hasError = true), setPasswordError('Password cannot be empty');
+    else (hasError = false), setPasswordError('');
+
+    if (newPassword.trim() === '') (hasError = true), setNewPasswordError('New password cannot be empty');
+    else (hasError = false), setNewPasswordError('');
+
+    if (confirmPassword.trim() === '') (hasError = true), setConfirmError('Please confirm your password');
+    else if (newPassword !== confirmPassword) (hasError = true), setConfirmError('Passwords do not match');
+    else (hasError = false), setConfirmError('');
+
+    setUpdateError('');
+    if (hasError) return;
+
+    setUpdating(true);
+    const changePasswordResponse = await userApi.changePassword({ currentPassword: password, newPassword });
+    setUpdating(false);
+
+    if (changePasswordResponse.error) {
+      setUpdateError(changePasswordResponse.message);
+    } else {
+      userMutate();
+      setOpen(false);
+      toast({
+        variant: 'success',
+        description: "Your password has been changed!",
+      })
+    }
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="text-white-primary bg-teal-secondary active:scale-[98%]">Change</Button>
+        <Button
+          id="change_password_trigger"
+          className="text-white-primary bg-teal-secondary active:scale-[98%]"
+          onClick={handleOpenModal}
+        >
+          Change
+        </Button>
       </DialogTrigger>
       <DialogContent className="bg-white-primary rounded-lg flex flex-col items-center pt-8 pb-5 max-w-[25%] gap-2">
         <DialogHeader className="w-[85%] flex flex-col items-center gap-3">
@@ -48,7 +141,7 @@ export default function ChangePassword() {
                 className="mb-[5px] pr-[100px]"
                 prefix={<FiLock size={20} color="#6b7280" />}
                 suffix={
-                  <Button variant={'ghost'} className="p-0">
+                  <Button variant={'ghost'} className="p-0" onClick={handleViewPassword}>
                     {visibility ? <FaEye size={18} color="#6b7280" /> : <FaEyeSlash size={18} color="#6b7280" />}
                   </Button>
                 }
@@ -72,7 +165,7 @@ export default function ChangePassword() {
                 className="mb-[5px] pr-[100px]"
                 prefix={<FiLock size={20} color="#6b7280" />}
                 suffix={
-                  <Button variant={'ghost'} className="p-0">
+                  <Button variant={'ghost'} className="p-0" onClick={handleViewNewPassword}>
                     {newVisisbility ? <FaEye size={18} color="#6b7280" /> : <FaEyeSlash size={18} color="#6b7280" />}
                   </Button>
                 }
@@ -96,7 +189,7 @@ export default function ChangePassword() {
                 className="mb-[5px] pr-[100px]"
                 prefix={<FiCheckSquare size={20} color="#6b7280" />}
                 suffix={
-                  <Button variant={'ghost'} className="p-0">
+                  <Button variant={'ghost'} className="p-0" onClick={handleViewConfirmPassword}>
                     {confirmVisibility ? <FaEye size={18} color="#6b7280" /> : <FaEyeSlash size={18} color="#6b7280" />}
                   </Button>
                 }
@@ -112,10 +205,7 @@ export default function ChangePassword() {
         </DialogHeader>
 
         <div className="w-[85%] flex flex-col items-center p-0">
-          {updateError && <FailedAlert title={'Sent mail failed'} message={updateError} />}
-          {updateSuccess && (
-            <SuccessAlert title={'Sent mail successfully'} message={'A new verification email has been sent'} />
-          )}
+          {updateError && <FailedAlert title={'Changed password failed'} message={updateError} />}
         </div>
 
         <DialogFooter className="pt-0">

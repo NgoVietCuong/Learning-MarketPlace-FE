@@ -80,8 +80,7 @@ export default function EditAccount() {
                 </Text>
               </div>
             </div>
-            {/* <Button className="text-white-primary bg-teal-secondary active:scale-[98%]">Change</Button> */}
-            <ChangePassword />
+            <ChangePassword userMutate={userMutate} />
           </div>
         </div>
       </div>
