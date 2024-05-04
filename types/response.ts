@@ -4,3 +4,10 @@ export interface Response<Data = {}> {
   data?: Data;
   error?: string;
 }
+
+export interface UploadResponse {
+  error?: {
+    message: string;
+  },
+  secure_url?: string;
+}

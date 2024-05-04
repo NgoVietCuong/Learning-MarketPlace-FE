@@ -1,4 +1,4 @@
-import axiosClient from '.';
+import { axiosClient } from '.';
 import { ChangeAvatarBody, ChangePasswordBody } from '@/types/request';
 import { Response } from '@/types/response';
 

@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app';
 import type { Page } from '@/types/page';
 import '@/styles/globals.css';
 import { SWRConfig } from 'swr';
-import axiosClient from '@/services/axios';
+import { axiosClient } from '@/services/axios';
 import AppLayout from '@/components/layout/app-layout';
 import { Toaster } from "@/components/ui/toaster"
 import { GoogleOAuthProvider } from '@react-oauth/google';

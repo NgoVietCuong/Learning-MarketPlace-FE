@@ -12,7 +12,7 @@ import FailedAlert from '@/components/alert/Failed';
 import EmailProvider from '@/components/modal/EmailProvider';
 import LoginMessageModal from '@/components/modal/LoginMessage';
 import { authApi } from '@/services/axios/authApi';
-import axiosClient from '@/services/axios';
+import { axiosClient } from '@/services/axios';
 
 interface ResetPasswordProps {
   isValid: boolean;

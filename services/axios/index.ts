@@ -18,13 +18,37 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
   function (response) {
-    // console.log('response', response);
     return response.data;
   },
   function (error) {
-    // console.log('error', error);
     return error.response.data;
   }
 );
 
-export default axiosClient;
+const axiosUpload = axios.create({
+  headers: {
+    'Content-Type': 'multipart/form-data'
+  }
+});
+
+axiosUpload.interceptors.request.use(
+  function (config) {
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+axiosUpload.interceptors.response.use(
+  function (response) {
+    console.log('response', response)
+    return response.data;
+  },
+  function (error) {
+    console.log('error', error);
+    return error.response.data;
+  }
+);
+
+export { axiosClient, axiosUpload };
