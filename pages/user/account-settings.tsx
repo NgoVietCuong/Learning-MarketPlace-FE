@@ -7,10 +7,11 @@ import { Heading } from '@/components/ui/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AccountSkeleton from '@/components/skeleton/AccountSkeleton';
 import UserLayout from '@/components/layout/user-layout';
+import ChangeAvatar from "@/components/modal/ChangeAvatar";
 import ChangePassword from "@/components/modal/ChangePassword";
 import useUser from '@/hooks/useUser';
 
-export default function EditAccount() {
+export default function AccountSettings() {
   const { user, isLoading, userMutate } = useUser();
 
   return (
@@ -64,7 +65,7 @@ export default function EditAccount() {
                 </Text>
               </div>
             </div>
-            <Button className="text-white-primary bg-teal-secondary active:scale-[98%]">Change</Button>
+            <ChangeAvatar />
           </div>
 
           <div className="flex items-center justify-between px-4 py-5 rounded-xl bg-slate-100 ">
@@ -88,6 +89,6 @@ export default function EditAccount() {
   );
 }
 
-EditAccount.getLayout = function (page: React.ReactNode) {
+AccountSettings.getLayout = function (page: React.ReactNode) {
   return <UserLayout>{page}</UserLayout>;
 };

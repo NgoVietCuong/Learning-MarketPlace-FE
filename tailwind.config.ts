@@ -83,6 +83,7 @@ const config = {
       },
       boxShadow: {
         xs: '0px 1px 30px 1px rgba(61,65,67,.1)',
+        "avatar": 'rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;'
       },
       borderRadius: {
         lg: "var(--radius)",

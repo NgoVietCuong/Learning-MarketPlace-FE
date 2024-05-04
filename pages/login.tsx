@@ -119,7 +119,7 @@ export default function Login() {
                 </Button>
               </div>
 
-              {logInEror && <FailedAlert title={'Sign up failed'} message={logInEror} />}
+              {logInEror && <FailedAlert title={'Login failed'} message={logInEror} />}
 
               <Button
                 disabled={loggingIn}
