@@ -1,15 +1,17 @@
-import { IoMailOutline } from "react-icons/io5";
-import { RxAvatar } from "react-icons/rx";
-import { GoShieldLock } from "react-icons/go";
+import { IoMailOutline } from 'react-icons/io5';
+import { RxAvatar } from 'react-icons/rx';
+import { GoShieldLock } from 'react-icons/go';
 import { Text } from '@/components/ui/text';
-import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AccountSkeleton from '@/components/skeleton/AccountSkeleton';
 import UserLayout from '@/components/layout/user-layout';
+import ChangePhoto from '@/components/modal/ChangePhoto';
+import ChangePassword from '@/components/modal/ChangePassword';
 import useUser from '@/hooks/useUser';
+import { userApi } from '@/services/axios/userApi';
 
-export default function EditAccount() {
+export default function AccountSettings() {
   const { user, isLoading, userMutate } = useUser();
 
   return (
@@ -19,7 +21,7 @@ export default function EditAccount() {
           <AccountSkeleton />
         ) : (
           <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-11 w-11">
               <AvatarImage src={user?.data?.avatar ? user.data.avatar : undefined} />
               <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-sm">
                 {user?.data?.username.slice(0, 2).toUpperCase()}
@@ -35,7 +37,7 @@ export default function EditAccount() {
             </div>
           </div>
         )}
-        
+
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between px-4 py-4 rounded-xl border-dashed border-2 border-slate-300">
             <div className="flex items-center gap-4">
@@ -63,7 +65,14 @@ export default function EditAccount() {
                 </Text>
               </div>
             </div>
-            <Button className="text-white-primary bg-teal-secondary active:scale-[98%]">Change</Button>
+            <ChangePhoto
+              title={'Change Avatar'}
+              field={'avatar'}
+              object={user}
+              isLoading={isLoading}
+              mutate={userMutate}
+              apiHandler={userApi.changeAvatar}
+            />
           </div>
 
           <div className="flex items-center justify-between px-4 py-5 rounded-xl bg-slate-100 ">
@@ -79,7 +88,7 @@ export default function EditAccount() {
                 </Text>
               </div>
             </div>
-            <Button className="text-white-primary bg-teal-secondary active:scale-[98%]">Change</Button>
+            <ChangePassword userMutate={userMutate} />
           </div>
         </div>
       </div>
@@ -87,6 +96,6 @@ export default function EditAccount() {
   );
 }
 
-EditAccount.getLayout = function (page: React.ReactNode) {
+AccountSettings.getLayout = function (page: React.ReactNode) {
   return <UserLayout>{page}</UserLayout>;
 };

@@ -46,10 +46,10 @@ const config = {
         //   DEFAULT: "hsl(var(--muted))",
         //   foreground: "hsl(var(--muted-foreground))",
         // },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
+        // accent: {
+        //   DEFAULT: "hsl(var(--accent))",
+        //   foreground: "hsl(var(--accent-foreground))",
+        // },
         // popover: {
         //   DEFAULT: "hsl(var(--popover))",
         //   foreground: "hsl(var(--popover-foreground))",
@@ -83,6 +83,7 @@ const config = {
       },
       boxShadow: {
         xs: '0px 1px 30px 1px rgba(61,65,67,.1)',
+        "avatar": 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
       },
       borderRadius: {
         lg: "var(--radius)",

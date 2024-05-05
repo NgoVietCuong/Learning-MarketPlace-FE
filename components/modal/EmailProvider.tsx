@@ -90,7 +90,7 @@ export default function EmailProvider({ open, setOpen, title, apiHandler, url }:
           <Button
             disabled={sending}
             type="button"
-            className="bg-teal-secondary text-white-primary px-[30px]"
+            className="bg-teal-secondary text-white-primary px-[30px] active:scale-95"
             onClick={handleSendEmail}
           >
             {sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

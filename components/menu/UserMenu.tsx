@@ -41,15 +41,15 @@ export default function UserMenu({ user, userMutate }: UserMenuProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 bg-white-primary">
-        <DropdownMenuLabel className="font-medium">My Account</DropdownMenuLabel>
+        <DropdownMenuLabel className="font-medium text-gray-800">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className=" bg-slate-200" />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="text-gray-700" onClick={() => router.push('/user/account-settings')}>
+          <DropdownMenuItem className="text-gray-700 cursor-pointer hover:bg-slate-100" onClick={() => router.push('/user/account-settings')}>
             <Settings className="mr-2 h-4 w-4" />
             Account settings
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuItem className="text-gray-700" onClick={handleLogout}>
+        <DropdownMenuItem className="text-gray-700 cursor-pointer hover:bg-slate-100" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>
