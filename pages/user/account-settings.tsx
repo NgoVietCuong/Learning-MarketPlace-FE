@@ -1,18 +1,44 @@
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { UserRoundCheck, Loader2 } from 'lucide-react';
 import { IoMailOutline } from 'react-icons/io5';
 import { RxAvatar } from 'react-icons/rx';
 import { GoShieldLock } from 'react-icons/go';
 import { Text } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import { Heading } from '@/components/ui/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AccountSkeleton from '@/components/skeleton/AccountSkeleton';
 import UserLayout from '@/components/layout/user-layout';
 import ChangePhoto from '@/components/modal/ChangePhoto';
 import ChangePassword from '@/components/modal/ChangePassword';
-import useUser from '@/hooks/useUser';
 import { userApi } from '@/services/axios/userApi';
+import useUser from '@/hooks/useUser';
+import { Roles } from '@/constants/enums';
 
 export default function AccountSettings() {
-  const { user, isLoading, userMutate } = useUser();
+  const router = useRouter();
+  const { toast } = useToast();
+  const { user, isLoading, userMutate, hasRole } = useUser();
+  const [loading, setLoading] = useState(false);
+
+  const handleBecomeInstructor = async () => {
+    setLoading(true);
+    const becomeInstructorResponse = await userApi.becomeInstructor();
+    if (becomeInstructorResponse.error) {
+      toast({
+        variant: 'destructive',
+        description: becomeInstructorResponse.message,
+      });
+    } else {
+      toast({
+        variant: 'success',
+        description: "You've become an instructor succesfully. Please update your profile!",
+      });
+      router.push('/instructor/settings');
+    }
+  };
 
   return (
     <div className="grow bg-white-primary shadow-lg rounded-xl">
@@ -20,21 +46,36 @@ export default function AccountSettings() {
         {isLoading ? (
           <AccountSkeleton />
         ) : (
-          <div className="flex items-center gap-3">
-            <Avatar className="h-11 w-11">
-              <AvatarImage src={user?.data?.avatar ? user.data.avatar : undefined} />
-              <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-sm">
-                {user?.data?.username.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <Heading size="xl" className="!font-medium !text-gray-700">
-                My account
-              </Heading>
-              <Text size="xs" as="p" className="text-gray-700">
-                {user?.data?.email}
-              </Text>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-11 w-11">
+                <AvatarImage src={user?.data?.avatar ? user.data.avatar : undefined} />
+                <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-sm">
+                  {user?.data?.username.slice(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <Heading size="xl" className="!font-medium !text-gray-700">
+                  My account
+                </Heading>
+                <Text size="xs" as="p" className="text-gray-700">
+                  {user?.data?.email}
+                </Text>
+              </div>
             </div>
+            {!hasRole(Roles.INSTRUCTOR) && (
+              <Button
+                className="!text-teal-secondary active:scale-[98%] border-[1px] border-teal-secondary"
+                onClick={handleBecomeInstructor}
+              >
+                {loading ? (
+                  <Loader2 className="mr-2 w-4 h-4 text-teal-secondary" />
+                ) : (
+                  <UserRoundCheck className="mr-2 w-4 h-4 text-teal-secondary" />
+                )}
+                Become an instructor
+              </Button>
+            )}
           </div>
         )}
 

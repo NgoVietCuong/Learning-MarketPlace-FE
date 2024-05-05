@@ -13,6 +13,14 @@ export interface Verify {
 }
 
 // user api schema
+export interface Role {
+  id: number;
+  name: string;
+  code: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface User {
   id: number;
   username: string;
@@ -22,4 +30,5 @@ export interface User {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
+  roles: Role[];
 }

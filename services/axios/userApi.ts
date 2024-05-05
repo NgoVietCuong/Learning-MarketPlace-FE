@@ -5,4 +5,5 @@ import { Response } from '@/types/response';
 export const userApi = {
   changeAvatar: (body: ChangeAvatarBody): Promise<Response> => axiosClient.patch('/user/change-avatar', body),
   changePassword: (body: ChangePasswordBody): Promise<Response> => axiosClient.patch('/user/change-password', body),
+  becomeInstructor: (): Promise<Response> => axiosClient.post('/user/become-instructor'),
 }
