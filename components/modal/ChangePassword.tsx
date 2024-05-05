@@ -15,7 +15,7 @@ interface ChangePasswordProps {
 }
 
 export default function ChangePassword({ userMutate }: ChangePasswordProps) {
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -110,8 +110,8 @@ export default function ChangePassword({ userMutate }: ChangePasswordProps) {
       setOpen(false);
       toast({
         variant: 'success',
-        description: "Your password has been changed!",
-      })
+        description: 'Your password has been changed!',
+      });
     }
   };
 

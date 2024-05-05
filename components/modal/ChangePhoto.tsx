@@ -7,14 +7,23 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/use-toast';
 import AvatarSkeleton from '@/components/skeleton/AvatarSkeleton';
 import FailedAlert from '@/components/alert/Failed';
-import { uploadApi } from '@/services/axios/uploadApi';
-import useUser from '@/hooks/useUser';
+import { uploadApi } from '@/services/axios/uploadApi'; 
+import { Response } from '@/types/response';
+import { User } from '@/types/schema';
 
-export default function changeAvatar() {
-  const toast = useToast();
-  const { user, isLoading, userMutate } = useUser();
+interface ChangePhotoProps {
+  title: string;
+  field: string;
+  object: Response<User> | undefined;
+  isLoading: boolean
+  mutate: any;
+  apiHandler: (body: any) => Promise<Response>;
+}
+
+export default function ChangePhoto({title, field, object, isLoading, mutate, apiHandler}: ChangePhotoProps) {
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [avatar, setAvatar] = useState('');
+  const [photo, setPhoto] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [uploading, setUploading] = useState(false);
@@ -32,7 +41,7 @@ export default function changeAvatar() {
   }, [open]);
 
   useEffect(() => {
-    if (user?.data?.avatar) setAvatar(user?.data?.avatar);
+    if (object?.data?.avatar) setPhoto(object?.data?.avatar);
   }, [isLoading])
 
   const handleOpenModal = () => setOpen(!open);
@@ -42,24 +51,37 @@ export default function changeAvatar() {
       return;
     }
     const file = e.target.files[0];
-    console.log('file', file);
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET!);
-    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/${user?.data?.id}/avatar`);
+    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/${field}/${object?.data?.id}`);
 
     setUploading(true);
     const uploadResponse = await uploadApi.uploadImage(formData);
     if (uploadResponse.error) {
       setUploadError(uploadResponse.error.message);
     } else {
-      console.log('ahihi', uploadResponse.secure_url);
       setSelectedFile(file);
-      setAvatar(uploadResponse.secure_url as string);
+      setPhoto(uploadResponse.secure_url as string);
     }
     setUploading(false);
   };
+
+  const handleSavePhoto = async () => {
+    setSaving(true);
+    const savePhotoResponse = await apiHandler({ [`${field}`] : photo });
+    if (savePhotoResponse.error) {
+      setSaveError(savePhotoResponse.message);
+    } else {
+      mutate();
+      setOpen(false);
+      toast({
+        variant: 'success',
+        description: `Your ${field} has been changed!`,
+      });
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -74,16 +96,16 @@ export default function changeAvatar() {
       </DialogTrigger>
 
       <DialogContent className="bg-white-primary rounded-lg flex flex-col items-center pt-8 pb-8 max-w-[25%] gap-3">
-        <DialogTitle className="text-2xl text-gray-700 mb-[15px]">Change Avatar</DialogTitle>
+        <DialogTitle className="text-2xl text-gray-700 mb-[15px]">{title}</DialogTitle>
         <DialogHeader className="w-[85%] flex flex-col items-center gap-3">
           <div className="w-full flex flex-col items-center gap-5 ">
             {isLoading ? (
               <AvatarSkeleton />
             ) : (
               <Avatar className="h-32 w-32 shadow-avatar border-4 border-white-primary">
-                <AvatarImage src={avatar} />
+                <AvatarImage src={photo} />
                 <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-5xl">
-                  {user?.data?.username.slice(0, 2).toUpperCase()}
+                  {uploading ? <Loader2 className="h-8 w-8 animate-spin" /> : object?.data?.username.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             )}
@@ -106,15 +128,17 @@ export default function changeAvatar() {
         </DialogHeader>
 
         <div className="w-[85%] flex flex-col items-center p-0">
-          {saveError && <FailedAlert title={'Changed password failed'} message={saveError} />}
+          {uploadError && <FailedAlert title={'Upload image failed'} message={uploadError} />}
+          {saveError && <FailedAlert title={'Save image failed'} message={saveError} />}
         </div>
 
         <DialogFooter>
           <div className="flex items-center gap-3">
             <Button
-              disabled={!avatar}
+              disabled={!selectedFile}
               type="button"
               className="bg-teal-secondary text-white-primary px-[30px] active:scale-95"
+              onClick={handleSavePhoto}
             >
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save

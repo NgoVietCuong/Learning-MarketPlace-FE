@@ -29,13 +29,12 @@ export default function EmailProvider({ open, setOpen, title, apiHandler, url }:
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState('');
   const [sendSuccess, setSendSuccess] = useState(false);
-  console.log("email", email)
 
   useEffect(() => {
-    // setEmail('');
-    // setEmailError('');
-    // setSendError('');
-    // setSendSuccess(false);
+    setEmail('');
+    setEmailError('');
+    setSendError('');
+    setSendSuccess(false);
   }, [open]);
 
   const handleSendEmail = async () => {

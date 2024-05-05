@@ -1,15 +1,15 @@
-import { IoMailOutline } from "react-icons/io5";
-import { RxAvatar } from "react-icons/rx";
-import { GoShieldLock } from "react-icons/go";
+import { IoMailOutline } from 'react-icons/io5';
+import { RxAvatar } from 'react-icons/rx';
+import { GoShieldLock } from 'react-icons/go';
 import { Text } from '@/components/ui/text';
-import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import AccountSkeleton from '@/components/skeleton/AccountSkeleton';
 import UserLayout from '@/components/layout/user-layout';
-import ChangeAvatar from "@/components/modal/ChangeAvatar";
-import ChangePassword from "@/components/modal/ChangePassword";
+import ChangePhoto from '@/components/modal/ChangePhoto';
+import ChangePassword from '@/components/modal/ChangePassword';
 import useUser from '@/hooks/useUser';
+import { userApi } from '@/services/axios/userApi';
 
 export default function AccountSettings() {
   const { user, isLoading, userMutate } = useUser();
@@ -37,7 +37,7 @@ export default function AccountSettings() {
             </div>
           </div>
         )}
-        
+
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between px-4 py-4 rounded-xl border-dashed border-2 border-slate-300">
             <div className="flex items-center gap-4">
@@ -65,7 +65,14 @@ export default function AccountSettings() {
                 </Text>
               </div>
             </div>
-            <ChangeAvatar />
+            <ChangePhoto
+              title={'Change Avatar'}
+              field={'avatar'}
+              object={user}
+              isLoading={isLoading}
+              mutate={userMutate}
+              apiHandler={userApi.changeAvatar}
+            />
           </div>
 
           <div className="flex items-center justify-between px-4 py-5 rounded-xl bg-slate-100 ">
