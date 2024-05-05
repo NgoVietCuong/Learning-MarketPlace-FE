@@ -49,7 +49,7 @@ export default function NavBar() {
             ) : user?.data ? (
               <div className="flex items-center gap-3">
                 <Text size="sm" as="p" className="font-medium text-gray-700">{user.data.username}</Text>
-                <UserMenu user={user.data} userMutate={userMutate} />
+                <UserMenu />
               </div>
             ) : (
               <div className="flex items-center gap-7">
