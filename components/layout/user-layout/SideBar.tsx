@@ -40,7 +40,7 @@ export default function UserSideBar() {
               <Text
                 size="sm"
                 as="p"
-                className={`${isSelected('/user/account-settings') ? 'text-gray-800' : 'text-gray-700'} inline-flex items-center font-medium`}
+                className={`${isSelected('/user/account-settings') ? 'text-gray-800' : '!text-gray-700'} inline-flex items-center font-medium`}
               >
                 <Settings className="mr-5 h-5 w-5" />
                 Account settings
