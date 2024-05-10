@@ -32,3 +32,20 @@ export interface User {
   updatedAt: string;
   roles: Role[];
 }
+
+
+// instructor api schema
+export interface InstructorProfile {
+  id: number;
+  userId: number;
+  slug: string | null;
+  displayName: string | null;
+  picture: string | null;
+  introduction: string | null;
+  biography: string | null;
+  twitterLink: string | null;
+  linkedinLink: string | null;
+  youtubeLink: string | null;
+  createdAt: string;
+  updatedAt: string;
+}

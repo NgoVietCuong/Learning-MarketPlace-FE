@@ -43,3 +43,18 @@ export interface ChangePasswordBody {
 export interface ChangeAvatarBody {
   avatar: string;
 }
+
+
+// instructor body request
+export interface ChangeInstructorPictureBody {
+  picture: string;
+}
+
+export interface ChangeInstructorProfileBody {
+  displayName: string;
+  introduction: string;
+  biography: string;
+  twitterLink?: string;
+  linkedInLink?: string;
+  youtubeLink?: string;
+}
