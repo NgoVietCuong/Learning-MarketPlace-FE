@@ -28,7 +28,7 @@ export default function InstructorSideBar() {
               as="p"
               className={`${isSelected('/instructor') ? '!text-white-primary' : 'text-gray-700'} inline-flex items-center font-medium`}
             >
-              <Gauge className="mr-5 h-5 w-5" />
+              <Gauge className="mr-4 h-5 w-5" />
               Dashboard
             </Text>
           </Link>
@@ -41,7 +41,7 @@ export default function InstructorSideBar() {
               as="p"
               className={`${isSelected('/instructor/courses') ? '!text-white-primary' : 'text-gray-700'} inline-flex items-center font-medium`}
             >
-              <BookCopy className="mr-5 h-5 w-5" />
+              <BookCopy className="mr-4 h-5 w-5" />
               Courses
             </Text>
           </Link>
@@ -54,7 +54,7 @@ export default function InstructorSideBar() {
               as="p"
               className={`${isSelected('/instructor/profile') ? '!text-white-primary' : 'text-gray-700'} inline-flex items-center font-medium`}
             >
-              <FilePenLine className="mr-5 h-5 w-5" />
+              <FilePenLine className="mr-4 h-5 w-5" />
               Profile
             </Text>
           </Link>
@@ -67,7 +67,7 @@ export default function InstructorSideBar() {
               as="p"
               className={`${isSelected('/instructor/settings') ? '!text-white-primary' : 'text-gray-700'} inline-flex items-center font-medium`}
             >
-              <Settings className="mr-5 h-5 w-5" />
+              <Settings className="mr-4 h-5 w-5" />
               Settings
             </Text>
           </Link>

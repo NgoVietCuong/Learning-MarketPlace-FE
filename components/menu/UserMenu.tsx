@@ -62,7 +62,7 @@ export default function UserMenu() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-gray-700 cursor-pointer hover:bg-slate-100"
-                onClick={() => router.push('/instructor/settings')}
+                onClick={() => router.push('/instructor/profile')}
               >
                 <FilePenLine className="mr-2 h-4 w-4" />
                 Edit Profile
