@@ -7,7 +7,7 @@ import UserMenu from '@/components/menu/UserMenu';
 import useUser from '@/hooks/useUser';
 
 export default function NavBar() {
-  const { user, isLoading, userMutate } = useUser();
+  const { user, isLoading } = useUser();
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { UserRoundCheck, Loader2 } from 'lucide-react';
+import { UserRoundCheck, Loader2, User } from 'lucide-react';
 import { IoMailOutline } from 'react-icons/io5';
 import { RxAvatar } from 'react-icons/rx';
 import { GoShieldLock } from 'react-icons/go';
@@ -48,10 +48,10 @@ export default function AccountSettings() {
         ) : (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Avatar className="h-11 w-11">
+              <Avatar className="h-12 w-12">
                 <AvatarImage src={user?.data?.avatar ? user.data.avatar : undefined} />
-                <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-sm">
-                  {user?.data?.username.slice(0, 2).toUpperCase()}
+                <AvatarFallback className="bg-slate-300 text-white-primary text-center font-medium text-sm">
+                  <User className="w-9 h-9" />
                 </AvatarFallback>
               </Avatar>
               <div>
@@ -116,7 +116,7 @@ export default function AccountSettings() {
             />
           </div>
 
-          <div className="flex items-center justify-between px-4 py-5 rounded-xl bg-slate-100 ">
+          <div className="flex items-center justify-between px-4 py-4 rounded-xl bg-slate-100">
             <div className="flex items-center gap-4">
               <GoShieldLock className="w-8 h-8 font-medium text-teal-secondary" />
               <div>

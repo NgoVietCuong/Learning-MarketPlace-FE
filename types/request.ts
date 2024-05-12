@@ -54,7 +54,7 @@ export interface ChangeInstructorProfileBody {
   displayName: string;
   introduction: string;
   biography: string;
-  twitterLink?: string;
-  linkedInLink?: string;
-  youtubeLink?: string;
+  twitterLink?: string | null;
+  linkedinLink?: string | null;
+  youtubeLink?: string | null;
 }
