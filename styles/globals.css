@@ -149,4 +149,14 @@
   [type='file'] + label {
     cursor: pointer;
   }
+
+  .quill .ql-toolbar {
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+  }
+
+  .quill .ql-container {
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
 }

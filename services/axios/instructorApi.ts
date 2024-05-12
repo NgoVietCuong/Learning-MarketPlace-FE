@@ -3,6 +3,6 @@ import { ChangeInstructorPictureBody, ChangeInstructorProfileBody } from "@/type
 import { Response } from "@/types/response";
 
 export const instructorApi = { 
-  changePicture: (body: ChangeInstructorPictureBody): Promise<Response> => axiosClient.patch('/instructor/change-picture', body),
-  changeProfile: (body: ChangeInstructorProfileBody): Promise<Response> => axiosClient.patch('/instructor/change-information', body),
+  changePicture: (body: ChangeInstructorPictureBody): Promise<Response> => axiosClient.patch('/instructor/profile/change-picture', body),
+  changeProfile: (body: ChangeInstructorProfileBody): Promise<Response> => axiosClient.patch('/instructor/profile/change-information', body),
 }

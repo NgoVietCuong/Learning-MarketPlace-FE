@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { LogOut, Settings, UserRoundCheck, FilePenLine } from 'lucide-react';
+import { LogOut, Settings, UserRoundCheck, FilePenLine, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -31,8 +31,8 @@ export default function UserMenu() {
         <Button variant={'ghost'} className="flex items-center gap-7 p-0">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.data?.avatar ? user?.data?.avatar : undefined} />
-            <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-sm">
-              {user?.data?.username.slice(0, 2).toUpperCase()}
+            <AvatarFallback className="bg-slate-300 text-white-primary text-center font-medium text-sm">
+              <User className="w-6 h-6" />
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -62,7 +62,7 @@ export default function UserMenu() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-gray-700 cursor-pointer hover:bg-slate-100"
-                onClick={() => router.push('/instructor/settings')}
+                onClick={() => router.push('/instructor/profile')}
               >
                 <FilePenLine className="mr-2 h-4 w-4" />
                 Edit Profile

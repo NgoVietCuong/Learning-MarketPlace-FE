@@ -33,7 +33,6 @@ export interface User {
   roles: Role[];
 }
 
-
 // instructor api schema
 export interface InstructorProfile {
   id: number;
@@ -48,4 +47,5 @@ export interface InstructorProfile {
   youtubeLink: string | null;
   createdAt: string;
   updatedAt: string;
+  [key: string]: string | number | null;
 }

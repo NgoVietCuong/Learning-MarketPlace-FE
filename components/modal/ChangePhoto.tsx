@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Loader2, CloudUpload } from 'lucide-react';
+import { User, Loader2, CloudUpload } from 'lucide-react';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components//ui/button';
@@ -7,23 +7,24 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/components/ui/use-toast';
 import AvatarSkeleton from '@/components/skeleton/AvatarSkeleton';
 import FailedAlert from '@/components/alert/Failed';
-import { uploadApi } from '@/services/axios/uploadApi'; 
+import { uploadApi } from '@/services/axios/uploadApi';
 import { Response } from '@/types/response';
-import { User } from '@/types/schema';
+import { User as UserSchema } from '@/types/schema';
+import { InstructorProfile } from '@/types/schema';
 
 interface ChangePhotoProps {
   title: string;
-  field: string;
-  object: Response<User> | undefined;
-  isLoading: boolean
+  field: 'avatar' | 'picture';
+  object: Response<UserSchema> | Response<InstructorProfile> | undefined;
+  isLoading: boolean;
   mutate: any;
   apiHandler: (body: any) => Promise<Response>;
 }
 
-export default function ChangePhoto({title, field, object, isLoading, mutate, apiHandler}: ChangePhotoProps) {
+export default function ChangePhoto({ title, field, object, isLoading, mutate, apiHandler }: ChangePhotoProps) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [photo, setPhoto] = useState('');
+  const [photo, setPhoto] = useState<string | null>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [uploading, setUploading] = useState(false);
@@ -41,8 +42,14 @@ export default function ChangePhoto({title, field, object, isLoading, mutate, ap
   }, [open]);
 
   useEffect(() => {
-    if (object?.data?.avatar) setPhoto(object?.data?.avatar);
-  }, [isLoading])
+    if (object) {
+      if (field === 'picture') {
+        setPhoto((object.data! as InstructorProfile)[field]);
+      } else {
+        setPhoto((object.data! as UserSchema)[field]);
+      }
+    }
+  }, [isLoading]);
 
   const handleOpenModal = () => setOpen(!open);
 
@@ -70,7 +77,7 @@ export default function ChangePhoto({title, field, object, isLoading, mutate, ap
 
   const handleSavePhoto = async () => {
     setSaving(true);
-    const savePhotoResponse = await apiHandler({ [`${field}`] : photo });
+    const savePhotoResponse = await apiHandler({ [`${field}`]: photo });
     if (savePhotoResponse.error) {
       setSaveError(savePhotoResponse.message);
     } else {
@@ -81,7 +88,8 @@ export default function ChangePhoto({title, field, object, isLoading, mutate, ap
         description: `Your ${field} has been changed!`,
       });
     }
-  }
+    setSaving(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -103,9 +111,9 @@ export default function ChangePhoto({title, field, object, isLoading, mutate, ap
               <AvatarSkeleton />
             ) : (
               <Avatar className="h-32 w-32 shadow-avatar border-4 border-white-primary">
-                <AvatarImage src={photo} />
-                <AvatarFallback className="bg-teal-secondary text-white-primary text-center font-medium text-5xl">
-                  {uploading ? <Loader2 className="h-8 w-8 animate-spin" /> : object?.data?.username.slice(0, 2).toUpperCase()}
+                <AvatarImage src={photo ? photo : undefined} />
+                <AvatarFallback className="bg-slate-300 text-white-primary text-center font-medium text-5xl">
+                  {uploading ? <Loader2 className="h-8 w-8 animate-spin" /> : <User className="w-20 h-20" />}
                 </AvatarFallback>
               </Avatar>
             )}
@@ -122,7 +130,13 @@ export default function ChangePhoto({title, field, object, isLoading, mutate, ap
               className="bg-slate-200 text-gray-700 px-[25px] py-[8px] rounded-md inline-flex items-center gap-2"
             >
               {uploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CloudUpload className="w-5 h-5" />}
-              {uploading ? 'Uploading' : !selectedFile ? 'Choose a file' : selectedFile.name.length > 15 ? `${selectedFile.name.substring(0, 14)}...` :  selectedFile.name}
+              {uploading
+                ? 'Uploading'
+                : !selectedFile
+                  ? 'Choose a file'
+                  : selectedFile.name.length > 15
+                    ? `${selectedFile.name.substring(0, 14)}...`
+                    : selectedFile.name}
             </Label>
           </div>
         </DialogHeader>
