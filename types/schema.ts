@@ -1,19 +1,19 @@
 // auth api schema
-export interface Token {
+export type Token = {
   accessToken: string;
 }
 
-export interface Login {
+export type Login = {
   accessToken: string;
   refreshToken: string;
 }
 
-export interface Verify {
+export type Verify = {
   isValid: boolean | null;
 }
 
 // user api schema
-export interface Role {
+export type Role = {
   id: number;
   name: string;
   code: string;
@@ -21,7 +21,7 @@ export interface Role {
   updatedAt: string;
 }
 
-export interface User {
+export type User = {
   id: number;
   username: string;
   email: string;
@@ -34,7 +34,7 @@ export interface User {
 }
 
 // instructor api schema
-export interface InstructorProfile {
+export type InstructorProfile = {
   id: number;
   userId: number;
   slug: string | null;
@@ -48,4 +48,9 @@ export interface InstructorProfile {
   createdAt: string;
   updatedAt: string;
   [key: string]: string | number | null;
+}
+
+// instructor course api schema
+export type CreateData = {
+  id: number;
 }
