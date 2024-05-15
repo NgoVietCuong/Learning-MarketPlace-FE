@@ -114,8 +114,8 @@ export default function EditProfile() {
   return (
     <div className="grow flex justify-center items-center">
       <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl">
-        <div className="px-8 py-6 flex flex-col gap-8">
-          <Heading size="3xl" className="!font-medium">
+        <div className="px-10 py-8 flex flex-col gap-8">
+          <Heading className="!font-medium">
             Instructor Profile
           </Heading>
           <div className="w-full flex flex-col gap-5">
