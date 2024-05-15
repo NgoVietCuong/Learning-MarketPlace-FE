@@ -15,7 +15,9 @@ export default function InstructorCourses() {
           <Heading className="!font-medium">
             Courses
           </Heading>
-          {!isLoading && <DataTable columns={CourseColumns} data={courseList!.data!.items} /> }
+          <div className='w-full'>
+            {!isLoading && <DataTable columns={CourseColumns} data={courseList!.data!.items} /> }
+          </div>
         </div>
       </div>
     </div>

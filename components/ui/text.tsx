@@ -2,6 +2,7 @@ import React from "react";
 
 const sizes = {
   xs: "text-xs",
+  tx: "text-[13px]",
   sm: "text-sm",
   s: "text-base",
   lg: "text-lg",
