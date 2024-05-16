@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { BookCheck, BookMinus, FilePenLine, Trash2, CircleCheck, CircleAlert, CircleDollarSign, WalletMinimal, DollarSign } from 'lucide-react';
+import { FilePenLine, Trash2, CircleCheck, CircleAlert, WalletMinimal, DollarSign } from 'lucide-react';
 import { Text } from '../../ui/text';
 import { Badge } from '../../ui/badge';
 import { Button } from '../../ui/button';

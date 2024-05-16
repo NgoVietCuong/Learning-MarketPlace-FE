@@ -13,7 +13,7 @@ export default function InstructorCourses() {
   return (
     <div className="grow flex justify-center items-center">
       <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl">
-        <div className="px-10 py-8 flex flex-col gap-8">
+        <div className="px-10 py-8 flex flex-col gap-4">
           <Heading className="!font-medium">
             Courses
           </Heading>
