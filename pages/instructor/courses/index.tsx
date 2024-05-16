@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import { useReactTable } from '@tanstack/react-table';
 import { Heading } from '@/components/ui/heading';
-import DataTable from '@/components/table/DataTable';
-import { CourseColumns } from '@/components/table/CourseColumns';
+import CourseTable from '@/components/table/course-table';
+import { CourseColumns } from '@/components/table/course-table/CourseColumns';
 import InstructorLayout from '@/components/layout/instructor-layout';
 import useCourseList from '@/hooks/useCourseList';
 
 export default function InstructorCourses() {
   const { courseList, isLoading, courseListMutate } = useCourseList();
+  console.log('courseList', courseList)
 
   return (
     <div className="grow flex justify-center items-center">
@@ -15,9 +17,7 @@ export default function InstructorCourses() {
           <Heading className="!font-medium">
             Courses
           </Heading>
-          <div className='w-full'>
-            {!isLoading && <DataTable columns={CourseColumns} data={courseList!.data!.items} /> }
-          </div>
+          {!isLoading && <CourseTable columns={CourseColumns} data={courseList!.data!.items} meta={courseList!.data!.meta} /> }
         </div>
       </div>
     </div>

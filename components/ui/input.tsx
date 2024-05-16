@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 const sizes = {
-  xs: 'h-[40px] px-4 text-base',
+  sm: 'h-[36px] px-3 text-[20px]',
+  base: 'h-[38px] px-4 text-base',
 } as const;
 
 type InputProps = Omit<
@@ -22,7 +23,7 @@ type InputProps = Omit<
   }>;
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, prefix, suffix, onChange, size = 'xs', ...props }, ref) => {
+  ({ className, type, prefix, suffix, onChange, size = 'base', ...props }, ref) => {
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       if (onChange) onChange(e?.target?.value);
     };

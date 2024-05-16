@@ -241,8 +241,9 @@ export default function EditProfile() {
                 {saveError && <FailedAlert title={'Update profile failed'} message={saveError} />}
               </div>
               <Button
+                size='sm'
                 disabled={!isChanged}
-                className="w-[100px] ] bg-teal-secondary text-white-primary active:scale-95"
+                className="w-[80px] bg-teal-secondary text-white-primary active:scale-95"
                 onClick={handleSaveProfile}
               >
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

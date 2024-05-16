@@ -83,13 +83,15 @@ export type Course = {
   categories: Category[];
 };
 
+export type Meta = {
+  totalItems: number;
+  itemCount: number;
+  itemsPerPage: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 export type CourseList = {
   items: Course[];
-  meta: {
-    totalItems: number;
-    itemCount: number;
-    itemsPerPage: number;
-    totalPages: number;
-    currentPage: number;
-  };
+  meta: Meta;
 };

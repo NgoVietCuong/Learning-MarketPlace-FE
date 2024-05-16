@@ -119,6 +119,7 @@ export default function ChangePassword({ userMutate }: ChangePasswordProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
+          size='sm'
           id="change_password_trigger"
           className="text-white-primary bg-teal-secondary active:scale-[98%]"
           onClick={handleOpenModal}
