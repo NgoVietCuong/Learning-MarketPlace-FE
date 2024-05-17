@@ -5,10 +5,15 @@ import CourseTable from '@/components/table/course-table';
 import { CourseColumns } from '@/components/table/course-table/CourseColumns';
 import InstructorLayout from '@/components/layout/instructor-layout';
 import useCourseList from '@/hooks/useCourseList';
+import useCategories from '@/hooks/useCategories';
 
 export default function InstructorCourses() {
   const { courseList, isLoading, courseListMutate } = useCourseList();
-  console.log('courseList', courseList)
+  const { categoryList, categoriesLoading } = useCategories();
+  console.log('categoriesLoading', categoriesLoading)
+  console.log('categoryList', categoryList);
+  console.log('courselist', courseList);
+  console.log('isLoading', isLoading)
 
   return (
     <div className="grow flex justify-center items-center">
@@ -17,7 +22,7 @@ export default function InstructorCourses() {
           <Heading className="!font-medium">
             Courses
           </Heading>
-          {!isLoading && <CourseTable columns={CourseColumns} data={courseList!.data!.items} meta={courseList!.data!.meta} /> }
+          {/* {!isLoading && <CourseTable columns={CourseColumns} data={courseList!.data!.items} meta={courseList!.data!.meta} /> } */}
         </div>
       </div>
     </div>

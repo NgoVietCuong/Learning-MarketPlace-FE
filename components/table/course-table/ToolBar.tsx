@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DataTableFacetedFilter } from './FacetedFilter';
 import { statuses, types } from '@/constants/filterField';
+import useCategories from '@/hooks/useCategories';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -12,8 +13,10 @@ interface DataTableToolbarProps<TData> {
 }
 
 export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TData>) {
-  console.log('data', data)
   const isFiltered = table.getState().columnFilters.length > 0;
+  // const { categoryList, categoriesLoading } = useCategories();
+  // console.log('categoriesLoading', categoriesLoading)
+  // console.log('categoryList', categoryList);
 
   return (
     <div className="flex items-center justify-between">
@@ -25,7 +28,7 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
           prefix={<Search size={16} className="text-gray-400" />}
           value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
           onChange={(value: string) => table.getColumn('email')?.setFilterValue(value)}
-          className="max-w-sm"
+          className="max-w-sm !text-xs"
         />
         {table.getColumn('isPublished') && (
           <DataTableFacetedFilter column={table.getColumn('status')} title="Status" options={statuses} />
@@ -33,6 +36,13 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
         {table.getColumn('price') && (
           <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={types} />
         )}
+        {/* {(!categoriesLoading && table.getColumn('categories')) && (
+          <DataTableFacetedFilter column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({
+            label: category.name,
+            value: category.name,
+            icon: category.icon
+          }))} />
+        )} */}
         {isFiltered && (
           <Button variant="ghost" onClick={() => table.resetColumnFilters()} className="h-8 px-2 lg:px-3">
             Reset

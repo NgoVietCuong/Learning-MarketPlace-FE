@@ -1,3 +1,8 @@
+import * as LucideIcons from 'lucide-react';
+
+// lucide icons
+type IconNames = keyof typeof LucideIcons;
+
 // auth api schema
 export type Token = {
   accessToken: string;
@@ -55,11 +60,13 @@ export type Category = {
   id: number;
   name: string;
   slug: string;
-  icon: string;
+  icon: IconNames;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
 };
+
+export type CategoryList = Category[];
 
 // instructor course api schema
 export type CreateData = {
@@ -80,7 +87,7 @@ export type Course = {
   price: number | null;
   createdAt: string;
   updatedAt: string;
-  categories: Category[];
+  categories: CategoryList;
 };
 
 export type Meta = {
