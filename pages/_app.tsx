@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }: Props) {
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
       <SWRConfig
         value={{
-          fetcher: (url) => axiosClient.get(url),
+          fetcher: (url: string) => axiosClient.get(url),
           revalidateOnFocus: false,
           shouldRetryOnError: false,
         }}

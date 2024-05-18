@@ -1,9 +1,14 @@
+
+import { useRouter } from 'next/router';
 import { ColumnDef } from '@tanstack/react-table';
 import { FilePenLine, Trash2, CircleCheck, CircleAlert, WalletMinimal, DollarSign } from 'lucide-react';
-import { Text } from '../../ui/text';
-import { Badge } from '../../ui/badge';
-import { Button } from '../../ui/button';
+import { Text } from '@/components/ui/text';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import DeleteAction from '@/components/modal/DeleteAction';
 import { Category, Course } from '@/types/schema';
+import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
+import useCourseList from '@/hooks/useCourseList';
 
 export const CourseColumns: ColumnDef<Course>[] = [
   {
@@ -83,15 +88,18 @@ export const CourseColumns: ColumnDef<Course>[] = [
         Actions
       </Text>
     ),
-    cell: () => (
-      <div className="flex flex-start">
-        <Button variant={'ghost'} className="p-2 hover:bg-slate-200">
+    cell: ({ row }) => {
+      const router = useRouter();
+      const { courseListMutate } = useCourseList();
+
+      return (
+        <div className="flex flex-start">
+        <Button variant={'ghost'} className="p-2 hover:bg-slate-200" onClick={() => router.push(`/instructor/courses/${row.original.id}`)}>
           <FilePenLine className="w-[17px] h-[17px] text-gray-600" />
         </Button>
-        <Button variant={'ghost'} className="p-2 hover:bg-slate-200">
-          <Trash2 className="w-[18px] h-[18px] text-gray-600" />
-        </Button>
+        <DeleteAction title={'Delete Course?'} object={'course'} mutate={courseListMutate} apiHandler={() => instructorCourseApi.deleteCourse(row.original.id)}  />
       </div>
-    ),
+      )
+    }
   },
 ];

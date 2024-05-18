@@ -14,9 +14,7 @@ interface DataTableToolbarProps<TData> {
 
 export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  // const { categoryList, categoriesLoading } = useCategories();
-  // console.log('categoriesLoading', categoriesLoading)
-  // console.log('categoryList', categoryList);
+  const { categoryList, categoriesLoading } = useCategories();
 
   return (
     <div className="flex items-center justify-between">
@@ -36,13 +34,13 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
         {table.getColumn('price') && (
           <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={types} />
         )}
-        {/* {(!categoriesLoading && table.getColumn('categories')) && (
+        {(!categoriesLoading && table.getColumn('categories')) && (
           <DataTableFacetedFilter column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({
             label: category.name,
             value: category.name,
             icon: category.icon
           }))} />
-        )} */}
+        )}
         {isFiltered && (
           <Button variant="ghost" onClick={() => table.resetColumnFilters()} className="h-8 px-2 lg:px-3">
             Reset
