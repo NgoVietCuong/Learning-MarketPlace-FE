@@ -6,7 +6,7 @@ export default function useUser() {
   const { data: user, isLoading, mutate: userMutate } = useSWR<Response<User>>('/user');
   
   const getUserRoles = () => {
-    if (!user) return [];
+    if (!user || !user.data) return [];
     return user.data!.roles.map((role) => role.code);
   }
 

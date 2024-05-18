@@ -1,11 +1,11 @@
-export interface Response<Data = {}> {
+export type Response<Data = {}> = {
   statusCode: number;
   message: string;
   data?: Data;
   error?: string;
 }
 
-export interface UploadResponse {
+export type UploadResponse = {
   error?: {
     message: string;
   },

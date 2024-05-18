@@ -1,56 +1,56 @@
 // auth body request
-export interface LoginBody {
+export type LoginBody = {
   email: string;
   password: string;
 }
 
-export interface GoogleLoginBody {
+export type GoogleLoginBody ={
   idToken: string;
 }
 
-export interface VerifyCodeBody {
+export type VerifyCodeBody = {
   email: string;
   code: string;
 }
 
-export interface SendVerifyEmailBody {
+export type SendVerifyEmailBody = {
   email: string;
 }
 
-export interface SendResetEmailBody {
+export type SendResetEmailBody = {
   email: string;
   url: string;
 }
 
-export interface RefreshTokenBody {
+export type RefreshTokenBody = {
   refreshToken: string;
 }
 
-export interface SignUpBody extends LoginBody {
+export type SignUpBody = LoginBody & {
   username: string;
 }
 
-export interface UpdatePasswordBody extends VerifyCodeBody {
+export type UpdatePasswordBody = VerifyCodeBody & {
   password: string;
 }
 
 // user body request
-export interface ChangePasswordBody {
+export type ChangePasswordBody = {
   currentPassword: string;
   newPassword: string;
 }
 
-export interface ChangeAvatarBody {
+export type ChangeAvatarBody=  {
   avatar: string;
 }
 
 
 // instructor body request
-export interface ChangeInstructorPictureBody {
+export type ChangeInstructorPictureBody = {
   picture: string;
 }
 
-export interface ChangeInstructorProfileBody {
+export type ChangeInstructorProfileBody = {
   displayName: string;
   introduction: string;
   biography: string;
@@ -58,3 +58,39 @@ export interface ChangeInstructorProfileBody {
   linkedinLink?: string | null;
   youtubeLink?: string | null;
 }
+
+
+// instructor course body request
+export type CreateCourseBody = {
+  title: string;
+  categoryIds: number[];
+}
+
+export type UpdateCourseBody = CreateCourseBody & {
+  overview: string;
+  description: string;
+  price: number;
+  level: string;
+  imagePreview?: string | null;
+  videoPreview?: string | null;
+}
+
+export type UpdatePublishBody = {
+  isPublished: boolean;
+}
+
+export type CreateSectionBody = {
+  title: string;
+  courseId: number;
+}
+
+export type UpdateSectionBody = Partial<CreateSectionBody>;
+
+export type CreateLessonBody = {
+  title: string;
+  sectionId: number;
+  contentType: string;
+  content?: string | null;
+}
+
+export type UpdateLessonBody = Partial<CreateLessonBody>;

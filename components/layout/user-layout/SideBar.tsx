@@ -27,7 +27,7 @@ export default function UserSideBar() {
               <Heading size="xl" as="h2" className="text-white-primary from-neutral-50 !font-medium">
                 Welcome back!
               </Heading>
-              <Text size="xs" as="p" className="text-white-primary">
+              <Text size="tx" as="p" className="text-white-primary">
                 HoaLearn student
               </Text>
             </div>

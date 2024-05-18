@@ -4,8 +4,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { FiLock, FiCheckSquare } from 'react-icons/fi';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Text } from '@/components/ui/text';
-import { Input } from '@/components//ui/input';
-import { Button } from '@/components//ui/button';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import FailedAlert from '@/components/alert/Failed';
 import { userApi } from '@/services/axios/userApi';
@@ -119,6 +119,7 @@ export default function ChangePassword({ userMutate }: ChangePasswordProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
+          size='sm'
           id="change_password_trigger"
           className="text-white-primary bg-teal-secondary active:scale-[98%]"
           onClick={handleOpenModal}

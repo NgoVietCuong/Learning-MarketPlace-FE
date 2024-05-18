@@ -36,7 +36,7 @@ export default function AccountSettings() {
         variant: 'success',
         description: "You've become an instructor succesfully. Please update your profile!",
       });
-      router.push('/instructor/settings');
+      router.push('/instructor/profile');
     }
   };
 
@@ -79,8 +79,8 @@ export default function AccountSettings() {
           </div>
         )}
 
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between px-4 py-4 rounded-xl border-dashed border-2 border-slate-300">
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between px-4 py-3 rounded-xl border-dashed border-2 border-slate-300">
             <div className="flex items-center gap-4">
               <IoMailOutline className="w-8 h-8 font-medium text-teal-secondary" />
               <div>
