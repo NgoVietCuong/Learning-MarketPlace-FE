@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const sizes = {
-  sm: 'h-[36px] px-3',
+  sm: 'h-[36px] px-4',
   base: 'h-[38px] px-4 text-base',
 } as const;
 
