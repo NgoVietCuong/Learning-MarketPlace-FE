@@ -24,8 +24,8 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
           type="text"
           placeholder="Filter courses..."
           prefix={<Search size={16} className="text-gray-400" />}
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(value: string) => table.getColumn('email')?.setFilterValue(value)}
+          // value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
+          // onChange={(value: string) => table.getColumn('email')?.setFilterValue(value)}
           className="max-w-sm !text-xs"
         />
         {table.getColumn('isPublished') && (

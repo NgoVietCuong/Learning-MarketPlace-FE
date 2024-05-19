@@ -52,7 +52,7 @@ export default function InstructorCreateCourse({ categories }: InstructorCreateC
       router.push(`/instructor/courses/${courseId}`);
       toast({
         variant: 'success',
-        description: `Created course successfully! Now you can update your course.`,
+        description: `Created course successfully!`,
       });
     }
     setSaving(false);

@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
-import 'react-quill/dist/quill.snow.css';
 import { User, Loader2 } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';

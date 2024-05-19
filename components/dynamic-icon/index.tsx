@@ -1,6 +1,5 @@
 import * as LucideIcons from 'lucide-react';
-
-type IconNames = keyof typeof LucideIcons;
+import { IconNames } from '@/types/common';
 
 interface IconProps {
   iconName: IconNames;

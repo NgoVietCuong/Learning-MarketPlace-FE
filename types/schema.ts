@@ -1,7 +1,5 @@
-import * as LucideIcons from 'lucide-react';
-
-// lucide icons
-type IconNames = keyof typeof LucideIcons;
+import { IconNames } from "./common";
+import { LessonContentTypes } from "../constants/enums";
 
 // auth api schema
 export type Token = {
@@ -68,11 +66,11 @@ export type Category = {
 
 export type CategoryList = Category[];
 
-// instructor course api schema
 export type CreateData = {
   id: number;
 };
 
+// instructor course api schema
 export type Course = {
   id: number;
   instructorId: number;
@@ -102,3 +100,29 @@ export type CourseList = {
   items: Course[];
   meta: Meta;
 };
+
+export type Lesson = {
+  id: number;
+  sectionId: number;
+  title: string;
+  contentType: LessonContentTypes;
+  content: string | null;
+  sortOrder: number;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type Section = {
+  id: number;
+  courseId: number;
+  title: string;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+  lessons: Lesson[];
+}
+
+export type CourseDetails = Course & {
+  sections: Section[];
+}
