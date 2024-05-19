@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Plus, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import {
@@ -22,6 +23,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export default function CourseTable<TData, Tavlue>({ columns, data, meta }: DataTableProps<TData, Tavlue>) {
+  const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
@@ -35,7 +37,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
         <CourseToolbar table={table} data={data}/>
-        <Button size="base" className="text-white-primary bg-teal-secondary active:scale-[98%]">
+        <Button size="base" className="text-white-primary bg-teal-secondary active:scale-[98%]" onClick={() => router.push("/instructor/courses/create")}>
           <Plus className="mr-1 w-4 h-4 text-white-primary" />
           Add Course
         </Button>
