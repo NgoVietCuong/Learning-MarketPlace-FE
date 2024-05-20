@@ -160,4 +160,13 @@
     border-bottom-left-radius: 0.375rem;
     border-bottom-right-radius: 0.375rem;
   }
+
+  button[data-state='active'] {
+    background-color: #ffffff;
+    color: #4b5563!important;
+  }
+
+  button[data-state='inactive'] {
+    color: #ffffff!important;
+  }
 }
