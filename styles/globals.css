@@ -153,6 +153,7 @@
   .quill .ql-toolbar {
     border-top-left-radius: 0.375rem;
     border-top-right-radius: 0.375rem;
+    height: 38px;
   }
 
   .quill .ql-container {

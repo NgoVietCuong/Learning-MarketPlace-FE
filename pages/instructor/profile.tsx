@@ -149,6 +149,7 @@ export default function EditProfile() {
                     Display name
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="Enter your display name"
                     className="mb-[5px] pr-[100px]"
@@ -166,6 +167,7 @@ export default function EditProfile() {
                     Headline
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="Enter your headline"
                     className="mb-[5px] pr-[100px]"
@@ -202,6 +204,7 @@ export default function EditProfile() {
                     Twitter
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="http://www.twitter.com/username"
                     className="mb-[5px] pr-[100px]"
@@ -214,6 +217,7 @@ export default function EditProfile() {
                     Linkedin
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="http://www.linkedin.com/username"
                     className="mb-[5px] pr-[100px]"
@@ -226,6 +230,7 @@ export default function EditProfile() {
                     Youtube
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="http://www.youtube.com/username"
                     className="mb-[5px] pr-[100px]"
