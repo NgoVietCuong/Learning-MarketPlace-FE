@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { useToast } from '@/components/ui/use-toast';
-import CategoryButton from '@/components/ui/category-button';
+import { CategoryButton } from '@/components/ui/category-button';
 import InstructorLayout from '@/components/layout/instructor-layout';
 import FailedAlert from '@/components/alert/Failed';
 import { axiosClient } from '@/services/axios';

@@ -169,4 +169,8 @@
   button[data-state='inactive'] {
     color: #ffffff!important;
   }
+
+  button span {
+    color: #374151;
+  }
 }

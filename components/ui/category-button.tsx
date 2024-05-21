@@ -16,7 +16,7 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({ key, category, isSelect
       className={clsx(
         'font-medium h-[35px] px-3 rounded-md text-[13px] border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
         {
-          'text-teal-primary border-teal-primary': isSelected,
+          'text-teal-500 border-teal-primary': isSelected,
           'text-gray-400 border-input': !isSelected,
         },
         className
@@ -27,4 +27,4 @@ const CategoryButton: React.FC<CategoryButtonProps> = ({ key, category, isSelect
   );
 };
 
-export default CategoryButton;
+export { CategoryButton };

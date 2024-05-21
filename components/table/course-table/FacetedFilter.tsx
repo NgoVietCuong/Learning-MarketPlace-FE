@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
+import { CheckIcon } from '@radix-ui/react-icons';
 import { CirclePlus } from 'lucide-react';
 import { Column } from '@tanstack/react-table';
 import { cn } from '@/lib/utils';

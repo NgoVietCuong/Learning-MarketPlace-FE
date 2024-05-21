@@ -6,7 +6,7 @@ import { Text } from '@/components/ui/text';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import DeleteAction from '@/components/modal/DeleteAction';
-import { Category, Course } from '@/types/schema';
+import { CategoryList, Course } from '@/types/schema';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import useCourseList from '@/hooks/useCourseList';
 
@@ -73,7 +73,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex gap-2">
-        {(row.getValue('categories') as Category[]).map((category) => (
+        {(row.getValue('categories') as CategoryList).map((category) => (
           <Badge variant={'info'}>
             <Text className="!font-medium text-sky-600">{category.name}</Text>
           </Badge>
