@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { Trash2, Loader2 } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
@@ -10,13 +11,16 @@ import { Response } from '@/types/response';
 interface DeleteActionProps {
   title: string;
   object: string;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   mutate: any;
+  redirect?: boolean
   apiHandler: () => Promise<Response>;
 }
 
-export default function DeleteAction({ title, object, mutate, apiHandler }: DeleteActionProps) {
+export default function DeleteAction({ title, object, open, setOpen, mutate, redirect, apiHandler }: DeleteActionProps) {
+  const router = useRouter();
   const { toast } = useToast();
-  const [open, setOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState('');
 
@@ -24,8 +28,6 @@ export default function DeleteAction({ title, object, mutate, apiHandler }: Dele
     setDeleting(false);
     setDeleteError('');
   }, [open]);
-
-  const handleOpenModal = () => setOpen(!open);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -39,18 +41,13 @@ export default function DeleteAction({ title, object, mutate, apiHandler }: Dele
         variant: 'success',
         description: `Deleted ${object} successfully!`,
       });
+      if (redirect) router.push('/instructor/courses');
     }
     setDeleting(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant={'ghost'} className="p-2 hover:bg-slate-200">
-          <Trash2 className="w-[18px] h-[18px] text-gray-600" />
-        </Button>
-      </DialogTrigger>
-
       <DialogContent className="bg-white-primary rounded-lg flex flex-col py-6 max-w-[23%] gap-5">
         <DialogTitle className="text-2xl text-gray-700">{title}</DialogTitle>
         <DialogHeader className="w-full flex justify-start text-sm">
@@ -64,7 +61,7 @@ export default function DeleteAction({ title, object, mutate, apiHandler }: Dele
             {deleteError && <FailedAlert title={`Delete ${object} failed`} message={deleteError} />}
           </div>
           <div className="flex items-center gap-3 justify-end">
-            <Button size="sm" className="bg-gray-200 active:scale-[98%]" onClick={handleOpenModal}>
+            <Button size="sm" className="bg-gray-200 active:scale-[98%]" onClick={() => setOpen(!open)}>
               Cancel
             </Button>
             <Button

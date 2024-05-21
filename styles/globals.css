@@ -167,7 +167,7 @@
   }
 
   button[data-state='inactive'] {
-    color: #ffffff!important;
+    color: #4b5563!important;
   }
 
   button span {

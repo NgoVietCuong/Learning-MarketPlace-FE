@@ -1,9 +1,10 @@
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { GetServerSidePropsContext } from 'next';
-import { Loader2, Trash2, Upload, ImageOff, SquarePlay } from 'lucide-react';
+import { Loader2, Trash2, Upload, ImageOff, SquarePlay, TriangleAlert } from 'lucide-react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { Text } from '@/components/ui/text';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ import InstructorLayout from '@/components/layout/instructor-layout';
 import CourseInfoSkeleton from '@/components/skeleton/CourseInfoSkeleton';
 import DeleteAction from '@/components/modal/DeleteAction';
 import useCategories from '@/hooks/useCategories';
+import useCourseList from '@/hooks/useCourseList';
 import useCourseDetails from '@/hooks/useCourseDetails';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Course, CategoryList } from '@/types/schema';
@@ -28,7 +30,9 @@ interface InstructorCourseDetailsProps {
 
 export default function InstructorCourseDetails({ id }: InstructorCourseDetailsProps) {
   const { categoryList } = useCategories();
+  const { courseListMutate } = useCourseList();
   const { courseDetails, isLoading, courseDetailsMutate } = useCourseDetails(id);
+  const [open, setOpen] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -62,13 +66,14 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
     setCourseInfo({ ...courseInfo!, level: value });
   };
 
-  const handleChangePrice = (value: number) => {
-    setCourseInfo({ ...courseInfo!, price: value });
+  const handleChangePrice = (value: string) => {
+    let newValue = parseFloat(value);
+    setCourseInfo({ ...courseInfo!, price: newValue && newValue > 0 ? parseFloat(newValue.toFixed(2)) : null });
   };
 
   const handleChangeCategories = (value: CategoryList) => {
     setCourseInfo({ ...courseInfo!, categories: value });
-  }
+  };
 
   return (
     <div className="grow flex justify-center items-center">
@@ -78,27 +83,42 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
             <CourseInfoSkeleton />
           ) : (
             <>
+              <Alert variant={'warning'}>
+                <AlertDescription className="flex items-center">
+                  <TriangleAlert className="h-4 w-4 mr-2" />
+                  <Text size="tx" className='font-medium !text-gray-700'>This course is unpublished. It will not be visible for everyone.</Text>
+                </AlertDescription>
+              </Alert>
               <div className="flex justify-between">
-                <Heading className="!font-medium">Courses Details</Heading>
+                <Heading className="!font-medium">
+                  {courseInfo?.isPublished ? 'Course Details' : 'Course Setup'}
+                </Heading>
                 <div className="flex items-center gap-2">
                   <Button size="sm" variant={'outline'} className="p-[15px]">
-                    Publish
+                    {courseInfo?.isPublished ? 'Unpublish' : 'Publish'}
                   </Button>
-                  {/* <Button size="sm" variant={'destructive'} className="p-2">
+                  <Button size="sm" variant={'destructive'} className="p-2" onClick={() => setOpen(!open)}>
                     <Trash2 className="w-[17px] h-[17px]" />
-                  </Button> */}
+                  </Button>
                   <DeleteAction
                     title={'Delete Course?'}
                     object={'course'}
-                    mutate={courseDetailsMutate}
+                    open={open}
+                    setOpen={setOpen}
+                    mutate={courseListMutate}
+                    redirect={true}
                     apiHandler={() => instructorCourseApi.deleteCourse(id)}
                   />
                 </div>
               </div>
               <Tabs defaultValue="Course Info" className="w-full">
-                <TabsList className="bg-teal-secondary py-2 mb-2">
-                  <TabsTrigger value="Course Info">Course Info</TabsTrigger>
-                  <TabsTrigger value="Sections">Sections</TabsTrigger>
+                <TabsList className="bg-slate-200 py-2 mb-2">
+                  <TabsTrigger value="Course Info" className="px-4">
+                    Course Info
+                  </TabsTrigger>
+                  <TabsTrigger value="Sections" className="px-4">
+                    Sections
+                  </TabsTrigger>
                 </TabsList>
                 <TabsContent value="Course Info" className="flex flex-col gap-3">
                   <div className="flex gap-7 justify-between py-3">
@@ -153,6 +173,8 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                           placeholder="Enter course price"
                           className="mb-[5px] pr-[100px]"
                           prefix={<BsCurrencyDollar size={16} color="#6b7280" />}
+                          value={courseInfo?.price ? courseInfo?.price.toString() : undefined}
+                          onChange={handleChangePrice}
                         />
                       </div>
                       <div className="w-full flex flex-col items-start gap-1">
@@ -183,12 +205,12 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                         <Text size="sm" className="font-medium !text-gray-600">
                           Categories<span className="text-red-500"> *</span>
                         </Text>
-                        {(categoryList && courseInfo) && (
+                        {categoryList && courseInfo && (
                           <div className="w-full flex flex-wrap gap-2">
                             <AddCategory
                               categories={categoryList.data!.filter((category) => category.id !== 14)}
                               selectedCategories={courseInfo?.categories!}
-                              
+                              handleSelectCategory={handleChangeCategories}
                             />
                             {courseInfo?.categories
                               .filter((category) => category.id !== 14)

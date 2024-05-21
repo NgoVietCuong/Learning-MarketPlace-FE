@@ -1,5 +1,5 @@
-
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { FilePenLine, Trash2, CircleCheck, CircleAlert, WalletMinimal, DollarSign } from 'lucide-react';
 import { Text } from '@/components/ui/text';
@@ -91,13 +91,17 @@ export const CourseColumns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       const router = useRouter();
       const { courseListMutate } = useCourseList();
+      const [open, setOpen] = useState(false);
 
       return (
         <div className="flex flex-start">
         <Button variant={'ghost'} className="p-2 hover:bg-slate-200" onClick={() => router.push(`/instructor/courses/${row.original.id}`)}>
           <FilePenLine className="w-[17px] h-[17px] text-gray-600" />
         </Button>
-        <DeleteAction title={'Delete Course?'} object={'course'} mutate={courseListMutate} apiHandler={() => instructorCourseApi.deleteCourse(row.original.id)}  />
+        <Button variant={'ghost'} className="p-2 hover:bg-slate-200" onClick={() => setOpen(!open)}>
+          <Trash2 className="w-[18px] h-[18px] text-gray-600" />
+        </Button>
+        <DeleteAction title={'Delete Course?'} object={'course'} open={open} setOpen={setOpen} mutate={courseListMutate} apiHandler={() => instructorCourseApi.deleteCourse(row.original.id)}  />
       </div>
       )
     }

@@ -9,10 +9,11 @@ import { CategoryList } from '@/types/schema';
 
 interface AddCategoryProps {
   categories: CategoryList;
-  selectedCategories: CategoryList
+  selectedCategories: CategoryList;
+  handleSelectCategory: (value: CategoryList) => void;
 }
 
-export default function AddCategory({ categories, selectedCategories }: AddCategoryProps) {
+export default function AddCategory({ categories, selectedCategories, handleSelectCategory }: AddCategoryProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -35,27 +36,33 @@ export default function AddCategory({ categories, selectedCategories }: AddCateg
             <CommandEmpty>No category found.</CommandEmpty>
             <CommandGroup>
               {categories.map((category) => {
-                const isSelected = selectedCategories.map(c => c.id).includes(category.id);
+                const isSelected = selectedCategories.map((c) => c.id).includes(category.id);
                 return (
                   <CommandItem
-                  key={category.id}
-                  value={category.name}
-                  className="text-gray-700"
-                  onSelect={() => {
-
-                  }}
-                >
-                  <div
-                    className={cn(
-                      'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-                      isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible',
-                    )}
+                    key={category.id}
+                    value={category.name}
+                    className="text-gray-700"
+                    onSelect={() => {
+                      if (isSelected) {
+                        handleSelectCategory(selectedCategories.filter((c) => c.id !== category.id));
+                      } else if (selectedCategories.length === 3) {
+                        handleSelectCategory(selectedCategories);
+                      } else {
+                        handleSelectCategory([...selectedCategories, category]);
+                      }
+                    }}
                   >
-                    <CheckIcon className={cn('h-4 w-4')} />
-                  </div>
-                  {category.name}
-                </CommandItem>
-                )
+                    <div
+                      className={cn(
+                        'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                        isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible',
+                      )}
+                    >
+                      <CheckIcon className={cn('h-4 w-4')} />
+                    </div>
+                    {category.name}
+                  </CommandItem>
+                );
               })}
             </CommandGroup>
           </CommandList>
