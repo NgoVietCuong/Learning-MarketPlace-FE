@@ -21,6 +21,7 @@ import DeleteAction from '@/components/modal/DeleteAction';
 import useCategories from '@/hooks/useCategories';
 import useCourseList from '@/hooks/useCourseList';
 import useCourseDetails from '@/hooks/useCourseDetails';
+import { uploadApi } from '@/services/axios/uploadApi';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Course, CategoryList } from '@/types/schema';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -36,6 +37,10 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
   const { courseDetails, isLoading, courseDetailsMutate } = useCourseDetails(id);
   const [open, setOpen] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -43,7 +48,6 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
   const [priceError, setPriceError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [publish, setPublish] = useState<boolean | null>(null);
-
   const [courseInfo, setCourseInfo] = useState<Omit<Course, 'isPublished'> | null>(null);
 
   console.log('courseInfo', courseInfo);
@@ -51,6 +55,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
   useEffect(() => {
     if (courseDetails) {
       const { sections, isPublished, ...rest } = courseDetails.data!;
+      setPublish(isPublished);
       setCourseInfo(rest);
     }
   }, [isLoading]);
@@ -80,24 +85,57 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
     setCourseInfo({ ...courseInfo!, categories: value });
   };
 
-  // const handleCheckCondition = () => {
-  //   if (!courseInfo) return false;
-  //   if (courseInfo.title.trim() === '') return false;
-  //   else if (courseInfo.overview.trim() === '')
-  // }
+  const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET!);
+    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/course-image/${courseInfo?.id}`);
+
+    setImageUploading(true);
+    const uploadResponse = await uploadApi.uploadImage(formData);
+    if (!uploadResponse.error) {
+      setSelectedImage(file);
+      setCourseInfo({ ...courseInfo!, imagePreview: uploadResponse.secure_url as string });
+    }
+    setImageUploading(false);
+  };
+
+  const handleChangeVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET!);
+    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/course-video/${courseInfo?.id}`);
+
+    setVideoUploading(true);
+    const uploadResponse = await uploadApi.uploadVideo(formData);
+    if (!uploadResponse.error) {
+      setSelectedVideo(file);
+      setCourseInfo({ ...courseInfo!, videoPreview: uploadResponse.secure_url as string });
+    }
+    setVideoUploading(false);
+  };
+
 
   const handlePublishCourse = async () => {
     setPublishing(true);
     const publishResponse = await instructorCourseApi.updatePublishCourse(courseInfo!.id, {
-      isPublished: !isPublished,
+      isPublished: !publish,
     });
     if (!publishResponse.error) {
       courseDetailsMutate();
       toast({
         variant: 'success',
-        description: `${isPublished ? 'Unpublished' : 'Published'} course successfully!`,
+        description: `${publish ? 'Unpublished' : 'Published'} course successfully!`,
       });
-      // setCourseInfo({ ...courseInfo!, isPublished: !courseInfo!.isPublished });
+      setPublish(!publish);
     }
     setPublishing(false);
   };
@@ -110,13 +148,11 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
             <CourseInfoSkeleton />
           ) : (
             <>
-              {isPublished && (
+              {!publish && (
                 <WarningAlert message={'This course is unpublished. It will not be visible for everyone.'} />
               )}
               <div className="flex justify-between">
-                <Heading className="!font-medium">
-                  {isPublished ? 'Course Details' : 'Course Setup'}
-                </Heading>
+                <Heading className="!font-medium">{publish ? 'Course Details' : 'Course Setup'}</Heading>
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"
@@ -126,7 +162,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                     onClick={handlePublishCourse}
                   >
                     {publishing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {courseInfo?.isPublished ? 'Unpublish' : 'Publish'}
+                    {publish ? 'Unpublish' : 'Publish'}
                   </Button>
                   <Button size="sm" variant={'destructive'} className="p-2" onClick={() => setOpen(!open)}>
                     <Trash2 className="w-[17px] h-[17px]" />
@@ -263,13 +299,29 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                         <Text size="sm" className="font-medium !text-gray-600">
                           Course image
                         </Text>
-                        <input type="file" id="course_image" />
+                        <input
+                          type="file"
+                          id="course_image"
+                          accept="image/png, image/gif, image/jpeg, image/jpg"
+                          disabled={imageUploading}
+                          onChange={handleChangeImage}
+                        />
                         <Label
                           htmlFor="course_image"
                           className="w-full bg-white font-normal border border-gray-border border-dashed rounded-md h-[36px] flex items-center px-4 text-gray-primary"
                         >
-                          <Upload className="w-4 h-4 mr-2" />
-                          Select an image
+                          {imageUploading ? (
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          ) : (
+                            <Upload className="w-4 h-4 mr-2" />
+                          )}
+                          {imageUploading
+                            ? 'Uploading...'
+                            : !selectedImage
+                              ? 'Select an image'
+                              : selectedImage.name.length > 15
+                                ? `${selectedImage.name.substring(0, 14)}...`
+                                : selectedImage.name}
                         </Label>
                         <div className="w-full flex h-[220px] bg-slate-200 justify-center items-center rounded-md">
                           <ImageOff className="w-28 h-28 text-gray-400" />
@@ -279,13 +331,29 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                         <Text size="sm" className="font-medium !text-gray-600">
                           Course video
                         </Text>
-                        <input type="file" id="course_video" />
+                        <input
+                          type="file"
+                          id="course_video"
+                          disabled={videoUploading}
+                          accept="video/mp4,video/x-m4v,video/*"
+                          onChange={handleChangeVideo}
+                        />
                         <Label
                           htmlFor="course_video"
                           className="w-full bg-white font-normal border border-gray-border border-dashed rounded-md h-[36px] flex items-center px-4 text-gray-primary"
                         >
-                          <Upload className="w-4 h-4 mr-2" />
-                          Select a video
+                          {videoUploading ? (
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          ) : (
+                            <Upload className="w-4 h-4 mr-2" />
+                          )}
+                          {videoUploading
+                            ? 'Uploading...'
+                            : !selectedVideo
+                              ? 'Select a video'
+                              : selectedVideo.name.length > 15
+                                ? `${selectedVideo.name.substring(0, 14)}...`
+                                : selectedVideo.name}
                         </Label>
                         <div className="w-full flex h-[240px] bg-slate-200 justify-center items-center rounded-md">
                           <SquarePlay className="w-28 h-28 text-gray-400" />
