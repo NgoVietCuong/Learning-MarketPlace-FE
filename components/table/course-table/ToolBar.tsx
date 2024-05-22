@@ -4,7 +4,7 @@ import { Cross2Icon } from '@radix-ui/react-icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DataTableFacetedFilter } from './FacetedFilter';
-import { statuses, types } from '@/constants/filterField';
+import { Statuses, Types } from '@/constants/filterField';
 import useCategories from '@/hooks/useCategories';
 
 interface DataTableToolbarProps<TData> {
@@ -29,10 +29,10 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
           className="max-w-sm !text-xs"
         />
         {table.getColumn('isPublished') && (
-          <DataTableFacetedFilter column={table.getColumn('status')} title="Status" options={statuses} />
+          <DataTableFacetedFilter column={table.getColumn('status')} title="Status" options={Statuses} />
         )}
         {table.getColumn('price') && (
-          <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={types} />
+          <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={Types} />
         )}
         {(!categoryLoading && table.getColumn('categories')) && (
           <DataTableFacetedFilter column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({

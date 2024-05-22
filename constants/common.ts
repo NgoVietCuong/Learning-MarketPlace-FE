@@ -1,0 +1,1 @@
+export const UnknownCategoryId = 14;

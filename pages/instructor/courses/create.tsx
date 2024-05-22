@@ -13,12 +13,11 @@ import { axiosClient } from '@/services/axios';
 import { Response } from '@/types/response';
 import { CategoryList } from '@/types/schema';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
+import { UnknownCategoryId } from '@/constants/common';
 
 interface InstructorCreateCourseProps {
   categories: CategoryList;
 }
-
-const unknownCategoryId = 14;
 
 export default function InstructorCreateCourse({ categories }: InstructorCreateCourseProps) {
   const router = useRouter();
@@ -34,8 +33,8 @@ export default function InstructorCreateCourse({ categories }: InstructorCreateC
         return preCategoryIds.filter((categoryId) => categoryId !== id);
       } else if (preCategoryIds.length === 3) {
         return preCategoryIds;
-      } else if (id === unknownCategoryId || preCategoryIds.includes(unknownCategoryId)) {
-        return [unknownCategoryId];
+      } else if (id === UnknownCategoryId || preCategoryIds.includes(UnknownCategoryId)) {
+        return [UnknownCategoryId];
       } else {
         return [...preCategoryIds, id];
       }
@@ -115,7 +114,7 @@ export default function InstructorCreateCourse({ categories }: InstructorCreateC
                 Cancel
               </Button>
               <Button
-                disabled={!(title.trim() && categoryIds.length)}
+                disabled={!(title.trim() && categoryIds.length) || saving}
                 size="base"
                 className="text-white-primary bg-teal-secondary active:scale-[98%] px-[15px]"
                 onClick={handleCreateCourse}

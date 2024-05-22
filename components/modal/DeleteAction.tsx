@@ -65,6 +65,7 @@ export default function DeleteAction({ title, object, open, setOpen, mutate, red
               Cancel
             </Button>
             <Button
+              disabled={deleting}
               size="sm"
               type="button"
               className="bg-red-500 text-white-primary px-[20px] active:scale-95"

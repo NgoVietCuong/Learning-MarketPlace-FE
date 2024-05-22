@@ -4,15 +4,16 @@ import { GetServerSidePropsContext } from 'next';
 import { Loader2, Trash2, Upload, ImageOff, SquarePlay, TriangleAlert } from 'lucide-react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { Text } from '@/components/ui/text';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
+import { useToast } from '@/components/ui/use-toast';
 import { CategoryButton } from '@/components/ui/category-button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FailedAlert from '@/components/alert/Failed';
+import WarningAlert from '@/components/alert/Warning';
 import AddCategory from '@/components/combobox/AddCategory';
 import InstructorLayout from '@/components/layout/instructor-layout';
 import CourseInfoSkeleton from '@/components/skeleton/CourseInfoSkeleton';
@@ -29,23 +30,27 @@ interface InstructorCourseDetailsProps {
 }
 
 export default function InstructorCourseDetails({ id }: InstructorCourseDetailsProps) {
+  const { toast } = useToast();
   const { categoryList } = useCategories();
   const { courseListMutate } = useCourseList();
   const { courseDetails, isLoading, courseDetailsMutate } = useCourseDetails(id);
   const [open, setOpen] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
+  const [publishing, setPublishing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [titleError, setTitleError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
-  const [courseInfo, setCourseInfo] = useState<Course | null>(null);
+  const [publish, setPublish] = useState<boolean | null>(null);
+
+  const [courseInfo, setCourseInfo] = useState<Omit<Course, 'isPublished'> | null>(null);
 
   console.log('courseInfo', courseInfo);
 
   useEffect(() => {
     if (courseDetails) {
-      const { sections, ...rest } = courseDetails.data!;
+      const { sections, isPublished, ...rest } = courseDetails.data!;
       setCourseInfo(rest);
     }
   }, [isLoading]);
@@ -75,6 +80,28 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
     setCourseInfo({ ...courseInfo!, categories: value });
   };
 
+  // const handleCheckCondition = () => {
+  //   if (!courseInfo) return false;
+  //   if (courseInfo.title.trim() === '') return false;
+  //   else if (courseInfo.overview.trim() === '')
+  // }
+
+  const handlePublishCourse = async () => {
+    setPublishing(true);
+    const publishResponse = await instructorCourseApi.updatePublishCourse(courseInfo!.id, {
+      isPublished: !isPublished,
+    });
+    if (!publishResponse.error) {
+      courseDetailsMutate();
+      toast({
+        variant: 'success',
+        description: `${isPublished ? 'Unpublished' : 'Published'} course successfully!`,
+      });
+      // setCourseInfo({ ...courseInfo!, isPublished: !courseInfo!.isPublished });
+    }
+    setPublishing(false);
+  };
+
   return (
     <div className="grow flex justify-center items-center">
       <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl overflow-scroll">
@@ -83,18 +110,22 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
             <CourseInfoSkeleton />
           ) : (
             <>
-              <Alert variant={'warning'}>
-                <AlertDescription className="flex items-center">
-                  <TriangleAlert className="h-4 w-4 mr-2" />
-                  <Text size="tx" className='font-medium !text-gray-700'>This course is unpublished. It will not be visible for everyone.</Text>
-                </AlertDescription>
-              </Alert>
+              {isPublished && (
+                <WarningAlert message={'This course is unpublished. It will not be visible for everyone.'} />
+              )}
               <div className="flex justify-between">
                 <Heading className="!font-medium">
-                  {courseInfo?.isPublished ? 'Course Details' : 'Course Setup'}
+                  {isPublished ? 'Course Details' : 'Course Setup'}
                 </Heading>
                 <div className="flex items-center gap-2">
-                  <Button size="sm" variant={'outline'} className="p-[15px]">
+                  <Button
+                    size="sm"
+                    variant={'outline'}
+                    className="p-[15px]"
+                    disabled={publishing}
+                    onClick={handlePublishCourse}
+                  >
+                    {publishing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {courseInfo?.isPublished ? 'Unpublish' : 'Publish'}
                   </Button>
                   <Button size="sm" variant={'destructive'} className="p-2" onClick={() => setOpen(!open)}>
