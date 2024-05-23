@@ -4,7 +4,7 @@ import { Cross2Icon } from '@radix-ui/react-icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DataTableFacetedFilter } from './FacetedFilter';
-import { statuses, types } from '@/constants/filterField';
+import { Statuses, Types } from '@/constants/filterField';
 import useCategories from '@/hooks/useCategories';
 
 interface DataTableToolbarProps<TData> {
@@ -14,7 +14,7 @@ interface DataTableToolbarProps<TData> {
 
 export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const { categoryList, isLoading } = useCategories();
+  const { categoryList, categoryLoading } = useCategories();
 
   return (
     <div className="flex items-center justify-between">
@@ -24,17 +24,17 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
           type="text"
           placeholder="Filter courses..."
           prefix={<Search size={16} className="text-gray-400" />}
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(value: string) => table.getColumn('email')?.setFilterValue(value)}
+          // value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
+          // onChange={(value: string) => table.getColumn('email')?.setFilterValue(value)}
           className="max-w-sm !text-xs"
         />
         {table.getColumn('isPublished') && (
-          <DataTableFacetedFilter column={table.getColumn('status')} title="Status" options={statuses} />
+          <DataTableFacetedFilter column={table.getColumn('status')} title="Status" options={Statuses} />
         )}
         {table.getColumn('price') && (
-          <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={types} />
+          <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={Types} />
         )}
-        {(!isLoading && table.getColumn('categories')) && (
+        {(!categoryLoading && table.getColumn('categories')) && (
           <DataTableFacetedFilter column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({
             label: category.name,
             value: category.name,

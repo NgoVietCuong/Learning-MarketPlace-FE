@@ -16,7 +16,7 @@ export default function InstructorSideBar() {
   };
 
   return (
-    <div className="w-[260px] h-[100%] z-5 bg-white-primary shadow-lg">
+    <div className="min-w-[260px] w-[260px] h-[100%] z-5 bg-white-primary shadow-lg">
       <div className="w-full h-full flex flex-col px-4 py-4 justify-between">
         <div className="flex flex-col gap-1">
           <Link

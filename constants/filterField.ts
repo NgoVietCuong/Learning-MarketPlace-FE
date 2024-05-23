@@ -1,6 +1,6 @@
 import * as LucideIcons from 'lucide-react';
 
-export const statuses = [
+export const Statuses = [
   {
     value: 'Published',
     label: 'Published',
@@ -13,7 +13,7 @@ export const statuses = [
   },
 ];
 
-export const types = [
+export const Types = [
   {
     value: 'Free',
     label: 'Free',

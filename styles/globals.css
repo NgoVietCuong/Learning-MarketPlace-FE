@@ -32,6 +32,9 @@
     --success: 173 80% 40%;
     ---success-foreground: 173 80% 40%;
 
+    --warning: 38 92% 50%;
+    --warning-forground: 38 92% 50%;
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
@@ -153,10 +156,24 @@
   .quill .ql-toolbar {
     border-top-left-radius: 0.375rem;
     border-top-right-radius: 0.375rem;
+    height: 38px;
   }
 
   .quill .ql-container {
     border-bottom-left-radius: 0.375rem;
     border-bottom-right-radius: 0.375rem;
+  }
+
+  button[data-state='active'] {
+    background-color: #ffffff;
+    color: #4b5563!important;
+  }
+
+  button[data-state='inactive'] {
+    color: #4b5563!important;
+  }
+
+  button span {
+    color: #374151;
   }
 }

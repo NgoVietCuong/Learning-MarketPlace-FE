@@ -1,6 +1,6 @@
 export type Response<Data = {}> = {
   statusCode: number;
-  message: string;
+  message: string | string[];
   data?: Data;
   error?: string;
 }

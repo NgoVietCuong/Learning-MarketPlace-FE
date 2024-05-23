@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
-import 'react-quill/dist/quill.snow.css';
 import { User, Loader2 } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
@@ -100,7 +99,7 @@ export default function EditProfile() {
     setSaving(false);
 
     if (saveProfileResponse.error) {
-      setSaveError(saveProfileResponse.message);
+      if (typeof saveProfileResponse.message === 'string') setSaveError(saveProfileResponse.message);
     } else {
       profileMutate();
       toast({
@@ -115,9 +114,7 @@ export default function EditProfile() {
     <div className="grow flex justify-center items-center">
       <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl">
         <div className="px-10 py-8 flex flex-col gap-8">
-          <Heading className="!font-medium">
-            Instructor Profile
-          </Heading>
+          <Heading className="!font-medium">Instructor Profile</Heading>
           <div className="w-full flex flex-col gap-5">
             <div className="flex gap-5">
               <Avatar className="h-24 w-24">
@@ -150,6 +147,7 @@ export default function EditProfile() {
                     Display name
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="Enter your display name"
                     className="mb-[5px] pr-[100px]"
@@ -167,6 +165,7 @@ export default function EditProfile() {
                     Headline
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="Enter your headline"
                     className="mb-[5px] pr-[100px]"
@@ -203,6 +202,7 @@ export default function EditProfile() {
                     Twitter
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="http://www.twitter.com/username"
                     className="mb-[5px] pr-[100px]"
@@ -215,6 +215,7 @@ export default function EditProfile() {
                     Linkedin
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="http://www.linkedin.com/username"
                     className="mb-[5px] pr-[100px]"
@@ -227,6 +228,7 @@ export default function EditProfile() {
                     Youtube
                   </Text>
                   <Input
+                    size="sm"
                     type="text"
                     placeholder="http://www.youtube.com/username"
                     className="mb-[5px] pr-[100px]"
@@ -241,8 +243,8 @@ export default function EditProfile() {
                 {saveError && <FailedAlert title={'Update profile failed'} message={saveError} />}
               </div>
               <Button
-                size='sm'
-                disabled={!isChanged}
+                size="sm"
+                disabled={!isChanged || saving}
                 className="w-[80px] bg-teal-secondary text-white-primary active:scale-95"
                 onClick={handleSaveProfile}
               >

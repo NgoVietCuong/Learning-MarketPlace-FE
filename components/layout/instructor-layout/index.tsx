@@ -14,7 +14,7 @@ export default function InstructorLayout({ children }: InstructorLayoutProps) {
           {children}
         </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
