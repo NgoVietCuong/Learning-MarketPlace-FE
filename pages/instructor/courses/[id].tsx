@@ -54,8 +54,6 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
   const [publish, setPublish] = useState<boolean | null>(null);
   const [courseInfo, setCourseInfo] = useState<Omit<Course, 'isPublished'> | null>(null);
 
-  console.log('courseInfo', courseInfo);
-
   useEffect(() => {
     if (courseDetails) {
       const { sections, isPublished, ...rest } = courseDetails.data!;
@@ -158,7 +156,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       hasLevelError = false,
       hasCategoryError = false;
 
-    const { id, title, overview, description, price, level, categories } = courseInfo!;
+    const { id, title, overview, description, price, level, categories, imagePreview, videoPreview } = courseInfo!;
 
     if (!title || (title && title.trim() === '')) (hasTitleError = true), setTitleError('Course title cannot be empty');
     else (hasTitleError = false), setTitleError('');
@@ -197,10 +195,14 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       price: price as number,
       level: level as string,
       categoryIds: categories.map((c) => c.id) as number[],
+      imagePreview: imagePreview,
+      videoPreview: videoPreview
     });
 
-    if (!saveCourseInfoResponse.error) {
-      setSaveError(saveCourseInfoResponse.message);
+    if (saveCourseInfoResponse.error) {
+      const messages = saveCourseInfoResponse.message;
+      if (typeof messages === 'string') setSaveError(messages);
+      else setSaveError(messages[0]);
     } else {
       courseDetailsMutate();
       toast({
@@ -209,6 +211,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       });
       setIsChanged(false);
     }
+    setSaving(false);
   };
 
   return (
@@ -309,7 +312,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                           onChange={handleChangeDescription}
                         />
                         {descriptionError && (
-                          <Text size="xs" as="p" className="text-red-400 font-medium">
+                          <Text size="xs" as="p" className="text-red-400 font-medium mt-[40px]">
                             {descriptionError}
                           </Text>
                         )}
@@ -371,12 +374,12 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                         {categoryList && courseInfo && (
                           <div className="w-full flex flex-wrap gap-2">
                             <AddCategory
-                              categories={categoryList.data!.filter((category) => category.id !== 14)}
-                              selectedCategories={courseInfo?.categories!}
+                              categories={categoryList.data!.filter((category) => category.id !== UnknownCategoryId)}
+                              selectedCategories={courseInfo?.categories!.filter((category) => category.id !== UnknownCategoryId)}
                               handleSelectCategory={handleChangeCategories}
                             />
                             {courseInfo?.categories
-                              .filter((category) => category.id !== 14)
+                              .filter((category) => category.id !== UnknownCategoryId)
                               .map((category) => (
                                 <CategoryButton
                                   className="text-gray-500"
@@ -463,7 +466,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                     </div>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <div className="w-[35%] flex flex-col items-center p-0">
+                    <div className="w-[32%] flex flex-col items-center p-0">
                       {saveError && <FailedAlert title={'Update course info failed'} message={saveError} />}
                     </div>
                     <Button

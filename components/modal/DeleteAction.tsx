@@ -33,15 +33,15 @@ export default function DeleteAction({ title, object, open, setOpen, mutate, red
     setDeleting(true);
     const deleteResponse = await apiHandler();
     if (deleteResponse.error) {
-      setDeleteError(deleteResponse.message);
+      if (typeof deleteResponse.message === 'string') setDeleteError(deleteResponse.message);
     } else {
       mutate();
       setOpen(false);
+      if (redirect) router.push('/instructor/courses');
       toast({
         variant: 'success',
         description: `Deleted ${object} successfully!`,
       });
-      if (redirect) router.push('/instructor/courses');
     }
     setDeleting(false);
   };
