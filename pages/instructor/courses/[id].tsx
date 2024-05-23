@@ -24,6 +24,7 @@ import useCourseDetails from '@/hooks/useCourseDetails';
 import { uploadApi } from '@/services/axios/uploadApi';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Course, CategoryList } from '@/types/schema';
+import { UnknownCategoryId } from '@/constants/common';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface InstructorCourseDetailsProps {
@@ -46,6 +47,9 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
   const [saveError, setSaveError] = useState('');
   const [titleError, setTitleError] = useState('');
   const [priceError, setPriceError] = useState('');
+  const [levelError, setLevelError] = useState('');
+  const [overviewError, setOverviewError] = useState('');
+  const [categoryError, setCategoryError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [publish, setPublish] = useState<boolean | null>(null);
   const [courseInfo, setCourseInfo] = useState<Omit<Course, 'isPublished'> | null>(null);
@@ -59,6 +63,13 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       setCourseInfo(rest);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (courseInfo && courseDetails) {
+      const changed = !Object.keys(courseInfo).every((key: string) => courseInfo[key] == courseDetails.data![key]);
+      setIsChanged(changed);
+    }
+  }, [courseInfo]);
 
   const handleChangeCourseTitle = (value: string) => {
     setCourseInfo({ ...courseInfo!, title: value });
@@ -123,7 +134,6 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
     setVideoUploading(false);
   };
 
-
   const handlePublishCourse = async () => {
     setPublishing(true);
     const publishResponse = await instructorCourseApi.updatePublishCourse(courseInfo!.id, {
@@ -138,6 +148,67 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       setPublish(!publish);
     }
     setPublishing(false);
+  };
+
+  const handleSaveCourseInfo = async () => {
+    let hasTitleError = false,
+      hasOverviewError = false,
+      hasDescriptionError = false,
+      hasPriceError = false,
+      hasLevelError = false,
+      hasCategoryError = false;
+
+    const { id, title, overview, description, price, level, categories } = courseInfo!;
+
+    if (!title || (title && title.trim() === '')) (hasTitleError = true), setTitleError('Course title cannot be empty');
+    else (hasTitleError = false), setTitleError('');
+
+    if (!overview || (overview && overview.trim() === ''))
+      (hasOverviewError = true), setOverviewError('Course overview cannot be empty');
+    else (hasOverviewError = false), setOverviewError('');
+
+    if (
+      !description ||
+      (description && ['<h1><br></h1>', '<h2><br></h2>', '<h3><br></h3>', '<p><br></p>'].includes(description))
+    )
+      (hasDescriptionError = true), setDescriptionError('Biography cannot be empty');
+    else (hasDescriptionError = false), setDescriptionError('');
+
+    if (price == null || (typeof price === 'number' && price < 0))
+      (hasPriceError = true), setPriceError('Course price cannot be empty');
+    else (hasPriceError = false), setPriceError('');
+
+    if (!level) (hasLevelError = true), setLevelError('Course level cannot be empty');
+    else (hasCategoryError = false), setLevelError('');
+
+    if (!categories.length || (categories.length && categories.map((c) => c.id).includes(UnknownCategoryId)))
+      (hasCategoryError = true), setCategoryError('Course categories cannot be empty');
+    else (hasCategoryError = false), setCategoryError('');
+
+    setSaveError('');
+    if (hasTitleError || hasOverviewError || hasDescriptionError || hasPriceError || hasLevelError || hasCategoryError)
+      return;
+
+    setSaving(true);
+    const saveCourseInfoResponse = await instructorCourseApi.updateCourse(id, {
+      title: title as string,
+      overview: overview as string,
+      description: description as string,
+      price: price as number,
+      level: level as string,
+      categoryIds: categories.map((c) => c.id) as number[],
+    });
+
+    if (!saveCourseInfoResponse.error) {
+      setSaveError(saveCourseInfoResponse.message);
+    } else {
+      courseDetailsMutate();
+      toast({
+        variant: 'success',
+        description: 'Updated course successfully!',
+      });
+      setIsChanged(false);
+    }
   };
 
   return (
@@ -202,6 +273,11 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                           value={courseInfo?.title ? courseInfo?.title : undefined}
                           onChange={handleChangeCourseTitle}
                         />
+                        {titleError && (
+                          <Text size="xs" as="p" className="text-red-400 font-medium">
+                            {titleError}
+                          </Text>
+                        )}
                       </div>
                       <div className="w-full flex flex-col items-start gap-1">
                         <Text size="sm" className="font-medium !text-gray-600">
@@ -215,6 +291,11 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                           value={courseInfo?.overview ? courseInfo?.overview : undefined}
                           onChange={handleChangeOverview}
                         />
+                        {overviewError && (
+                          <Text size="xs" as="p" className="text-red-400 font-medium">
+                            {overviewError}
+                          </Text>
+                        )}
                       </div>
                       <div className="w-full flex flex-col items-start gap-1">
                         <Text size="sm" className="font-medium !text-gray-600">
@@ -227,6 +308,11 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                           value={courseInfo?.description ? courseInfo?.description : undefined}
                           onChange={handleChangeDescription}
                         />
+                        {descriptionError && (
+                          <Text size="xs" as="p" className="text-red-400 font-medium">
+                            {descriptionError}
+                          </Text>
+                        )}
                       </div>
                     </div>
                     <div className="w-[31%] flex flex-col gap-4">
@@ -243,6 +329,11 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                           value={courseInfo?.price ? courseInfo?.price.toString() : undefined}
                           onChange={handleChangePrice}
                         />
+                        {priceError && (
+                          <Text size="xs" as="p" className="text-red-400 font-medium">
+                            {priceError}
+                          </Text>
+                        )}
                       </div>
                       <div className="w-full flex flex-col items-start gap-1">
                         <Text size="sm" className="font-medium !text-gray-600">
@@ -267,6 +358,11 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                             </SelectItem>
                           </SelectContent>
                         </Select>
+                        {levelError && (
+                          <Text size="xs" as="p" className="text-red-400 font-medium">
+                            {levelError}
+                          </Text>
+                        )}
                       </div>
                       <div className="w-full flex flex-col items-start gap-1">
                         <Text size="sm" className="font-medium !text-gray-600">
@@ -291,6 +387,11 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                                 />
                               ))}
                           </div>
+                        )}
+                        {categoryError && (
+                          <Text size="xs" as="p" className="text-red-400 font-medium">
+                            {categoryError}
+                          </Text>
                         )}
                       </div>
                     </div>
@@ -365,7 +466,13 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                     <div className="w-[35%] flex flex-col items-center p-0">
                       {saveError && <FailedAlert title={'Update course info failed'} message={saveError} />}
                     </div>
-                    <Button size="sm" className="w-[80px] bg-teal-secondary text-white-primary active:scale-95">
+                    <Button
+                      size="sm"
+                      disabled={!isChanged || saving}
+                      className="w-[80px] bg-teal-secondary text-white-primary active:scale-95"
+                      onClick={handleSaveCourseInfo}
+                    >
+                      {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Save
                     </Button>
                   </div>

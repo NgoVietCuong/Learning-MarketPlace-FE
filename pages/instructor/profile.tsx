@@ -246,7 +246,7 @@ export default function EditProfile() {
               </div>
               <Button
                 size='sm'
-                disabled={!isChanged}
+                disabled={!isChanged || saving}
                 className="w-[80px] bg-teal-secondary text-white-primary active:scale-95"
                 onClick={handleSaveProfile}
               >

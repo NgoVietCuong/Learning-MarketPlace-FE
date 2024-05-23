@@ -86,6 +86,7 @@ export type Course = {
   createdAt: string;
   updatedAt: string;
   categories: CategoryList;
+  // [key: string]: string | number | boolean | CategoryList | null;
 };
 
 export type Meta = {
