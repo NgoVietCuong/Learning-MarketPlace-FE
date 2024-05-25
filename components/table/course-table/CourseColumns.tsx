@@ -23,6 +23,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
         {row.getValue('title')}
       </Text>
     ),
+    meta: { className: 'col-title'}
   },
   {
     accessorKey: 'isPublished',
@@ -35,12 +36,16 @@ export const CourseColumns: ColumnDef<Course>[] = [
       row.getValue('isPublished') ? (
         <div className="flex gap-1 items-center">
           <CircleCheck className="w-4 h-4 text-teal-500" />
-          <Text size='sm' as='p' className='!text-gray-600'>Published</Text>
+          <Text size="sm" as="p" className="!text-gray-600">
+            Published
+          </Text>
         </div>
       ) : (
         <div className="flex gap-1 items-center">
           <CircleAlert className="w-4 h-4 text-gray-500" />
-          <Text size='sm' as='p' className='!text-gray-600'>Unpublished</Text>
+          <Text size="sm" as="p" className="!text-gray-600">
+            Unpublished
+          </Text>
         </div>
       ),
   },
@@ -55,12 +60,16 @@ export const CourseColumns: ColumnDef<Course>[] = [
       row.getValue('price') ? (
         <div className="flex gap-1 items-center">
           <DollarSign className="w-4 h-4 text-teal-500" />
-          <Text size='sm' as='p' className='!text-gray-600'>Paid</Text>
+          <Text size="sm" as="p" className="!text-gray-600">
+            Paid
+          </Text>
         </div>
       ) : (
         <div className="flex gap-1 items-center">
           <WalletMinimal className="w-4 h-4 text-sky-500" />
-          <Text size='sm' as='p' className='!text-gray-600'>Free</Text>
+          <Text size="sm" as="p" className="!text-gray-600">
+            Free
+          </Text>
         </div>
       ),
   },
@@ -95,15 +104,26 @@ export const CourseColumns: ColumnDef<Course>[] = [
 
       return (
         <div className="flex flex-start">
-        <Button variant={'ghost'} className="p-2 hover:bg-slate-200" onClick={() => router.push(`/instructor/courses/${row.original.id}`)}>
-          <FilePenLine className="w-[17px] h-[17px] text-gray-600" />
-        </Button>
-        <Button variant={'ghost'} className="p-2 hover:bg-slate-200" onClick={() => setOpen(!open)}>
-          <Trash2 className="w-[18px] h-[18px] text-gray-600" />
-        </Button>
-        <DeleteAction title={'Delete Course?'} object={'course'} open={open} setOpen={setOpen} mutate={courseListMutate} apiHandler={() => instructorCourseApi.deleteCourse(row.original.id)}  />
-      </div>
-      )
-    }
+          <Button
+            variant={'ghost'}
+            className="p-2 hover:bg-slate-200"
+            onClick={() => router.push(`/instructor/courses/${row.original.id}`)}
+          >
+            <FilePenLine className="w-[17px] h-[17px] text-gray-600" />
+          </Button>
+          <Button variant={'ghost'} className="p-2 hover:bg-slate-200" onClick={() => setOpen(!open)}>
+            <Trash2 className="w-[18px] h-[18px] text-gray-600" />
+          </Button>
+          <DeleteAction
+            title={'Delete Course?'}
+            object={'course'}
+            open={open}
+            setOpen={setOpen}
+            mutate={courseListMutate}
+            apiHandler={() => instructorCourseApi.deleteCourse(row.original.id)}
+          />
+        </div>
+      );
+    },
   },
 ];

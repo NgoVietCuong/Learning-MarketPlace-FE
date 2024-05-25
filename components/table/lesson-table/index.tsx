@@ -6,9 +6,6 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  ColumnFiltersState,
-  getFilteredRowModel,
-  getPaginationRowModel,
 } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Text } from '@/components/ui/text';
@@ -19,13 +16,11 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export default function SectionTable<TData, Tavlue>({ columns, data }: DataTableProps<TData, Tavlue>) {
+export default function LessonTable<TData, Tavlue>({ columns, data }: DataTableProps<TData, Tavlue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   return (
@@ -51,16 +46,13 @@ export default function SectionTable<TData, Tavlue>({ columns, data }: DataTable
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
                     <>
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                      <TableCell key={cell.id} className='!w-[25%] max-w-[25%]'>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                     </>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
-                </TableCell>
               </TableRow>
             )}
           </TableBody>
