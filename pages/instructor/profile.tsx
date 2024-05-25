@@ -24,7 +24,7 @@ export default function EditProfile() {
   const [nameError, setNameError] = useState('');
   const [headlineError, setHeadlineError] = useState('');
   const [biographyError, setBiographyError] = useState('');
-  const [profileData, setProfileData] = useState<InstructorProfile | null>(null);
+  const [profileData, setProfileData] = useState<Omit<InstructorProfile, 'picture'> | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -34,7 +34,7 @@ export default function EditProfile() {
 
   useEffect(() => {
     if (profile && profileData) {
-      const changed = !Object.keys(profileData).every((key: string) => profileData[key] == profile.data![key]);
+      const changed = !(Object.keys(profileData) as (keyof Omit<InstructorProfile, 'picture'>)[]).every((key) => profileData[key] == profile.data![key]);
       setIsChanged(changed);
     }
   }, [profileData]);
