@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { Loader2, Trash2 } from 'lucide-react';
@@ -40,7 +39,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       setSections(sections);
       setCourseInfo(rest);
     }
-  }, [courseDetails, sections]);
+  }, [courseDetails]);
 
   useEffect(() => {
     if (courseInfo && courseDetails) {
@@ -68,9 +67,9 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
   };
 
   return (
-    <div className="grow flex justify-center items-center max-h-[100%]">
-      <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl overflow-scroll">
-        <div className="px-10 py-8 flex flex-col gap-4">
+    <div className="grow flex justify-center items-center">
+      <div className="bg-white-primary w-[95%] h-[95%] max-h-[95%] shadow-lg rounded-xl overflow-y-scroll">
+        <div className="px-10 py-8 flex flex-col gap-4 overflow-y-scroll">
           {isLoading ? (
             <CourseInfoSkeleton />
           ) : (
@@ -117,8 +116,8 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                 <TabsContent value="Course Info" className="flex flex-col gap-3">
                   {courseInfo && <CourseInfo courseInfo={courseInfo!} setCourseInfo={setCourseInfo} isChanged={isChanged} setIsChanged={setIsChanged} />}
                 </TabsContent>
-                <TabsContent value="Sections" className="flex flex-col items-center gap-3">
-                  {sections && <SectionList sections={sections} />}
+                <TabsContent value="Sections" className="flex flex-col gap-3">
+                  {sections && <SectionList sections={sections} courseId={id} />}
                 </TabsContent>
               </Tabs>
             </>
@@ -134,9 +133,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     query: { id },
   } = context;
 
+  const idNumber = Number(id);
+
+  if (isNaN(idNumber)) {
+    return {
+      redirect: {
+        destination: '/instructor/courses',
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
-      id,
+      id: idNumber,
     },
   };
 }

@@ -49,9 +49,8 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const className = header.column.columnDef.meta?.className;
-                  console.log('className', className)
                   return (
-                    <TableHead key={header.id} className={className ? className : ''}>
+                    <TableHead key={header.id} className={className ? className: ''}>
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );

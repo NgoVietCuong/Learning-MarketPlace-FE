@@ -1,5 +1,4 @@
 import InstructorSideBar from './SideBar';
-import Footer from '../Footer';
 
 interface InstructorLayoutProps {
   children: React.ReactNode;
@@ -8,13 +7,12 @@ interface InstructorLayoutProps {
 export default function InstructorLayout({ children }: InstructorLayoutProps) {
   return (
     <>
-      <main className="w-full flex grow bg-slate-100">
-        <div className="w-full flex flex-row h-full">
+      <main className="w-full flex grow bg-slate-100 overflow-hidden box-border">
+        <div className="w-full flex flex-row">
           <InstructorSideBar />
           {children}
         </div>
       </main>
-      {/* <Footer /> */}
     </>
   );
 }

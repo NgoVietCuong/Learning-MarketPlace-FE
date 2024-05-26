@@ -10,6 +10,12 @@ import { CategoryList, Course } from '@/types/schema';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import useCourseList from '@/hooks/useCourseList';
 
+declare module '@tanstack/react-table' {
+  interface ColumnMeta<TData, TValue> {
+    className?: string;
+  }
+}
+
 export const CourseColumns: ColumnDef<Course>[] = [
   {
     accessorKey: 'title',
@@ -23,7 +29,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
         {row.getValue('title')}
       </Text>
     ),
-    meta: { className: 'col-title'}
+    meta: { className: 'max-w-[25%]'}
   },
   {
     accessorKey: 'isPublished',
@@ -48,6 +54,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
           </Text>
         </div>
       ),
+    meta: { className: 'max-w-[15%]' }
   },
   {
     accessorKey: 'price',
@@ -72,6 +79,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
           </Text>
         </div>
       ),
+    meta: { className: 'max-w-[15%]' }
   },
   {
     accessorKey: 'categories',
@@ -89,6 +97,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
         ))}
       </div>
     ),
+    meta: { className: 'max-w-[25%]' }
   },
   {
     id: 'actions',
@@ -125,5 +134,6 @@ export const CourseColumns: ColumnDef<Course>[] = [
         </div>
       );
     },
+    meta: { className: 'max-w-[25%]' }
   },
 ];

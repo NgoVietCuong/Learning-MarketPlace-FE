@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import { Loader2, Trash2, Upload, ImageOff, SquarePlay } from 'lucide-react';
+import { useState, Dispatch, SetStateAction } from 'react';
+import { Loader2, Upload, ImageOff, SquarePlay } from 'lucide-react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
