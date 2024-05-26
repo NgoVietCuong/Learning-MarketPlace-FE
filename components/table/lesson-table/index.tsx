@@ -1,6 +1,3 @@
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { Plus, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import {
   ColumnDef,
   flexRender,
@@ -8,8 +5,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Text } from '@/components/ui/text';
-import { Button } from '@/components/ui/button';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

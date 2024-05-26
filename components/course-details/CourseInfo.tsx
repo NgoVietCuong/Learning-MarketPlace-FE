@@ -11,6 +11,7 @@ import { CategoryButton } from '@/components/ui/category-button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FailedAlert from '@/components/alert/Failed';
 import AddCategory from '@/components/combobox/AddCategory';
+import UploadVideo from '@/components/upload/UploadVideo';
 import useCategories from '@/hooks/useCategories';
 import useCourseDetails from '@/hooks/useCourseDetails';
 import { uploadApi } from '@/services/axios/uploadApi';
@@ -43,6 +44,8 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
   const [categoryError, setCategoryError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
 
+  console.log("courseInfo", courseInfo)
+
   const handleChangeCourseTitle = (value: string) => {
     setCourseInfo({ ...courseInfo!, title: value });
   };
@@ -61,7 +64,7 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
 
   const handleChangePrice = (value: string) => {
     let newValue = parseFloat(value);
-    setCourseInfo({ ...courseInfo!, price: newValue && newValue > 0 ? parseFloat(newValue.toFixed(2)) : null });
+    setCourseInfo({ ...courseInfo!, price: typeof newValue === 'number' ? ( newValue && newValue > 0 ? parseFloat(newValue.toFixed(2)) : 0 ) : null });
   };
 
   const handleChangeCategories = (value: CategoryList) => {
@@ -241,7 +244,7 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
               placeholder="Enter course price"
               className="mb-[5px] pr-[100px]"
               prefix={<BsCurrencyDollar size={16} color="#6b7280" />}
-              value={courseInfo?.price ? courseInfo?.price.toString() : undefined}
+              value={typeof courseInfo?.price === 'number' ? courseInfo?.price.toString() : undefined}
               onChange={handleChangePrice}
             />
             {priceError && (
@@ -336,34 +339,7 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
               <ImageOff className="w-28 h-28 text-gray-400" />
             </div>
           </div>
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Course video
-            </Text>
-            <input
-              type="file"
-              id="course_video"
-              disabled={videoUploading}
-              accept="video/mp4,video/x-m4v,video/*"
-              onChange={handleChangeVideo}
-            />
-            <Label
-              htmlFor="course_video"
-              className="w-full bg-white font-normal border border-gray-border border-dashed rounded-md h-[36px] flex items-center px-4 text-gray-primary"
-            >
-              {videoUploading ? <Loader2 className="w-5 h-5 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
-              {videoUploading
-                ? 'Uploading...'
-                : !selectedVideo
-                  ? 'Select a video'
-                  : selectedVideo.name.length > 15
-                    ? `${selectedVideo.name.substring(0, 14)}...`
-                    : selectedVideo.name}
-            </Label>
-            <div className="w-full flex h-[240px] bg-slate-200 justify-center items-center rounded-md">
-              <SquarePlay className="w-28 h-28 text-gray-400" />
-            </div>
-          </div>
+          <UploadVideo uploading={videoUploading} selectedVideo={selectedVideo} handleChangeVideo={handleChangeVideo} />
         </div>
       </div>
       <div className="flex flex-col gap-3">

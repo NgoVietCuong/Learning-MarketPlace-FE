@@ -44,7 +44,9 @@ export default function VerifySignUpPage({ queryEmail }: VerifySignUpPageProps) 
 
     setSending(false);
     if (sendVerifyEmailResponse.error) {
-      setSendError(sendVerifyEmailResponse.message);
+      const messages = sendVerifyEmailResponse.message;
+      if (typeof messages === 'string') setSendError(messages);
+      else setSendError(messages[0]);
     } else {
       setSendSuccess(true);
     }
@@ -59,7 +61,9 @@ export default function VerifySignUpPage({ queryEmail }: VerifySignUpPageProps) 
 
     setVerifying(false);
     if (verifySignUpResponse.error) {
-      setVerifyError(verifySignUpResponse.message);
+      const messages = verifySignUpResponse.message;
+      if (typeof messages === 'string') setVerifyError(messages);
+      else setVerifyError(messages[0]);
     } else {
       setVerifySuccess(true);
     }
