@@ -11,6 +11,7 @@ import { CategoryButton } from '@/components/ui/category-button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FailedAlert from '@/components/alert/Failed';
 import AddCategory from '@/components/combobox/AddCategory';
+import UploadVideo from '@/components/upload/UploadVideo';
 import useCategories from '@/hooks/useCategories';
 import useCourseDetails from '@/hooks/useCourseDetails';
 import { uploadApi } from '@/services/axios/uploadApi';
@@ -336,7 +337,7 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
               <ImageOff className="w-28 h-28 text-gray-400" />
             </div>
           </div>
-          <div className="w-full flex flex-col items-start gap-1">
+          {/* <div className="w-full flex flex-col items-start gap-1">
             <Text size="sm" className="font-medium !text-gray-600">
               Course video
             </Text>
@@ -363,7 +364,8 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
             <div className="w-full flex h-[240px] bg-slate-200 justify-center items-center rounded-md">
               <SquarePlay className="w-28 h-28 text-gray-400" />
             </div>
-          </div>
+          </div> */}
+          <UploadVideo uploading={videoUploading} selectedVideo={selectedVideo} handleChangeVideo={handleChangeVideo} />
         </div>
       </div>
       <div className="flex flex-col gap-3">

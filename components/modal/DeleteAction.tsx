@@ -13,12 +13,13 @@ interface DeleteActionProps {
   object: string;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  mutate: any;
-  redirect?: boolean
+  mutate?: any;
+  redirect?: boolean;
+  redirectUrl?: string;
   apiHandler: () => Promise<Response>;
 }
 
-export default function DeleteAction({ title, object, open, setOpen, mutate, redirect, apiHandler }: DeleteActionProps) {
+export default function DeleteAction({ title, object, open, setOpen, mutate, redirect, redirectUrl, apiHandler }: DeleteActionProps) {
   const router = useRouter();
   const { toast } = useToast();
   const [deleting, setDeleting] = useState(false);
@@ -37,7 +38,7 @@ export default function DeleteAction({ title, object, open, setOpen, mutate, red
     } else {
       mutate();
       setOpen(false);
-      if (redirect) router.push('/instructor/courses');
+      if (redirect) router.push(redirectUrl! as string);
       toast({
         variant: 'success',
         description: `Deleted ${object} successfully!`,

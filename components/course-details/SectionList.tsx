@@ -26,7 +26,7 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
   const handleEditClick = (sectionId: number) => {
     setSelectedSection(sectionId);
     setEditOpen(!editOpen);
-  }
+  };
 
   const handleDeleteClick = (sectionId: number) => {
     setSelectedSection(sectionId);
@@ -40,35 +40,44 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
         defaultValue={sections.map((section) => section.id.toString())}
         className="w-full flex flex-col gap-3"
       >
-        {sections.map((section) => (
-          <>
-            <AccordionItem value={section.id.toString()} className="border-none space-y-2">
-              <div className="flex justify-between items-center h-[40px] bg-slate-100 rounded-md px-4">
-                <div className="flex items-center gap-2">
-                  <Text size="s" className="!font-medium !text-gray-600">
-                    {section.title}
-                  </Text>
-                  <Button variant={'ghost'} className="p-0" onClick={() => handleEditClick(section.id)}>
-                    <PenLine className="w-4 h-4 text-gray-400" />
-                  </Button>
+        {sections.map((section) => {
+          const columns = LessonColumns(courseId);
+          return (
+            <>
+              <AccordionItem value={section.id.toString()} className="border-none space-y-2">
+                <div className="flex justify-between items-center h-[40px] bg-slate-100 rounded-md px-4">
+                  <div className="flex items-center gap-2">
+                    <Text size="s" className="!font-medium !text-gray-600">
+                      {section.title}
+                    </Text>
+                    <Button variant={'ghost'} className="p-0" onClick={() => handleEditClick(section.id)}>
+                      <PenLine className="w-4 h-4 text-gray-400" />
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Button size="base" variant={'ghost'} className="p-2 text-gray-600 ">
+                      <Plus className="mr-1 w-4 h-4 text-gray-600" />
+                      Add Lesson
+                    </Button>
+                    <Button variant={'ghost'} className="p-2">
+                      <Trash2
+                        className="w-[17px] h-[17px] text-gray-600"
+                        onClick={() => handleDeleteClick(section.id)}
+                      />
+                    </Button>
+                    <AccordionTrigger />
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Button size="base" variant={'ghost'} className="p-2 text-gray-600 ">
-                    <Plus className="mr-1 w-4 h-4 text-gray-600" />
-                    Add Lesson
-                  </Button>
-                  <Button variant={'ghost'} className="p-2">
-                    <Trash2 className="w-[17px] h-[17px] text-gray-600" onClick={() => handleDeleteClick(section.id)} />
-                  </Button>
-                  <AccordionTrigger />
-                </div>
-              </div>
-              <AccordionContent>
-                <LessonTable columns={LessonColumns} data={section.lessons} />
-              </AccordionContent>
-            </AccordionItem>
-          </>
-        ))}
+                <AccordionContent>
+                  <LessonTable
+                    columns={columns}
+                    data={section.lessons}
+                  />
+                </AccordionContent>
+              </AccordionItem>
+            </>
+          );
+        })}
       </Accordion>
       <Button
         size="sm"
@@ -84,7 +93,7 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
         apiHandler={instructorCourseApi.createSection}
         mutate={courseDetailsMutate}
         courseId={courseId}
-        sectionTitle={""}
+        sectionTitle={''}
       />
       <TitleProvider
         header="Edit section"

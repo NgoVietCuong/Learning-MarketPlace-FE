@@ -18,7 +18,7 @@ interface NameProviderProps {
   sectionTitle?: string;
 }
 
-export default function NameProvider({ open, setOpen, header, apiHandler, mutate, courseId, sectionTitle }: NameProviderProps) {
+export default function TitleProvider({ open, setOpen, header, apiHandler, mutate, courseId, sectionTitle }: NameProviderProps) {
   const { toast } = useToast();
   const [title, setTitle] = useState(sectionTitle);
   const [titleError, setTitleError] = useState('');
