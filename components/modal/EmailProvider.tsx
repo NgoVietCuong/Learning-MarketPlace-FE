@@ -54,7 +54,9 @@ export default function EmailProvider({ open, setOpen, title, apiHandler, url }:
     setSending(false);
 
     if (sendMailResponse.error) {
-      if (typeof sendMailResponse.message === 'string') setSendError(sendMailResponse.message);
+      const messages = sendMailResponse.message;
+      if (typeof messages === 'string') setSendError(messages);
+      else setSendError(messages[0]);
     } else {
       setSendSuccess(true);
     }

@@ -76,7 +76,9 @@ export default function ResetPassword({ isValid, email, code }: ResetPasswordPro
     setUpdating(false);
 
     if (updatePasswordResponse.error) {
-      setUpdateError(updatePasswordResponse.message);
+      const messages = updatePasswordResponse.message;
+      if (typeof messages === 'string') setUpdateError(messages);
+      else setUpdateError(messages[0]);
     } else {
       setUpdateSuccess(true);
     }

@@ -79,7 +79,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
   return (
     <div className="grow flex justify-center items-center">
       <div className="bg-white-primary w-[95%] h-[95%] max-h-[95%] shadow-lg rounded-xl overflow-y-scroll">
-        <div className="px-10 py-8 flex flex-col gap-4 overflow-y-scroll">
+        <div className="px-10 py-8 flex flex-col gap-4">
           {isLoading ? (
             <CourseInfoSkeleton />
           ) : (

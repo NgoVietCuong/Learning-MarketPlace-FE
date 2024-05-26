@@ -99,7 +99,9 @@ export default function EditProfile() {
     setSaving(false);
 
     if (saveProfileResponse.error) {
-      if (typeof saveProfileResponse.message === 'string') setSaveError(saveProfileResponse.message);
+      const messages = saveProfileResponse.message;
+      if (typeof messages === 'string') setSaveError(messages);
+      else setSaveError(messages[0]);
     } else {
       profileMutate();
       toast({
@@ -112,7 +114,7 @@ export default function EditProfile() {
 
   return (
     <div className="grow flex justify-center items-center">
-      <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl">
+      <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl overflow-y-scroll">
         <div className="px-10 py-8 flex flex-col gap-8">
           <Heading className="!font-medium">Instructor Profile</Heading>
           <div className="w-full flex flex-col gap-5">
@@ -144,7 +146,7 @@ export default function EditProfile() {
               <div className="w-[35%] flex flex-col gap-3">
                 <div className="w-full flex flex-col items-start gap-1">
                   <Text size="sm" className="font-medium !text-gray-600">
-                    Display name
+                    Display name<span className="text-red-500"> *</span>
                   </Text>
                   <Input
                     size="sm"
@@ -162,7 +164,7 @@ export default function EditProfile() {
                 </div>
                 <div className="w-full flex flex-col items-start gap-1">
                   <Text size="sm" className="font-medium !text-gray-600">
-                    Headline
+                    Headline<span className="text-red-500"> *</span>
                   </Text>
                   <Input
                     size="sm"
@@ -180,7 +182,7 @@ export default function EditProfile() {
                 </div>
                 <div className="w-full flex flex-col items-start gap-1">
                   <Text size="sm" className="font-medium !text-gray-600">
-                    Biography
+                    Biography<span className="text-red-500"> *</span>
                   </Text>
                   <ReactQuill
                     theme="snow"

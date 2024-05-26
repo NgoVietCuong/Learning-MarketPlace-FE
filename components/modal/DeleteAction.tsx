@@ -34,7 +34,9 @@ export default function DeleteAction({ title, object, open, setOpen, mutate, red
     setDeleting(true);
     const deleteResponse = await apiHandler();
     if (deleteResponse.error) {
-      if (typeof deleteResponse.message === 'string') setDeleteError(deleteResponse.message);
+      const messages = deleteResponse.message;
+      if (typeof messages === 'string') setDeleteError(messages);
+      else setDeleteError(messages[0]);
     } else {
       mutate();
       setOpen(false);

@@ -45,7 +45,9 @@ export default function InstructorCreateCourse({ categories }: InstructorCreateC
     setSaving(true);
     const createCourseResponse = await instructorCourseApi.createCourse({ title, categoryIds });
     if (createCourseResponse.error) {
-      setSaveError(createCourseResponse.message);
+      const messages = createCourseResponse.message;
+      if (typeof messages === 'string') setSaveError(messages);
+      else setSaveError(messages[0]);
     } else {
       const courseId = createCourseResponse.data!.id;
       router.push(`/instructor/courses/${courseId}`);
@@ -59,7 +61,7 @@ export default function InstructorCreateCourse({ categories }: InstructorCreateC
 
   return (
     <div className="grow flex justify-center items-center">
-      <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl overflow-scroll">
+      <div className="bg-white-primary w-[95%] h-[95%] shadow-lg rounded-xl overflow-y-scroll">
         <div className="w-full h-full flex justify-center items-center">
           <div className="max-w-[45%] flex flex-col gap-5">
             <div className="flex flex-col gap-0.5">
@@ -71,7 +73,7 @@ export default function InstructorCreateCourse({ categories }: InstructorCreateC
 
             <div className="flex flex-col gap-1 mb-[25px]">
               <Text size="sm" className="font-medium !text-gray-600">
-                Course Title
+                Course Title<span className="text-red-500"> *</span>
               </Text>
               <Input
                 type="text"

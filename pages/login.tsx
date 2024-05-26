@@ -58,7 +58,9 @@ export default function Login() {
     setLoggingIn(false);
 
     if (loginResponse.error) {
-      setLoginError(loginResponse.message);
+      const messages = loginResponse.message;
+      if (typeof messages === 'string') setLoginError(messages);
+      else setLoginError(messages[0]);
     } else {
       userMutate();
       router.push('/');
@@ -147,7 +149,9 @@ export default function Login() {
                     idToken: credentialResponse.credential as string,
                   });
                   if (googleLoginResponse.error) {
-                    setLoginError(googleLoginResponse.message);
+                    const messages = googleLoginResponse.message;
+                    if (typeof messages === 'string') setLoginError(messages);
+                    else setLoginError(messages[0]);
                   } else {
                     userMutate();
                     router.push('/');

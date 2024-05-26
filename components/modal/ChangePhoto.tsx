@@ -79,7 +79,9 @@ export default function ChangePhoto({ title, field, object, isLoading, mutate, a
     setSaving(true);
     const savePhotoResponse = await apiHandler({ [`${field}`]: photo });
     if (savePhotoResponse.error) {
-      if (typeof savePhotoResponse.message === 'string') setSaveError(savePhotoResponse.message);
+      const messages = savePhotoResponse.message;
+      if (typeof messages === 'string') setSaveError(messages);
+      else setSaveError(messages[0]);
     } else {
       mutate();
       setOpen(false);

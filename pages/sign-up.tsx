@@ -85,7 +85,9 @@ export default function SignUp() {
     setLoading(false);
 
     if (signUpResponse.error) {
-      setApiError(signUpResponse.message);
+      const messages = signUpResponse.message;
+      if (typeof messages === 'string') setApiError(messages);
+      else setApiError(messages[0]);
     } else {
       router.push({ pathname: '/verify-signup', query: { email: encodeURIComponent(email) } });
     }
@@ -197,9 +199,13 @@ export default function SignUp() {
               shape="circle"
               width="48px"
               onSuccess={async (credentialResponse) => {
-                const googleLoginResponse = await authApi.googleLogin({ idToken: credentialResponse.credential as string });
+                const googleLoginResponse = await authApi.googleLogin({
+                  idToken: credentialResponse.credential as string,
+                });
                 if (googleLoginResponse.error) {
-                  setApiError(googleLoginResponse.message);
+                  const messages = googleLoginResponse.message;
+                  if (typeof messages === 'string') setApiError(messages);
+                  else setApiError(messages[0]);
                 } else {
                   userMutate();
                   router.push('/');

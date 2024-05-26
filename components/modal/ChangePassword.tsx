@@ -104,7 +104,9 @@ export default function ChangePassword({ userMutate }: ChangePasswordProps) {
     setUpdating(false);
 
     if (changePasswordResponse.error) {
-      setUpdateError(changePasswordResponse.message);
+      const messages = changePasswordResponse.message;
+      if (typeof messages === 'string') setUpdateError(messages);
+      else setUpdateError(messages[0]);
     } else {
       userMutate();
       setOpen(false);
