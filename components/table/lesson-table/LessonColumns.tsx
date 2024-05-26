@@ -1,22 +1,14 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { FilePenLine, Trash2, CircleCheck, CircleAlert, WalletMinimal, DollarSign } from 'lucide-react';
+import { FilePenLine, Trash2, CircleCheck, CircleAlert } from 'lucide-react';
 import { Text } from '@/components/ui/text';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import DeleteAction from '@/components/modal/DeleteAction';
-import { CategoryList, Course } from '@/types/schema';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
-import useCourseList from '@/hooks/useCourseList';
+import { Lesson } from '@/types/schema';
 
-declare module '@tanstack/react-table' {
-  interface ColumnMeta<TData, TValue> {
-    className?: string;
-  }
-}
-
-export const CourseColumns: ColumnDef<Course>[] = [
+export const LessonColumns: ColumnDef<Lesson>[] = [
   {
     accessorKey: 'title',
     header: () => (
@@ -29,7 +21,6 @@ export const CourseColumns: ColumnDef<Course>[] = [
         {row.getValue('title')}
       </Text>
     ),
-    meta: { className: 'max-w-[25%]'}
   },
   {
     accessorKey: 'isPublished',
@@ -54,65 +45,33 @@ export const CourseColumns: ColumnDef<Course>[] = [
           </Text>
         </div>
       ),
-    meta: { className: 'max-w-[15%]' }
   },
   {
-    accessorKey: 'price',
+    accessorKey: 'contentType',
     header: () => (
       <Text size="xs" className="font-medium">
-        Type
-      </Text>
-    ),
-    cell: ({ row }) =>
-      row.getValue('price') ? (
-        <div className="flex gap-1 items-center">
-          <DollarSign className="w-4 h-4 text-teal-500" />
-          <Text size="sm" as="p" className="!text-gray-600">
-            Paid
-          </Text>
-        </div>
-      ) : (
-        <div className="flex gap-1 items-center">
-          <WalletMinimal className="w-4 h-4 text-sky-500" />
-          <Text size="sm" as="p" className="!text-gray-600">
-            Free
-          </Text>
-        </div>
-      ),
-    meta: { className: 'max-w-[15%]' }
-  },
-  {
-    accessorKey: 'categories',
-    header: () => (
-      <Text size="xs" className="font-medium">
-        Categories
+        Content type
       </Text>
     ),
     cell: ({ row }) => (
-      <div className="flex gap-2">
-        {(row.getValue('categories') as CategoryList).map((category) => (
-          <Badge variant={'info'}>
-            <Text className="!font-medium text-sky-600">{category.name}</Text>
-          </Badge>
-        ))}
-      </div>
+      <Text size="sm" className="!text-gray-600">
+        {row.getValue('contentType')}
+      </Text>
     ),
-    meta: { className: 'max-w-[25%]' }
   },
   {
     id: 'actions',
     header: () => (
-      <Text size="xs" className="font-medium">
+      <Text size="xs" className="font-medium text-center">
         Actions
       </Text>
     ),
     cell: ({ row }) => {
       const router = useRouter();
-      const { courseListMutate } = useCourseList();
       const [open, setOpen] = useState(false);
 
       return (
-        <div className="flex flex-start">
+        <div className="flex justify-center">
           <Button
             variant={'ghost'}
             className="p-2 hover:bg-slate-200"
@@ -124,16 +83,15 @@ export const CourseColumns: ColumnDef<Course>[] = [
             <Trash2 className="w-[18px] h-[18px] text-gray-600" />
           </Button>
           <DeleteAction
-            title={'Delete Course?'}
-            object={'course'}
+            title={'Delete Lesson?'}
+            object={'lesson'}
             open={open}
             setOpen={setOpen}
-            mutate={courseListMutate}
-            apiHandler={() => instructorCourseApi.deleteCourse(row.original.id)}
+            mutate={null}
+            apiHandler={() => instructorCourseApi.deleteLesson(row.original.id)}
           />
         </div>
       );
     },
-    meta: { className: 'max-w-[25%]' }
   },
 ];

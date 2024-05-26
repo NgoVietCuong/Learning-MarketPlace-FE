@@ -4,7 +4,7 @@ import { Trash2, Loader2 } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import FailedAlert from '@/components/alert/Failed';
 import { Response } from '@/types/response';
 

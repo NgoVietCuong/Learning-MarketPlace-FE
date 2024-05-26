@@ -50,7 +50,6 @@ export type InstructorProfile = {
   youtubeLink: string | null;
   createdAt: string;
   updatedAt: string;
-  [key: string]: string | number | null;
 };
 
 // category schema
@@ -86,7 +85,6 @@ export type Course = {
   createdAt: string;
   updatedAt: string;
   categories: CategoryList;
-  // [key: string]: string | number | boolean | CategoryList | null;
 };
 
 export type Meta = {

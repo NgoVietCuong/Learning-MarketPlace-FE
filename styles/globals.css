@@ -81,7 +81,7 @@
     overflow-x: hidden;
     padding-right: calc(0 - var(--removed-body-scroll-bar-size)) !important;
     height: 100vh;
-    min-height: 100vh;
+    max-height: 100%;
     margin: 0;
     position: relative;
   }
