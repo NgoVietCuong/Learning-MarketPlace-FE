@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import { Trash2, PenLine, Plus } from 'lucide-react';
 import { Text } from '../ui/text';
 import { Button } from '../ui/button';
@@ -21,6 +21,7 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
   const [createOpen, setCreateOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [addLessonOpen, setAddLessonOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<number | null>(null);
 
   const handleEditClick = (sectionId: number) => {
@@ -32,6 +33,11 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
     setSelectedSection(sectionId);
     setDeleteOpen(!deleteOpen);
   };
+
+  const handleAddLessonClick = (sectionId: number) => {
+    setSelectedSection(sectionId);
+    setAddLessonOpen(!addLessonOpen);
+  }
 
   return (
     <div className="w-[100%] flex flex-col gap-2">
@@ -55,7 +61,7 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
                     </Button>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Button size="base" variant={'ghost'} className="p-2 text-gray-600 ">
+                    <Button size="base" variant={'ghost'} className="p-2 text-gray-600" onClick={() => handleAddLessonClick(section.id)}>
                       <Plus className="mr-1 w-4 h-4 text-gray-600" />
                       Add Lesson
                     </Button>
@@ -92,8 +98,10 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
         setOpen={setCreateOpen}
         apiHandler={instructorCourseApi.createSection}
         mutate={courseDetailsMutate}
-        courseId={courseId}
-        sectionTitle={''}
+        object={"Section"}
+        parentId={courseId}
+        parentField={'courseId'}
+        titleValue={''}
       />
       <TitleProvider
         header="Edit section"
@@ -101,7 +109,19 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
         setOpen={setEditOpen}
         apiHandler={(body) => instructorCourseApi.updateSection(selectedSection!, body)}
         mutate={courseDetailsMutate}
-        sectionTitle={sections.find((section) => section.id === selectedSection!)?.title}
+        object={"Section"}
+        titleValue={sections.find((section) => section.id === selectedSection!)?.title}
+      />
+      <TitleProvider
+        header="Create lesson"
+        open={addLessonOpen}
+        setOpen={setAddLessonOpen}
+        apiHandler={instructorCourseApi.createLesson}
+        mutate={courseDetailsMutate}
+        object={"Lesson"}
+        parentId={selectedSection!}
+        parentField={'sectionId'}
+        titleValue={''}
       />
       <DeleteAction
         title={'Delete Section?'}

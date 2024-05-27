@@ -34,9 +34,9 @@ export default function UploadVideo({ uploading, handleChangeVideo, selectedVide
               ? `${selectedVideo.name.substring(0, 14)}...`
               : selectedVideo.name}
       </Label>
-      <div className="w-full flex h-[240px] bg-slate-200 justify-center items-center rounded-md">
+      {/* <div className="w-full flex h-[240px] bg-slate-200 justify-center items-center rounded-md">
         <SquarePlay className="w-28 h-28 text-gray-400" />
-      </div>
+      </div> */}
     </div>
   );
 }
