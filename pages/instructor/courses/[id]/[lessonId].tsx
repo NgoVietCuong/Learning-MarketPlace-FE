@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { GetServerSidePropsContext } from 'next';
@@ -13,9 +14,16 @@ import WarningAlert from '@/components/alert/Warning';
 import InstructorLayout from '@/components/layout/instructor-layout';
 import CourseInfoSkeleton from '@/components/skeleton/CourseInfoSkeleton';
 import DeleteAction from '@/components/modal/DeleteAction';
+import UploadFile from '@/components/upload/UploadFile';
+import UploadVideo from '@/components/upload/UploadVideo';
 import useLessonDetails from '@/hooks/useLesson';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Lesson } from '@/types/schema';
+import { NumberOfLessonFields } from '@/constants/common';
+import { LessonContentTypes } from '@/constants/enums';
+import { uploadApi } from '@/services/axios/uploadApi';
+const { DOCUMENT, VIDEO } = LessonContentTypes;
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface InstructorLessonDetailsProps {
   courseId: number;
@@ -32,8 +40,13 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
   const [saveError, setSaveError] = useState('');
   const [titleError, setTitleError] = useState('');
   const [contentTypeError, setContentTypeError] = useState('');
+  const [fileUploading, setFileUploading] = useState(false);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
   const [publishing, setPublishing] = useState(false);
   const [publish, setPublish] = useState<boolean | null>(null);
+  const [numberCompleted, setNumberCompleted] = useState(0);
   const [lessonInfo, setLessonInfo] = useState<Omit<Lesson, 'isPublished'> | null>(null);
 
   useEffect(() => {
@@ -41,6 +54,17 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
       const { isPublished, ...rest } = lessonDetails.data!;
       setPublish(isPublished);
       setLessonInfo(rest);
+
+      let incompleteFields = 0;
+      const { title, contentType, content, fileName } = rest!;
+
+      if (!contentType) incompleteFields++;
+      if (!title || (title && title.trim() === '')) incompleteFields++;
+      if (!content || (content && content.trim() === '')) incompleteFields++;
+      if (contentType && [DOCUMENT, VIDEO].includes(contentType) && (!fileName || (fileName && fileName.trim() === '')))
+        incompleteFields++;
+
+      setNumberCompleted(NumberOfLessonFields - incompleteFields);
     }
   }, [lessonDetails]);
 
@@ -72,8 +96,47 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
   const handleChangeLessonTitle = (value: string) => {
     setLessonInfo({ ...lessonInfo!, title: value });
   };
-  const handleChangeContentType = (value: string) => {
-    setLessonInfo({ ...lessonInfo!, contentType: value });
+
+  const handleChangeContentType = (value: LessonContentTypes) => {
+    setLessonInfo({ ...lessonInfo!, contentType: value, content: null, fileName: null });
+  };
+
+  const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET!);
+    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/lesson-document/${lessonInfo?.id}`);
+
+    setFileUploading(true);
+    const uploadResponse = await uploadApi.uploadFile(formData);
+    if (!uploadResponse.error) {
+      setSelectedFile(file);
+      setLessonInfo({ ...lessonInfo!, content: uploadResponse.secure_url as string, fileName: file.name });
+    }
+    setFileUploading(false);
+  };
+
+  const handleChangeVideo = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) {
+      return;
+    }
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET!);
+    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/course-video/${courseInfo?.id}`);
+
+    setVideoUploading(true);
+    const uploadResponse = await uploadApi.uploadVideo(formData);
+    if (!uploadResponse.error) {
+      setSelectedVideo(file);
+      setLessonInfo({ ...lessonInfo!, content: uploadResponse.secure_url as string });
+    }
+    setVideoUploading(false);
   };
 
   return (
@@ -104,7 +167,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       size="sm"
                       variant={'outline'}
                       className="p-[15px]"
-                      disabled={publishing}
+                      disabled={numberCompleted < NumberOfLessonFields || publishing}
                       onClick={handlePublishLesson}
                     >
                       {publishing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -124,8 +187,11 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                     />
                   </div>
                 </div>
+                <Text size="tx" className="font-medium !text-cyan-600">
+                  Complete all required fields ({numberCompleted}/{NumberOfLessonFields})
+                </Text>
               </div>
-              <div className="flex gap-7">
+              <div className="flex gap-7 mt-[15px]">
                 <div className="w-[32%] flex flex-col gap-3">
                   <div className="w-full flex flex-col items-start gap-1">
                     <Text size="sm" className="font-medium !text-gray-600">
@@ -155,7 +221,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       onValueChange={handleChangeContentType}
                     >
                       <SelectTrigger className="w-full px-4">
-                        <SelectValue placeholder="Select course level" />
+                        <SelectValue placeholder="Select content type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white-primary">
                         <SelectItem value="text" className="text-gray-700">
@@ -175,6 +241,19 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       </Text>
                     )}
                   </div>
+
+                  {lessonInfo?.contentType === LessonContentTypes.TEXT && (
+                    <ReactQuill
+                      theme="snow"
+                      className="quill w-full"
+                      style={{ minHeight: '300px', maxHeight: '300px' }}
+                      value={lessonInfo?.content ? lessonInfo?.content : undefined}
+                      // onChange={}
+                    />
+                  )}
+                  {lessonInfo?.contentType === LessonContentTypes.DOCUMENT && (
+                    
+                  )}
                 </div>
               </div>
               <div className="flex flex-col gap-3">

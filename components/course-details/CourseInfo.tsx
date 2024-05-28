@@ -284,6 +284,9 @@ export default function CourseInfo({
                   <SelectItem value="Advanced" className="text-gray-700">
                     Advanced
                   </SelectItem>
+                  <SelectItem value="All Levels" className="text-gray-700">
+                    All Levels
+                  </SelectItem>
                 </SelectContent>
               </Select>
               {levelError && (

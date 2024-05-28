@@ -23,7 +23,6 @@ interface InstructorCourseDetailsProps {
 }
 
 export default function InstructorCourseDetails({ id }: InstructorCourseDetailsProps) {
-  const totalFields = 6;
   const router = useRouter();
   const { toast } = useToast();
   const { courseListMutate } = useCourseList();
