@@ -1,24 +1,31 @@
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import videojs from 'video.js';
-import 'video.js/dist/video-js.css';
+import "video.js/dist/video-js.css";
 
-interface VideoPlayerProps {
-  options: videojs.PlayerOptions
+interface IVideoPlayerProps {
+  className: string;
+  options: videojs.PlayerOptions;
 }
 
 const initialOptions: videojs.PlayerOptions = {
   controls: true,
+  responsive: true,
   fluid: true,
+  aspectRatio: "16:9",
   controlBar: {
     volumePanel: {
-      inline: false
+      inline: false,
+      volumeControl: {
+        vertical: true
+      }
     }
-  }
+  },
 };
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ options }) => {
-  const videoRef = useRef<HTMLVideoElement>();
-  const playerRef = useRef<videojs.Player>();
+
+const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options }) => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const playerRef = useRef<videojs.Player | null>(null);
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -26,31 +33,27 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ options }) => {
     const videoElement = videoRef.current;
 
     if (!playerRef.current) {
-      const videoJsOptions: VideoJsPlayerOptions = {
-        autoplay: false,
-        controls: true,
-        sources: [{
-          type: 'application/x-mpegURL',
-        }],
-        fluid: true,
-      };
+      playerRef.current = videojs(videoElement, {
+        ...options,
+        ...initialOptions
+      }).ready(function() {
 
-      playerRef.current = videojs(videoElement, videoJsOptions);
+      });
     }
 
+    // Cleanup the Video.js player on component unmount
     return () => {
       if (playerRef.current) {
         playerRef.current.dispose();
+        playerRef.current = null;
       }
     };
-  }, [src]);
+  }, [options]);
 
   return (
-    <div>
-      <div data-vjs-player>
-        <video ref={videoRef} className="video-js vjs-default-skin" />
-      </div>
-    </div>
+    <div data-vjs-player className={className}>
+      <video ref={videoRef} className="video-js vjs-big-play-centered video-js vjs-paused vjs-fluid vjs_video_3-dimensions vjs-controls-enabled vjs-workinghover vjs-v8 vjs-user-active vjs-layout-small" />
+    </div> 
   );
 };
 

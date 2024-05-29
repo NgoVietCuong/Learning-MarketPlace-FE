@@ -176,4 +176,8 @@
   button span {
     color: #374151;
   }
+
+  .video-js .vjs-button > .vjs-icon-placeholder:before {
+    color: white !important;
+  }
 }

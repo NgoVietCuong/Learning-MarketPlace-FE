@@ -24,11 +24,21 @@ import { LessonContentTypes } from '@/constants/enums';
 import { uploadApi } from '@/services/axios/uploadApi';
 const { DOCUMENT, VIDEO } = LessonContentTypes;
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import VideoPlayer from '@/components/video-player';
 
 interface InstructorLessonDetailsProps {
   courseId: number;
   lessonId: number;
 }
+
+const videoJsOptions = {
+  sources: [
+    {
+      src: "https://res.cloudinary.com/dvz7322mp/video/upload/sp_auto/hlm-dev/course-video/3/droz5qwofzg52hbclcdh.m3u8",
+      // type: 'video/m3u8'
+    }
+  ]
+};
 
 export default function InstructorLessonDetails({ courseId, lessonId }: InstructorLessonDetailsProps) {
   const router = useRouter();
@@ -266,14 +276,16 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                         handleChangeFile={handleChangeFile}
                       />
                     )}
-                    {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
+                    {/* {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
                       <UploadVideo
                         uploading={videoUploading}
                         selectedVideo={selectedVideo}
                         handleChangeVideo={handleChangeVideo}
                       />
-                    )}
+                    )} */}
+                    <VideoPlayer className="w-full" options={videoJsOptions} />
                   </div>
+                  
                 </div>
               </div>
               <div className="flex flex-col gap-3">
