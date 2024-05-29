@@ -275,16 +275,16 @@ export default function CourseInfo({
                   <SelectValue placeholder="Select course level" />
                 </SelectTrigger>
                 <SelectContent className="bg-white-primary">
-                  <SelectItem value="Basic" className="text-gray-700">
+                  <SelectItem value="Basic" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                     Basic
                   </SelectItem>
-                  <SelectItem value="Intermediate" className="text-gray-700">
+                  <SelectItem value="Intermediate" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                     Intermediate
                   </SelectItem>
-                  <SelectItem value="Advanced" className="text-gray-700">
+                  <SelectItem value="Advanced" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                     Advanced
                   </SelectItem>
-                  <SelectItem value="All Levels" className="text-gray-700">
+                  <SelectItem value="All Levels" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                     All Levels
                   </SelectItem>
                 </SelectContent>
@@ -327,16 +327,26 @@ export default function CourseInfo({
             </div>
           </div>
           <div className="w-[32%] flex flex-col gap-4">
-            <UploadImage
-              uploading={imageUploading}
-              selectedImage={selectedImage}
-              handleChangeImage={handleChangeImage}
-            />
-            <UploadVideo
-              uploading={videoUploading}
-              selectedVideo={selectedVideo}
-              handleChangeVideo={handleChangeVideo}
-            />
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Course image
+              </Text>
+              <UploadImage
+                uploading={imageUploading}
+                selectedImage={selectedImage}
+                handleChangeImage={handleChangeImage}
+              />
+            </div>
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Course video
+              </Text>
+              <UploadVideo
+                uploading={videoUploading}
+                selectedVideo={selectedVideo}
+                handleChangeVideo={handleChangeVideo}
+              />
+            </div>
           </div>
         </div>
       </div>

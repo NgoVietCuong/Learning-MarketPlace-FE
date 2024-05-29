@@ -128,11 +128,12 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET!);
-    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/course-video/${courseInfo?.id}`);
+    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/course-video/${lessonInfo?.id}`);
 
     setVideoUploading(true);
     const uploadResponse = await uploadApi.uploadVideo(formData);
     if (!uploadResponse.error) {
+      console.log("uploadResponse", uploadResponse)
       setSelectedVideo(file);
       setLessonInfo({ ...lessonInfo!, content: uploadResponse.secure_url as string });
     }
@@ -224,13 +225,13 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                         <SelectValue placeholder="Select content type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white-primary">
-                        <SelectItem value="text" className="text-gray-700">
+                        <SelectItem value="text" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                           Text
                         </SelectItem>
-                        <SelectItem value="video" className="text-gray-700">
+                        <SelectItem value="video" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                           Video
                         </SelectItem>
-                        <SelectItem value="document" className="text-gray-700">
+                        <SelectItem value="document" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                           Document
                         </SelectItem>
                       </SelectContent>
@@ -242,18 +243,37 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                     )}
                   </div>
 
-                  {lessonInfo?.contentType === LessonContentTypes.TEXT && (
-                    <ReactQuill
-                      theme="snow"
-                      className="quill w-full"
-                      style={{ minHeight: '300px', maxHeight: '300px' }}
-                      value={lessonInfo?.content ? lessonInfo?.content : undefined}
-                      // onChange={}
-                    />
-                  )}
-                  {lessonInfo?.contentType === LessonContentTypes.DOCUMENT && (
-                    
-                  )}
+                  <div className="w-full flex flex-col items-start gap-1">
+                    {lessonInfo?.contentType && (
+                      <Text size="sm" className="font-medium !text-gray-600">
+                        Content <span className="text-red-500"> *</span>
+                      </Text>
+                    )}
+
+                    {lessonInfo?.contentType === LessonContentTypes.TEXT && (
+                      <ReactQuill
+                        theme="snow"
+                        className="quill w-full"
+                        style={{ minHeight: '300px', maxHeight: '300px' }}
+                        value={lessonInfo?.content ? lessonInfo?.content : undefined}
+                        // onChange={}
+                      />
+                    )}
+                    {lessonInfo?.contentType === LessonContentTypes.DOCUMENT && (
+                      <UploadFile
+                        uploading={fileUploading}
+                        selectedFile={selectedFile}
+                        handleChangeFile={handleChangeFile}
+                      />
+                    )}
+                    {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
+                      <UploadVideo
+                        uploading={videoUploading}
+                        selectedVideo={selectedVideo}
+                        handleChangeVideo={handleChangeVideo}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col gap-3">

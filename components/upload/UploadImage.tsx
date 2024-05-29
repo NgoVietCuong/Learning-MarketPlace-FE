@@ -1,5 +1,4 @@
 import { ImageOff, Loader2, Upload } from 'lucide-react';
-import { Text } from '../ui/text';
 import { Label } from '../ui/label';
 
 interface UploadImageProps {
@@ -10,10 +9,7 @@ interface UploadImageProps {
 
 export default function UploadImage({ uploading, handleChangeImage, selectedImage }: UploadImageProps) {
   return (
-    <div className="w-full flex flex-col items-start gap-1">
-      <Text size="sm" className="font-medium !text-gray-600">
-        Course image
-      </Text>
+    <>
       <input
         type="file"
         id="course_image"
@@ -37,6 +33,6 @@ export default function UploadImage({ uploading, handleChangeImage, selectedImag
       {/* <div className="w-full flex h-[220px] bg-slate-200 justify-center items-center rounded-md">
         <ImageOff className="w-28 h-28 text-gray-400" />
       </div> */}
-    </div>
+    </>
   );
 }

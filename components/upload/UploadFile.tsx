@@ -1,5 +1,4 @@
 import { SquarePlay, Loader2, Upload } from 'lucide-react';
-import { Text } from '../ui/text';
 import { Label } from '../ui/label';
 
 interface UploadFileProps {
@@ -10,10 +9,7 @@ interface UploadFileProps {
 
 export default function UploadFile({ uploading, handleChangeFile, selectedFile }: UploadFileProps) {
   return (
-    <div className="w-full flex flex-col items-start gap-1">
-      <Text size="sm" className="font-medium !text-gray-600">
-        Course video
-      </Text>
+    <>
       <input
         type="file"
         id="course_video"
@@ -29,14 +25,11 @@ export default function UploadFile({ uploading, handleChangeFile, selectedFile }
         {uploading
           ? 'Uploading...'
           : !selectedFile
-            ? 'Select a video'
+            ? 'Select a file'
             : selectedFile.name.length > 15
               ? `${selectedFile.name.substring(0, 14)}...`
               : selectedFile.name}
       </Label>
-      {/* <div className="w-full flex h-[240px] bg-slate-200 justify-center items-center rounded-md">
-        <SquarePlay className="w-28 h-28 text-gray-400" />
-      </div> */}
-    </div>
+    </>
   );
 }
