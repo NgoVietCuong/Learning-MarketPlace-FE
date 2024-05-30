@@ -2,12 +2,13 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { GetServerSidePropsContext } from 'next';
-import { ArrowLeft, Loader2, Trash2 } from 'lucide-react';
+import { ArrowLeft, Loader2, Trash2, X } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { useToast } from '@/components/ui/use-toast';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FailedAlert from '@/components/alert/Failed';
 import WarningAlert from '@/components/alert/Warning';
@@ -34,10 +35,10 @@ interface InstructorLessonDetailsProps {
 const videoJsOptions = {
   sources: [
     {
-      src: "https://res.cloudinary.com/dvz7322mp/video/upload/sp_auto/hlm-dev/course-video/3/droz5qwofzg52hbclcdh.m3u8",
-      // type: 'video/m3u8'
-    }
-  ]
+      src: 'https://res.cloudinary.com/dvz7322mp/video/upload/sp_auto/hlm-dev/course-video/3/droz5qwofzg52hbclcdh.m3u8',
+      type: 'application/x-mpegURL',
+    },
+  ],
 };
 
 export default function InstructorLessonDetails({ courseId, lessonId }: InstructorLessonDetailsProps) {
@@ -142,8 +143,9 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
 
     setVideoUploading(true);
     const uploadResponse = await uploadApi.uploadVideo(formData);
+    console.log("uploadResponse", uploadResponse)
     if (!uploadResponse.error) {
-      console.log("uploadResponse", uploadResponse)
+      console.log('uploadResponse', uploadResponse);
       setSelectedVideo(file);
       setLessonInfo({ ...lessonInfo!, content: uploadResponse.secure_url as string });
     }
@@ -276,16 +278,19 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                         handleChangeFile={handleChangeFile}
                       />
                     )}
-                    {/* {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
-                      <UploadVideo
-                        uploading={videoUploading}
-                        selectedVideo={selectedVideo}
-                        handleChangeVideo={handleChangeVideo}
-                      />
-                    )} */}
-                    <VideoPlayer className="w-full" options={videoJsOptions} />
+                    
+                    {/* <VideoPlayer className="w-full" options={videoJsOptions} /> */}
                   </div>
-                  
+
+                  {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
+                    <div className="w-full flex flex-col items-start gap-1">
+                        <UploadVideo
+                          uploading={videoUploading}
+                          selectedVideo={selectedVideo}
+                          handleChangeVideo={handleChangeVideo}
+                        />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col gap-3">
