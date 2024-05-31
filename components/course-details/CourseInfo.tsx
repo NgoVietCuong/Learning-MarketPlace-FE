@@ -51,6 +51,7 @@ export default function CourseInfo({
   const [overviewError, setOverviewError] = useState('');
   const [categoryError, setCategoryError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const [imageError, setImageError] = useState('');
 
   const handleChangeCourseTitle = (value: string) => {
     setCourseInfo({ ...courseInfo!, title: value });
@@ -124,7 +125,8 @@ export default function CourseInfo({
       hasDescriptionError = false,
       hasPriceError = false,
       hasLevelError = false,
-      hasCategoryError = false;
+      hasCategoryError = false,
+      hasImageError = false;
 
     const { id, title, overview, description, price, level, categories, imagePreview, videoPreview } = courseInfo!;
 
@@ -153,8 +155,11 @@ export default function CourseInfo({
       (hasCategoryError = true), setCategoryError('Course categories cannot be empty');
     else (hasCategoryError = false), setCategoryError('');
 
+    if (!imagePreview) (hasImageError = true), setImageError('Course image cannot be empty');
+    else (hasImageError = false), setImageError('');
+
     setSaveError('');
-    if (hasTitleError || hasOverviewError || hasDescriptionError || hasPriceError || hasLevelError || hasCategoryError)
+    if (hasTitleError || hasOverviewError || hasDescriptionError || hasPriceError || hasLevelError || hasCategoryError || hasImageError)
       return;
 
     setSaving(true);
@@ -329,7 +334,7 @@ export default function CourseInfo({
           <div className="w-[32%] flex flex-col gap-4">
             <div className="w-full flex flex-col items-start gap-1">
               <Text size="sm" className="font-medium !text-gray-600">
-                Course image
+                Course image<span className="text-red-500"> *</span>
               </Text>
               <UploadImage
                 uploading={imageUploading}

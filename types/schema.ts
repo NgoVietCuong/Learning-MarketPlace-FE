@@ -107,6 +107,7 @@ export type Lesson = {
   contentType: LessonContentTypes;
   content: string | null;
   fileName: string | null;
+  duration: number | null;
   sortOrder: number;
   isPublished: boolean;
   createdAt: string;

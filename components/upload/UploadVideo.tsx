@@ -22,7 +22,7 @@ export default function UploadVideo({ uploading, handleChangeVideo, selectedVide
       <AspectRatio ratio={16 / 9}>
         <Label
           htmlFor="course_video"
-          className="w-full bg-white font-normal border border-gray-border border-dashed rounded-md h-full flex justify-center items-center px-4 text-gray-primary bg-white-primary"
+          className="w-full bg-white cursor-pointer font-normal border border-gray-border border-dashed rounded-md h-full flex justify-center items-center px-4 text-gray-primary bg-white-primary"
         >
           <div className="flex flex-col items-center gap-2">
             {uploading ? (
@@ -33,10 +33,12 @@ export default function UploadVideo({ uploading, handleChangeVideo, selectedVide
             ) : (
               <>
                 <CloudUpload className="w-8 h-8" />
-                <Text size="sm">Select a video or drag and drop</Text>
-                <Text size="sm" className="text-sky-700">
-                  File .mp4 (5GB)
-                </Text>
+                <div className='flex flex-col items-center gap-1'>
+                  <Text size="sm">Select a video or drag and drop</Text>
+                  <Text size="sm" className="text-sky-700">
+                    File .mp4 (5GB)
+                  </Text>
+                </div>
               </>
             )}
 
@@ -51,10 +53,6 @@ export default function UploadVideo({ uploading, handleChangeVideo, selectedVide
           </div>
         </Label>
       </AspectRatio>
-
-      {/* <div className="w-full flex h-[240px] bg-slate-200 justify-center items-center rounded-md">
-        <SquarePlay className="w-28 h-28 text-gray-400" />
-      </div> */}
     </>
   );
 }

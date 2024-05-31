@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { useToast } from '@/components/ui/use-toast';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FailedAlert from '@/components/alert/Failed';
 import WarningAlert from '@/components/alert/Warning';
@@ -32,15 +31,6 @@ interface InstructorLessonDetailsProps {
   lessonId: number;
 }
 
-const videoJsOptions = {
-  sources: [
-    {
-      src: 'https://res.cloudinary.com/dvz7322mp/video/upload/sp_auto/hlm-dev/course-video/3/droz5qwofzg52hbclcdh.m3u8',
-      type: 'application/x-mpegURL',
-    },
-  ],
-};
-
 export default function InstructorLessonDetails({ courseId, lessonId }: InstructorLessonDetailsProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -50,6 +40,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [titleError, setTitleError] = useState('');
+  const [contentError, setContentError] = useState('');
   const [contentTypeError, setContentTypeError] = useState('');
   const [fileUploading, setFileUploading] = useState(false);
   const [videoUploading, setVideoUploading] = useState(false);
@@ -65,17 +56,6 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
       const { isPublished, ...rest } = lessonDetails.data!;
       setPublish(isPublished);
       setLessonInfo(rest);
-
-      let incompleteFields = 0;
-      const { title, contentType, content, fileName } = rest!;
-
-      if (!contentType) incompleteFields++;
-      if (!title || (title && title.trim() === '')) incompleteFields++;
-      if (!content || (content && content.trim() === '')) incompleteFields++;
-      if (contentType && [DOCUMENT, VIDEO].includes(contentType) && (!fileName || (fileName && fileName.trim() === '')))
-        incompleteFields++;
-
-      setNumberCompleted(NumberOfLessonFields - incompleteFields);
     }
   }, [lessonDetails]);
 
@@ -85,6 +65,15 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
         (key) => lessonInfo[key] == lessonDetails.data![key],
       );
       setIsChanged(changed);
+
+      let incompleteFields = 0;
+      const { title, contentType, content } = lessonInfo!;
+
+      if (!contentType) incompleteFields++;
+      if (!title || (title && title.trim() === '')) incompleteFields++;
+      if (!content || (content && content.trim() === '')) incompleteFields++;
+
+      setNumberCompleted(NumberOfLessonFields - incompleteFields);
     }
   }, [lessonInfo]);
 
@@ -109,7 +98,17 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
   };
 
   const handleChangeContentType = (value: LessonContentTypes) => {
-    setLessonInfo({ ...lessonInfo!, contentType: value, content: null, fileName: null });
+    setLessonInfo({ ...lessonInfo!, contentType: value, content: null, fileName: null, duration: null });
+  };
+
+  const handleChangeContent = (value: string) => {
+    setLessonInfo({ ...lessonInfo!, content: value });
+  };
+
+  const handleRemoveContent = () => {
+    setSelectedFile(null);
+    setSelectedVideo(null);
+    setLessonInfo({ ...lessonInfo!, content: null, fileName: null, duration: null });
   };
 
   const handleChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +125,11 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
     const uploadResponse = await uploadApi.uploadFile(formData);
     if (!uploadResponse.error) {
       setSelectedFile(file);
-      setLessonInfo({ ...lessonInfo!, content: uploadResponse.secure_url as string, fileName: file.name });
+      setLessonInfo({
+        ...lessonInfo!,
+        content: uploadResponse.secure_url as string,
+        fileName: file.name,
+      });
     }
     setFileUploading(false);
   };
@@ -139,17 +142,68 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', process.env.NEXT_PUBLIC_UPLOAD_PRESET!);
-    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/course-video/${lessonInfo?.id}`);
+    formData.append('public_id_prefix', `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}/lesson-video/${lessonInfo?.id}`);
 
     setVideoUploading(true);
     const uploadResponse = await uploadApi.uploadVideo(formData);
-    console.log("uploadResponse", uploadResponse)
     if (!uploadResponse.error) {
-      console.log('uploadResponse', uploadResponse);
       setSelectedVideo(file);
-      setLessonInfo({ ...lessonInfo!, content: uploadResponse.secure_url as string });
+      setLessonInfo({
+        ...lessonInfo!,
+        content: uploadResponse.playback_url as string,
+        fileName: file.name,
+        duration: uploadResponse.duration as number,
+      });
     }
     setVideoUploading(false);
+  };
+
+  const handleSaveLessonInfo = async () => {
+    let hasTitleError = false,
+      hasContentTypeError = false,
+      hasContentError = false;
+
+    const { id, sectionId, title, contentType, content, fileName, duration } = lessonInfo!;
+
+    if (!title || (title && title.trim() === '')) (hasTitleError = true), setTitleError('Course title cannot be empty');
+    else (hasTitleError = false), setTitleError('');
+
+    if (!contentType) (hasContentTypeError = true), setContentTypeError('Lesson content type cannot be empty');
+    else (hasContentTypeError = false), setContentTypeError('');
+
+    if (!content || (content && ['<h1><br></h1>', '<h2><br></h2>', '<h3><br></h3>', '<p><br></p>'].includes(content)))
+      (hasContentError = true), setContentError('Lesson content cannot be empty');
+    else (hasContentError = false), setContentError('');
+
+    setSaveError('');
+    if (hasTitleError || hasContentTypeError || hasContentError) {
+      return;
+    }
+
+    setSaving(true);
+    const handleSaveLessonInfoResponse = await instructorCourseApi.updateLesson(id, {
+      title: title as string,
+      sectionId: sectionId,
+      contentType: contentType as LessonContentTypes,
+      content: content as string,
+      fileName: fileName,
+      duration: duration ? Math.round(duration) : null,
+    });
+
+    if (handleSaveLessonInfoResponse.error) {
+      console.log('handleSaveLessonInfoResponse', handleSaveLessonInfoResponse);
+      const messages = handleSaveLessonInfoResponse.message;
+      if (typeof messages === 'string') setSaveError(messages);
+      else setSaveError(messages[0]);
+    } else {
+      lessonDetailsMutate();
+      toast({
+        variant: 'success',
+        description: 'Updated lesson successfully!',
+      });
+      setIsChanged(false);
+    }
+    setSaving(false);
   };
 
   return (
@@ -190,13 +244,13 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       <Trash2 className="w-[17px] h-[17px]" />
                     </Button>
                     <DeleteAction
-                      title={'Delete Course?'}
-                      object={'course'}
+                      title={'Delete Lesson?'}
+                      object={'lesson'}
                       open={open}
                       setOpen={setOpen}
                       redirect={true}
                       redirectUrl={`/instructor/courses/${courseId}`}
-                      apiHandler={() => instructorCourseApi.deleteCourse(lessonId)}
+                      apiHandler={() => instructorCourseApi.deleteLesson(lessonId)}
                     />
                   </div>
                 </div>
@@ -205,7 +259,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                 </Text>
               </div>
               <div className="flex gap-7 mt-[15px]">
-                <div className="w-[32%] flex flex-col gap-3">
+                <div className="w-[32%] flex flex-col gap-4">
                   <div className="w-full flex flex-col items-start gap-1">
                     <Text size="sm" className="font-medium !text-gray-600">
                       Course title<span className="text-red-500"> *</span>
@@ -237,13 +291,13 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                         <SelectValue placeholder="Select content type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white-primary">
-                        <SelectItem value="text" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                        <SelectItem value="Text" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                           Text
                         </SelectItem>
-                        <SelectItem value="video" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                        <SelectItem value="Video" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                           Video
                         </SelectItem>
-                        <SelectItem value="document" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                        <SelectItem value="Document" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                           Document
                         </SelectItem>
                       </SelectContent>
@@ -262,15 +316,6 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       </Text>
                     )}
 
-                    {lessonInfo?.contentType === LessonContentTypes.TEXT && (
-                      <ReactQuill
-                        theme="snow"
-                        className="quill w-full"
-                        style={{ minHeight: '300px', maxHeight: '300px' }}
-                        value={lessonInfo?.content ? lessonInfo?.content : undefined}
-                        // onChange={}
-                      />
-                    )}
                     {lessonInfo?.contentType === LessonContentTypes.DOCUMENT && (
                       <UploadFile
                         uploading={fileUploading}
@@ -278,30 +323,74 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                         handleChangeFile={handleChangeFile}
                       />
                     )}
-                    
-                    {/* <VideoPlayer className="w-full" options={videoJsOptions} /> */}
-                  </div>
 
-                  {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
-                    <div className="w-full flex flex-col items-start gap-1">
+                    {lessonInfo?.fileName && (
+                      <div className="w-full flex justify-between items-center bg-slate-200 rounded-md px-3 mb-[3px]">
+                        <Text size="sm" className="font-medium !text-gray-600">
+                          {lessonInfo?.fileName}
+                        </Text>
+                        <Button variant={'ghost'} className="p-0" onClick={handleRemoveContent}>
+                          <X className="w-4 h-4 text-gray-400 hover:text-gray-600" />
+                        </Button>
+                      </div>
+                    )}
+
+                    {lessonInfo?.contentType === LessonContentTypes.TEXT && (
+                      <ReactQuill
+                        theme="snow"
+                        className="quill w-full"
+                        style={{ minHeight: '300px', maxHeight: '300px' }}
+                        value={lessonInfo?.content ? lessonInfo?.content : undefined}
+                        onChange={handleChangeContent}
+                      />
+                    )}
+
+                    {lessonInfo?.contentType === LessonContentTypes.VIDEO ? (
+                      lessonInfo?.content ? (
+                        <VideoPlayer
+                          className="w-full"
+                          options={{
+                            sources: [
+                              {
+                                src: lessonInfo?.content,
+                                type: 'application/x-mpegURL',
+                              },
+                            ],
+                          }}
+                        />
+                      ) : (
                         <UploadVideo
                           uploading={videoUploading}
                           selectedVideo={selectedVideo}
                           handleChangeVideo={handleChangeVideo}
                         />
-                    </div>
-                  )}
+                      )
+                    ) : (
+                      <></>
+                    )}
+                    {contentError && (
+                      <Text
+                        size="xs"
+                        as="p"
+                        className={`text-red-400 font-medium ${lessonInfo?.contentType === LessonContentTypes.TEXT ? 'mt-[40px]' : ''}`}
+                      >
+                        {contentError}
+                      </Text>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
+              <div
+                className={`flex flex-col gap-3 ${lessonInfo?.contentType === LessonContentTypes.TEXT && !contentError ? 'mt-[40px]' : ''}`}
+              >
                 <div className="w-[32%] flex flex-col items-center p-0">
-                  {saveError && <FailedAlert title={'Update course info failed'} message={saveError} />}
+                  {saveError && <FailedAlert title={'Update lesson info failed'} message={saveError} />}
                 </div>
                 <Button
                   size="sm"
                   disabled={!isChanged || saving}
                   className="w-[80px] bg-teal-secondary text-white-primary active:scale-95"
-                  // onClick={handleSaveLessonInfo}
+                  onClick={handleSaveLessonInfo}
                 >
                   {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Save

@@ -43,9 +43,10 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       setCourseInfo(rest);
 
       let incompleteFields = 0;
-      const { title, overview, description, price, level, categories } = rest!;
+      const { title, overview, description, price, level, categories, imagePreview } = rest!;
 
       if (!level) incompleteFields++;
+      if (!imagePreview) incompleteFields++;
       if (!title || (title && title.trim() === '')) incompleteFields++;
       if (!overview || (overview && overview.trim() === '')) incompleteFields++;
       if (price == null || (typeof price === 'number' && price < 0)) incompleteFields++;

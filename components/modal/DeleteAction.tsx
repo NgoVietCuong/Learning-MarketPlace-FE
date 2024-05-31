@@ -38,7 +38,7 @@ export default function DeleteAction({ title, object, open, setOpen, mutate, red
       if (typeof messages === 'string') setDeleteError(messages);
       else setDeleteError(messages[0]);
     } else {
-      mutate();
+      if (mutate) mutate();
       setOpen(false);
       if (redirect) router.push(redirectUrl! as string);
       toast({

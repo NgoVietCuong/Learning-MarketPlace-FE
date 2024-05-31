@@ -25,7 +25,7 @@ export default function UploadFile({ uploading, handleChangeFile, selectedFile }
         {uploading
           ? 'Uploading...'
           : !selectedFile
-            ? 'Select a file'
+            ? 'Select a file (.pdf only)'
             : selectedFile.name.length > 15
               ? `${selectedFile.name.substring(0, 14)}...`
               : selectedFile.name}
