@@ -345,28 +345,12 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       />
                     )}
 
-                    {lessonInfo?.contentType === LessonContentTypes.VIDEO ? (
-                      lessonInfo?.content ? (
-                        <VideoPlayer
-                          className="w-full"
-                          options={{
-                            sources: [
-                              {
-                                src: lessonInfo?.content,
-                                type: 'application/x-mpegURL',
-                              },
-                            ],
-                          }}
-                        />
-                      ) : (
-                        <UploadVideo
-                          uploading={videoUploading}
-                          selectedVideo={selectedVideo}
-                          handleChangeVideo={handleChangeVideo}
-                        />
-                      )
-                    ) : (
-                      <></>
+                    {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
+                      <UploadVideo
+                        uploading={videoUploading}
+                        handleChangeVideo={handleChangeVideo}
+                        src={lessonInfo.content}
+                      />
                     )}
                     {contentError && (
                       <Text

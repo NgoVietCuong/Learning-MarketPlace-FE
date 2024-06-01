@@ -1,10 +1,9 @@
 import dynamic from 'next/dynamic';
 import { useState, Dispatch, SetStateAction } from 'react';
-import { Loader2, Upload, ImageOff, SquarePlay } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { CategoryButton } from '@/components/ui/category-button';
@@ -34,7 +33,7 @@ export default function CourseInfo({
   setCourseInfo,
   isChanged,
   setIsChanged,
-  numberCompleted,
+  numberCompleted
 }: CourseInfoProps) {
   const { toast } = useToast();
   const { categoryList } = useCategories();
@@ -81,6 +80,16 @@ export default function CourseInfo({
     setCourseInfo({ ...courseInfo!, categories: value });
   };
 
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setCourseInfo({ ...courseInfo!, imagePreview: null });
+  };
+
+  const handleRemoveVideo = () => {
+    setSelectedVideo(null);
+    setCourseInfo({ ...courseInfo!, videoPreview: null });
+  };
+
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) {
       return;
@@ -114,7 +123,7 @@ export default function CourseInfo({
     const uploadResponse = await uploadApi.uploadVideo(formData);
     if (!uploadResponse.error) {
       setSelectedVideo(file);
-      setCourseInfo({ ...courseInfo!, videoPreview: uploadResponse.secure_url as string });
+      setCourseInfo({ ...courseInfo!, videoPreview: uploadResponse.playback_url as string });
     }
     setVideoUploading(false);
   };
@@ -159,7 +168,15 @@ export default function CourseInfo({
     else (hasImageError = false), setImageError('');
 
     setSaveError('');
-    if (hasTitleError || hasOverviewError || hasDescriptionError || hasPriceError || hasLevelError || hasCategoryError || hasImageError)
+    if (
+      hasTitleError ||
+      hasOverviewError ||
+      hasDescriptionError ||
+      hasPriceError ||
+      hasLevelError ||
+      hasCategoryError ||
+      hasImageError
+    )
       return;
 
     setSaving(true);
@@ -170,7 +187,7 @@ export default function CourseInfo({
       price: price as number,
       level: level as string,
       categoryIds: categories.map((c) => c.id) as number[],
-      imagePreview: imagePreview,
+      imagePreview: imagePreview as string,
       videoPreview: videoPreview,
     });
 
@@ -240,7 +257,7 @@ export default function CourseInfo({
               <ReactQuill
                 theme="snow"
                 className="quill w-full"
-                style={{ minHeight: '300px', maxHeight: '300px' }}
+                style={{ minHeight: '340px', maxHeight: '340px' }}
                 value={courseInfo?.description ? courseInfo?.description : undefined}
                 onChange={handleChangeDescription}
               />
@@ -330,32 +347,51 @@ export default function CourseInfo({
                 </Text>
               )}
             </div>
-          </div>
-          <div className="w-[32%] flex flex-col gap-4">
             <div className="w-full flex flex-col items-start gap-1">
-              <Text size="sm" className="font-medium !text-gray-600">
-                Course image<span className="text-red-500"> *</span>
-              </Text>
+              <div className="w-full flex justify-between items-center">
+                <Text size="sm" className="font-medium !text-gray-600">
+                  Course image<span className="text-red-500"> *</span>
+                </Text>
+                <Button variant={'ghost'} className={`p-0 h-fit ${courseInfo.imagePreview ? 'visible' : 'invisible'}`}>
+                  <Text size="tx" onClick={handleRemoveImage}>
+                    Remove
+                  </Text>
+                </Button>
+              </div>
               <UploadImage
                 uploading={imageUploading}
-                selectedImage={selectedImage}
                 handleChangeImage={handleChangeImage}
+                src={courseInfo.imagePreview}
               />
+              {imageError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium">
+                  {imageError}
+                </Text>
+              )}
             </div>
+          </div>
+          <div className="w-[31%] flex flex-col gap-4">
             <div className="w-full flex flex-col items-start gap-1">
-              <Text size="sm" className="font-medium !text-gray-600">
-                Course video
-              </Text>
+              <div className="w-full flex justify-between items-center">
+                <Text size="sm" className="font-medium !text-gray-600">
+                  Course video
+                </Text>
+                <Button variant={'ghost'} className={`p-0 h-fit ${courseInfo.videoPreview ? 'visible' : 'invisible'}`}>
+                  <Text size="tx" onClick={handleRemoveVideo}>
+                    Remove
+                  </Text>
+                </Button>
+              </div>
               <UploadVideo
                 uploading={videoUploading}
-                selectedVideo={selectedVideo}
                 handleChangeVideo={handleChangeVideo}
+                src={courseInfo.videoPreview}
               />
             </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-3 mt-[40px]">
+      <div className="flex flex-col gap-3">
         <div className="w-[32%] flex flex-col items-center p-0">
           {saveError && <FailedAlert title={'Update course info failed'} message={saveError} />}
         </div>

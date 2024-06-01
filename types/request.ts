@@ -73,7 +73,7 @@ export type UpdateCourseBody = CreateCourseBody & {
   description: string;
   price: number;
   level: string;
-  imagePreview?: string | null;
+  imagePreview: string;
   videoPreview?: string | null;
 }
 
