@@ -1,16 +1,16 @@
-import { TriangleAlert } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-interface WarningAlertProps {
+interface InfoAlertProps {
   message: string;
 }
 
-export default function WarningAlert({ message }: WarningAlertProps) {
+export default function InfoAlert({ message }: InfoAlertProps) {
   return (
-    <Alert variant="warning">
+    <Alert variant="info">
       <AlertDescription className="flex items-center">
-        <TriangleAlert className="h-4 w-4 mr-2 !text-gray-700" />
+        <Info className="h-4 w-4 mr-2 !text-gray-700" />
         <Text size="tx" className="font-medium !text-gray-700">
           {message}
         </Text>

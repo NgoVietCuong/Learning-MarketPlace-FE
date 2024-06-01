@@ -10,4 +10,6 @@ export type UploadResponse = {
     message: string;
   },
   secure_url?: string;
+  playback_url?: string;
+  duration?: number;
 }

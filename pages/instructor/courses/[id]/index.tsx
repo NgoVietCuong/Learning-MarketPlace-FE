@@ -16,6 +16,7 @@ import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Course, Section } from '@/types/schema';
 import CourseInfo from '@/components/course-details/CourseInfo';
 import SectionList from '@/components/course-details/SectionList';
+import { UnknownCategoryId, NumberOfCourseFields } from '@/constants/common';
 
 interface InstructorCourseDetailsProps {
   id: number;
@@ -30,6 +31,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
   const [isChanged, setIsChanged] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [publish, setPublish] = useState<boolean | null>(null);
+  const [numberCompleted, setNumberCompleted] = useState(0);
   const [courseInfo, setCourseInfo] = useState<Omit<Course, 'isPublished'> | null>(null);
   const [sections, setSections] = useState<Section[]>([]);
 
@@ -39,6 +41,24 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       setPublish(isPublished);
       setSections(sections);
       setCourseInfo(rest);
+
+      let incompleteFields = 0;
+      const { title, overview, description, price, level, categories, imagePreview } = rest!;
+
+      if (!level) incompleteFields++;
+      if (!imagePreview) incompleteFields++;
+      if (!title || (title && title.trim() === '')) incompleteFields++;
+      if (!overview || (overview && overview.trim() === '')) incompleteFields++;
+      if (price == null || (typeof price === 'number' && price < 0)) incompleteFields++;
+      if (!categories.length || (categories.length && categories.map((c) => c.id).includes(UnknownCategoryId)))
+        incompleteFields++;
+      if (
+        !description ||
+        (description && ['<h1><br></h1>', '<h2><br></h2>', '<h3><br></h3>', '<p><br></p>'].includes(description))
+      )
+        incompleteFields++;
+      
+      setNumberCompleted(NumberOfCourseFields - incompleteFields)
     }
   }, [courseDetails]);
 
@@ -93,9 +113,9 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                   <div className="flex items-center gap-2">
                     <Button
                       size="sm"
+                      disabled={(numberCompleted < NumberOfCourseFields) || publishing}
                       variant={'outline'}
                       className="p-[15px]"
-                      disabled={publishing}
                       onClick={handlePublishCourse}
                     >
                       {publishing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -133,6 +153,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                       setCourseInfo={setCourseInfo}
                       isChanged={isChanged}
                       setIsChanged={setIsChanged}
+                      numberCompleted={numberCompleted}
                     />
                   )}
                 </TabsContent>

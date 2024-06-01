@@ -42,11 +42,9 @@ axiosUpload.interceptors.request.use(
 
 axiosUpload.interceptors.response.use(
   function (response) {
-    console.log('response', response)
     return response.data;
   },
   function (error) {
-    console.log('error', error);
     return error.response.data;
   }
 );

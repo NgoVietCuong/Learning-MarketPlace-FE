@@ -1,23 +1,23 @@
 import dynamic from 'next/dynamic';
 import { useState, Dispatch, SetStateAction } from 'react';
-import { Loader2, Upload, ImageOff, SquarePlay } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { CategoryButton } from '@/components/ui/category-button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import FailedAlert from '@/components/alert/Failed';
 import AddCategory from '@/components/combobox/AddCategory';
+import UploadImage from '@/components/upload/UploadImage';
 import UploadVideo from '@/components/upload/UploadVideo';
 import useCategories from '@/hooks/useCategories';
 import useCourseDetails from '@/hooks/useCourseDetails';
 import { uploadApi } from '@/services/axios/uploadApi';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Course, CategoryList } from '@/types/schema';
-import { UnknownCategoryId } from '@/constants/common';
+import { UnknownCategoryId, NumberOfCourseFields } from '@/constants/common';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface CourseInfoProps {
@@ -25,9 +25,16 @@ interface CourseInfoProps {
   setCourseInfo: Dispatch<SetStateAction<Omit<Course, 'isPublished'> | null>>;
   isChanged: boolean;
   setIsChanged: Dispatch<SetStateAction<boolean>>;
+  numberCompleted: number;
 }
 
-export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIsChanged }: CourseInfoProps) {
+export default function CourseInfo({
+  courseInfo,
+  setCourseInfo,
+  isChanged,
+  setIsChanged,
+  numberCompleted
+}: CourseInfoProps) {
   const { toast } = useToast();
   const { categoryList } = useCategories();
   const { courseDetailsMutate } = useCourseDetails(courseInfo.id);
@@ -43,8 +50,7 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
   const [overviewError, setOverviewError] = useState('');
   const [categoryError, setCategoryError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
-
-  console.log("courseInfo", courseInfo)
+  const [imageError, setImageError] = useState('');
 
   const handleChangeCourseTitle = (value: string) => {
     setCourseInfo({ ...courseInfo!, title: value });
@@ -64,11 +70,24 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
 
   const handleChangePrice = (value: string) => {
     let newValue = parseFloat(value);
-    setCourseInfo({ ...courseInfo!, price: typeof newValue === 'number' ? ( newValue && newValue > 0 ? parseFloat(newValue.toFixed(2)) : 0 ) : null });
+    setCourseInfo({
+      ...courseInfo!,
+      price: typeof newValue === 'number' ? (newValue && newValue > 0 ? parseFloat(newValue.toFixed(2)) : 0) : null,
+    });
   };
 
   const handleChangeCategories = (value: CategoryList) => {
     setCourseInfo({ ...courseInfo!, categories: value });
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedImage(null);
+    setCourseInfo({ ...courseInfo!, imagePreview: null });
+  };
+
+  const handleRemoveVideo = () => {
+    setSelectedVideo(null);
+    setCourseInfo({ ...courseInfo!, videoPreview: null });
   };
 
   const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,7 +123,7 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
     const uploadResponse = await uploadApi.uploadVideo(formData);
     if (!uploadResponse.error) {
       setSelectedVideo(file);
-      setCourseInfo({ ...courseInfo!, videoPreview: uploadResponse.secure_url as string });
+      setCourseInfo({ ...courseInfo!, videoPreview: uploadResponse.playback_url as string });
     }
     setVideoUploading(false);
   };
@@ -115,7 +134,8 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
       hasDescriptionError = false,
       hasPriceError = false,
       hasLevelError = false,
-      hasCategoryError = false;
+      hasCategoryError = false,
+      hasImageError = false;
 
     const { id, title, overview, description, price, level, categories, imagePreview, videoPreview } = courseInfo!;
 
@@ -144,8 +164,19 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
       (hasCategoryError = true), setCategoryError('Course categories cannot be empty');
     else (hasCategoryError = false), setCategoryError('');
 
+    if (!imagePreview) (hasImageError = true), setImageError('Course image cannot be empty');
+    else (hasImageError = false), setImageError('');
+
     setSaveError('');
-    if (hasTitleError || hasOverviewError || hasDescriptionError || hasPriceError || hasLevelError || hasCategoryError)
+    if (
+      hasTitleError ||
+      hasOverviewError ||
+      hasDescriptionError ||
+      hasPriceError ||
+      hasLevelError ||
+      hasCategoryError ||
+      hasImageError
+    )
       return;
 
     setSaving(true);
@@ -156,7 +187,7 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
       price: price as number,
       level: level as string,
       categoryIds: categories.map((c) => c.id) as number[],
-      imagePreview: imagePreview,
+      imagePreview: imagePreview as string,
       videoPreview: videoPreview,
     });
 
@@ -177,169 +208,187 @@ export default function CourseInfo({ courseInfo, setCourseInfo, isChanged, setIs
 
   return (
     <>
-      <div className="flex gap-7 justify-between py-3">
-        <div className="w-[32%] flex flex-col gap-4">
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Course title<span className="text-red-500"> *</span>
-            </Text>
-            <Input
-              size="sm"
-              type="text"
-              placeholder="Enter course title"
-              className="mb-[5px] pr-[100px]"
-              value={courseInfo?.title ? courseInfo?.title : undefined}
-              onChange={handleChangeCourseTitle}
-            />
-            {titleError && (
-              <Text size="xs" as="p" className="text-red-400 font-medium">
-                {titleError}
+      <div className="flex flex-col gap-1">
+        <Text size="tx" className="font-medium !text-cyan-600">
+          Complete all required fields ({numberCompleted}/{NumberOfCourseFields})
+        </Text>
+        <div className="flex gap-7 justify-between py-3">
+          <div className="w-[32%] flex flex-col gap-4">
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Course title<span className="text-red-500"> *</span>
               </Text>
-            )}
-          </div>
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Overview<span className="text-red-500"> *</span>
-            </Text>
-            <Input
-              size="sm"
-              type="text"
-              placeholder="Enter course overview"
-              className="mb-[5px] pr-[100px]"
-              value={courseInfo?.overview ? courseInfo?.overview : undefined}
-              onChange={handleChangeOverview}
-            />
-            {overviewError && (
-              <Text size="xs" as="p" className="text-red-400 font-medium">
-                {overviewError}
+              <Input
+                size="sm"
+                type="text"
+                placeholder="Enter course title"
+                className="mb-[5px] pr-[100px]"
+                value={courseInfo?.title ? courseInfo?.title : undefined}
+                onChange={handleChangeCourseTitle}
+              />
+              {titleError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium">
+                  {titleError}
+                </Text>
+              )}
+            </div>
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Overview<span className="text-red-500"> *</span>
               </Text>
-            )}
-          </div>
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Description<span className="text-red-500"> *</span>
-            </Text>
-            <ReactQuill
-              theme="snow"
-              className="quill w-full"
-              style={{ minHeight: '390px', maxHeight: '390px' }}
-              value={courseInfo?.description ? courseInfo?.description : undefined}
-              onChange={handleChangeDescription}
-            />
-            {descriptionError && (
-              <Text size="xs" as="p" className="text-red-400 font-medium mt-[40px]">
-                {descriptionError}
+              <Input
+                size="sm"
+                type="text"
+                placeholder="Enter course overview"
+                className="mb-[5px] pr-[100px]"
+                value={courseInfo?.overview ? courseInfo?.overview : undefined}
+                onChange={handleChangeOverview}
+              />
+              {overviewError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium">
+                  {overviewError}
+                </Text>
+              )}
+            </div>
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Description<span className="text-red-500"> *</span>
               </Text>
-            )}
-          </div>
-        </div>
-        <div className="w-[31%] flex flex-col gap-4">
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Price<span className="text-red-500"> *</span>
-            </Text>
-            <Input
-              size="sm"
-              type="number"
-              placeholder="Enter course price"
-              className="mb-[5px] pr-[100px]"
-              prefix={<BsCurrencyDollar size={16} color="#6b7280" />}
-              value={typeof courseInfo?.price === 'number' ? courseInfo?.price.toString() : undefined}
-              onChange={handleChangePrice}
-            />
-            {priceError && (
-              <Text size="xs" as="p" className="text-red-400 font-medium">
-                {priceError}
-              </Text>
-            )}
-          </div>
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Level<span className="text-red-500"> *</span>
-            </Text>
-            <Select value={courseInfo?.level ? courseInfo?.level : undefined} onValueChange={handleChangeLevel}>
-              <SelectTrigger className="w-full px-4">
-                <SelectValue placeholder="Select course level" />
-              </SelectTrigger>
-              <SelectContent className="bg-white-primary">
-                <SelectItem value="Basic" className="text-gray-700">
-                  Basic
-                </SelectItem>
-                <SelectItem value="Intermediate" className="text-gray-700">
-                  Intermediate
-                </SelectItem>
-                <SelectItem value="Advanced" className="text-gray-700">
-                  Advanced
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            {levelError && (
-              <Text size="xs" as="p" className="text-red-400 font-medium">
-                {levelError}
-              </Text>
-            )}
-          </div>
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Categories<span className="text-red-500"> *</span>
-            </Text>
-            {categoryList && courseInfo && (
-              <div className="w-full flex flex-wrap gap-2">
-                <AddCategory
-                  categories={categoryList.data!.filter((category) => category.id !== UnknownCategoryId)}
-                  selectedCategories={courseInfo?.categories!.filter((category) => category.id !== UnknownCategoryId)}
-                  handleSelectCategory={handleChangeCategories}
-                />
-                {courseInfo?.categories
-                  .filter((category) => category.id !== UnknownCategoryId)
-                  .map((category) => (
-                    <CategoryButton
-                      className="text-gray-500"
-                      key={category.id}
-                      isSelected={true}
-                      category={category.name}
-                      onClick={() => {}}
-                    />
-                  ))}
-              </div>
-            )}
-            {categoryError && (
-              <Text size="xs" as="p" className="text-red-400 font-medium">
-                {categoryError}
-              </Text>
-            )}
-          </div>
-        </div>
-        <div className="w-[32%] flex flex-col gap-4">
-          <div className="w-full flex flex-col items-start gap-1">
-            <Text size="sm" className="font-medium !text-gray-600">
-              Course image
-            </Text>
-            <input
-              type="file"
-              id="course_image"
-              accept="image/png, image/gif, image/jpeg, image/jpg"
-              disabled={imageUploading}
-              onChange={handleChangeImage}
-            />
-            <Label
-              htmlFor="course_image"
-              className="w-full bg-white font-normal border border-gray-border border-dashed rounded-md h-[36px] flex items-center px-4 text-gray-primary"
-            >
-              {imageUploading ? <Loader2 className="w-5 h-5 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
-              {imageUploading
-                ? 'Uploading...'
-                : !selectedImage
-                  ? 'Select an image'
-                  : selectedImage.name.length > 15
-                    ? `${selectedImage.name.substring(0, 14)}...`
-                    : selectedImage.name}
-            </Label>
-            <div className="w-full flex h-[220px] bg-slate-200 justify-center items-center rounded-md">
-              <ImageOff className="w-28 h-28 text-gray-400" />
+              <ReactQuill
+                theme="snow"
+                className="quill w-full"
+                style={{ minHeight: '340px', maxHeight: '340px' }}
+                value={courseInfo?.description ? courseInfo?.description : undefined}
+                onChange={handleChangeDescription}
+              />
+              {descriptionError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium mt-[40px]">
+                  {descriptionError}
+                </Text>
+              )}
             </div>
           </div>
-          <UploadVideo uploading={videoUploading} selectedVideo={selectedVideo} handleChangeVideo={handleChangeVideo} />
+          <div className="w-[31%] flex flex-col gap-4">
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Price<span className="text-red-500"> *</span>
+              </Text>
+              <Input
+                size="sm"
+                type="number"
+                placeholder="Enter course price"
+                className="mb-[5px] pr-[100px]"
+                prefix={<BsCurrencyDollar size={16} color="#6b7280" />}
+                value={typeof courseInfo?.price === 'number' ? courseInfo?.price.toString() : undefined}
+                onChange={handleChangePrice}
+              />
+              {priceError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium">
+                  {priceError}
+                </Text>
+              )}
+            </div>
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Level<span className="text-red-500"> *</span>
+              </Text>
+              <Select value={courseInfo?.level ? courseInfo?.level : undefined} onValueChange={handleChangeLevel}>
+                <SelectTrigger className="w-full px-4">
+                  <SelectValue placeholder="Select course level" />
+                </SelectTrigger>
+                <SelectContent className="bg-white-primary">
+                  <SelectItem value="Basic" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                    Basic
+                  </SelectItem>
+                  <SelectItem value="Intermediate" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                    Intermediate
+                  </SelectItem>
+                  <SelectItem value="Advanced" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                    Advanced
+                  </SelectItem>
+                  <SelectItem value="All Levels" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                    All Levels
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {levelError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium">
+                  {levelError}
+                </Text>
+              )}
+            </div>
+            <div className="w-full flex flex-col items-start gap-1">
+              <Text size="sm" className="font-medium !text-gray-600">
+                Categories<span className="text-red-500"> *</span>
+              </Text>
+              {categoryList && courseInfo && (
+                <div className="w-full flex flex-wrap gap-2">
+                  <AddCategory
+                    categories={categoryList.data!.filter((category) => category.id !== UnknownCategoryId)}
+                    selectedCategories={courseInfo?.categories!.filter((category) => category.id !== UnknownCategoryId)}
+                    handleSelectCategory={handleChangeCategories}
+                  />
+                  {courseInfo?.categories
+                    .filter((category) => category.id !== UnknownCategoryId)
+                    .map((category) => (
+                      <CategoryButton
+                        className="text-gray-500"
+                        key={category.id}
+                        isSelected={true}
+                        category={category.name}
+                        onClick={() => {}}
+                      />
+                    ))}
+                </div>
+              )}
+              {categoryError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium">
+                  {categoryError}
+                </Text>
+              )}
+            </div>
+            <div className="w-full flex flex-col items-start gap-1">
+              <div className="w-full flex justify-between items-center">
+                <Text size="sm" className="font-medium !text-gray-600">
+                  Course image<span className="text-red-500"> *</span>
+                </Text>
+                <Button variant={'ghost'} className={`p-0 h-fit ${courseInfo.imagePreview ? 'visible' : 'invisible'}`}>
+                  <Text size="tx" onClick={handleRemoveImage}>
+                    Remove
+                  </Text>
+                </Button>
+              </div>
+              <UploadImage
+                uploading={imageUploading}
+                handleChangeImage={handleChangeImage}
+                src={courseInfo.imagePreview}
+              />
+              {imageError && (
+                <Text size="xs" as="p" className="text-red-400 font-medium">
+                  {imageError}
+                </Text>
+              )}
+            </div>
+          </div>
+          <div className="w-[31%] flex flex-col gap-4">
+            <div className="w-full flex flex-col items-start gap-1">
+              <div className="w-full flex justify-between items-center">
+                <Text size="sm" className="font-medium !text-gray-600">
+                  Course video
+                </Text>
+                <Button variant={'ghost'} className={`p-0 h-fit ${courseInfo.videoPreview ? 'visible' : 'invisible'}`}>
+                  <Text size="tx" onClick={handleRemoveVideo}>
+                    Remove
+                  </Text>
+                </Button>
+              </div>
+              <UploadVideo
+                uploading={videoUploading}
+                handleChangeVideo={handleChangeVideo}
+                src={courseInfo.videoPreview}
+              />
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-3">

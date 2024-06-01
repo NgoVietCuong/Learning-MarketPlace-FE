@@ -1,3 +1,5 @@
+import { LessonContentTypes } from "@/constants/enums";
+
 // auth body request
 export type LoginBody = {
   email: string;
@@ -71,7 +73,7 @@ export type UpdateCourseBody = CreateCourseBody & {
   description: string;
   price: number;
   level: string;
-  imagePreview?: string | null;
+  imagePreview: string;
   videoPreview?: string | null;
 }
 
@@ -89,8 +91,11 @@ export type UpdateSectionBody = Partial<CreateSectionBody>;
 export type CreateLessonBody = {
   title: string;
   sectionId: number;
-  contentType: string;
-  content?: string | null;
 }
 
-export type UpdateLessonBody = Partial<CreateLessonBody>;
+export type UpdateLessonBody = CreateLessonBody & {
+  contentType: LessonContentTypes;
+  content: string;
+  fileName: string | null;
+  duration: number | null;
+};
