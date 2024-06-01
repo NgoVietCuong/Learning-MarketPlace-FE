@@ -1,6 +1,8 @@
 import NavBar from '../NavBar';
 import Footer from '../Footer';
 import UserSideBar from './SideBar';
+import Auth from '../../auth';
+import { Roles } from '@/constants/enums';
 
 interface UserLayoutProps {
   children: React.ReactNode;
@@ -8,7 +10,7 @@ interface UserLayoutProps {
 
 export default function UserLayout({ children }: UserLayoutProps) {
   return (
-    <>
+    <Auth role={Roles.STUDENT}>
       <NavBar />
       <main className="w-full flex grow bg-slate-100">
         <div className='w-[90%] h-full mx-auto'>
@@ -19,6 +21,6 @@ export default function UserLayout({ children }: UserLayoutProps) {
         </div>
       </main>
       <Footer />
-    </>
+    </Auth>
   );
 }
