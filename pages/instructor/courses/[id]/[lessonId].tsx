@@ -181,7 +181,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
     }
 
     setSaving(true);
-    const handleSaveLessonInfoResponse = await instructorCourseApi.updateLesson(id, {
+    const saveLessonInfoResponse = await instructorCourseApi.updateLesson(id, {
       title: title as string,
       sectionId: sectionId,
       contentType: contentType as LessonContentTypes,
@@ -190,9 +190,8 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
       duration: duration ? Math.round(duration) : null,
     });
 
-    if (handleSaveLessonInfoResponse.error) {
-      console.log('handleSaveLessonInfoResponse', handleSaveLessonInfoResponse);
-      const messages = handleSaveLessonInfoResponse.message;
+    if (saveLessonInfoResponse.error) {
+      const messages = saveLessonInfoResponse.message;
       if (typeof messages === 'string') setSaveError(messages);
       else setSaveError(messages[0]);
     } else {
