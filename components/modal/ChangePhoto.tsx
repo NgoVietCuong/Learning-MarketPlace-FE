@@ -42,7 +42,7 @@ export default function ChangePhoto({ title, field, object, isLoading, mutate, a
   }, [open]);
 
   useEffect(() => {
-    if (object) {
+    if (object && object.data) {
       if (field === 'picture') {
         setPhoto((object.data! as InstructorProfile)[field]);
       } else {

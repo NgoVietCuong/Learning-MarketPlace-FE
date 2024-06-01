@@ -143,7 +143,7 @@ export default function EditProfile() {
             <div className="w-[67%] h-[1px] bg-gray-300 border-0 dark:bg-gray-700"></div>
 
             <div className="flex gap-7">
-              <div className="w-[35%] flex flex-col gap-3">
+              <div className="w-[35%] flex flex-col gap-4">
                 <div className="w-full flex flex-col items-start gap-1">
                   <Text size="sm" className="font-medium !text-gray-600">
                     Display name<span className="text-red-500"> *</span>
@@ -198,7 +198,7 @@ export default function EditProfile() {
                   )}
                 </div>
               </div>
-              <div className="w-[30%] flex flex-col gap-3">
+              <div className="w-[30%] flex flex-col gap-4">
                 <div className="w-full flex flex-col items-start gap-1">
                   <Text size="sm" className="font-medium !text-gray-600">
                     Twitter
