@@ -31,9 +31,9 @@ export default function NavBar() {
                   Courses
                 </Text>
               </Link>
-              <Link href="/blog">
+              <Link href="/course/javascript-for-beginner">
                 <Text size="sm" as="p" className="font-medium text-gray-700 hover:text-teal-primary">
-                  Blogs
+                  Test course
                 </Text>
               </Link>
               <Link href="/about-us">

@@ -181,4 +181,12 @@
   .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
     color: white !important;
   }
+
+  div[data-state] ~ div[data-state] {
+    border-top: none;
+  }
+
+  div[data-state] > div {
+    padding-bottom: 0px;
+  }
 }

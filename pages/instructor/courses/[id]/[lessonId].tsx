@@ -22,9 +22,7 @@ import { Lesson } from '@/types/schema';
 import { NumberOfLessonFields } from '@/constants/common';
 import { LessonContentTypes } from '@/constants/enums';
 import { uploadApi } from '@/services/axios/uploadApi';
-const { DOCUMENT, VIDEO } = LessonContentTypes;
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-import VideoPlayer from '@/components/video-player';
 
 interface InstructorLessonDetailsProps {
   courseId: number;

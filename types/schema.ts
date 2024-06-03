@@ -127,3 +127,34 @@ export type Section = {
 export type CourseDetails = Course & {
   sections: Section[];
 }
+
+// course review api schema
+export type Review = {
+  id: number;
+  enrollment: {
+    id: number;
+    user: Pick<User, 'username' | 'avatar'>
+  };
+  rating: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ReviewList = {
+  items: Review[];
+  meta: Meta;
+};
+
+
+// course api schema
+export type CourseSlugInfo = Course & {
+  profile: InstructorProfile;
+  sections: (Omit<Section, 'lessons'> & {
+    lessons: Pick<Lesson, 'id' | 'title' | 'contentType' | 'duration'>[]
+  })[];
+  hasEnrolled: boolean;
+  totalStudents: number;
+  totalReviews: number;
+  averageRating: number;
+}
