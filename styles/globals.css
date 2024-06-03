@@ -189,4 +189,15 @@
   div[data-state] > div {
     padding-bottom: 0px;
   }
+
+  .description p+p,
+  .description p+ul, 
+  .description p+ol, 
+  .description ul+p, 
+  .description ul+ol, 
+  .description ol+ol, 
+  .description ol+p, 
+  .description ol+ul {
+    margin-top: .8rem;
+  }
 }

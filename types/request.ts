@@ -99,3 +99,14 @@ export type UpdateLessonBody = CreateLessonBody & {
   fileName: string | null;
   duration: number | null;
 };
+
+// learn body request
+export type EnrollCourseBody = {
+  courseId: number;
+}
+
+export type UpdateProgressBody = {
+  enrollmentId: number;
+  lessonId: number;
+  progress: number;
+}

@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from 'next';
 import { IoInformationCircle } from 'react-icons/io5';
 import { FaUser } from 'react-icons/fa';
 import { TbPlayerPlayFilled } from 'react-icons/tb';
-import { Globe, Layers } from 'lucide-react';
+import { Globe, Layers, Dot, Loader2 } from 'lucide-react';
 import { Rate } from 'antd';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
@@ -15,10 +15,12 @@ import { useToast } from '@/components/ui/use-toast';
 import DynamicIcon from '@/components/dynamic-icon';
 import CoursePreview from '@/components/modal/CoursePreview';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import useCourseSlug from '@/hooks/useCourseSlug';
+import useUser from '@/hooks/useUser';
 import useReviews from '@/hooks/useReviews';
+import useCourseSlug from '@/hooks/useCourseSlug';
 import { ContentTypes } from '@/constants/filterField';
 import { secondsToMinutes, secondsToHours } from '@/utils/timeConverter';
+import { learnApi } from '@/services/axios/learnApi';
 
 interface CourseSlugDetailsProps {
   slug: string;
@@ -27,9 +29,28 @@ interface CourseSlugDetailsProps {
 export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
   const router = useRouter();
   const { toast } = useToast();
+  const { user } = useUser();
   const { courseSlugInfo, courseSlugLoading } = useCourseSlug(slug);
   const { reviewList, reviewLoading } = useReviews(slug);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [enrolling, setEnrolling] = useState(false);
+
+  const handleEnrollCourse = async () => {
+    if (!user || !user.data) {
+      router.push('/login');
+      return;
+    }
+    setEnrolling(true);
+    const enrollCourseReponse = await learnApi.enrollCourse({ courseId: courseSlugInfo?.data?.id! });
+    if (!enrollCourseReponse.error) {
+      router.push(`/course/${slug}/learn`);
+      toast({
+        variant: 'success',
+        description: `Enrolled course successfully!`,
+      });
+    }
+    setEnrolling(false);
+  };
 
   return (
     <div className="w-full">
@@ -98,22 +119,36 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         >
                           <TbPlayerPlayFilled className="w-10 h-10" />
                         </Button>
-                        <Text size="s" className='absolute bottom-[10%] left-[50%] translate-x-[-50%] !font-medium !text-white-primary'>Preview this course</Text>
-                        <CoursePreview open={previewOpen} setOpen={setPreviewOpen} src={courseSlugInfo?.data?.videoPreview} />
+                        <Text
+                          size="s"
+                          className="absolute bottom-[10%] left-[50%] translate-x-[-50%] !font-medium !text-white-primary"
+                        >
+                          Preview this course
+                        </Text>
+                        <CoursePreview
+                          open={previewOpen}
+                          setOpen={setPreviewOpen}
+                          src={courseSlugInfo?.data?.videoPreview}
+                        />
                       </>
                     )}
                     <Img src={courseSlugInfo?.data?.imagePreview!} />
                   </div>
                   <div className="p-8 space-y-4 bg-white-primary">
                     {courseSlugInfo?.data?.hasEnrolled ? (
-                      courseSlugInfo.data.price ? (
-                        <Button>Buy now</Button>
-                      ) : (
-                        <Button>Enroll course</Button>
-                      )
-                    ) : (
                       <Button size="lg" className="w-full bg-teal-secondary text-white-primary">
                         Go to course
+                      </Button>
+                    ) : courseSlugInfo?.data?.price ? (
+                      <Button>Buy now</Button>
+                    ) : (
+                      <Button
+                        disabled={!courseSlugInfo}
+                        size="lg"
+                        className="w-full bg-teal-secondary text-white-primary"
+                        onClick={handleEnrollCourse}
+                      >
+                        {enrolling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Enroll course
                       </Button>
                     )}
                   </div>
@@ -122,12 +157,15 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
             </div>
           </div>
           <div className="w-full p-0">
-            <div className="container px-16 py-14">
-              <div className="space-y-4 w-3/5">
+            <div className="container px-16 py-14 space-y-10">
+              <div className="space-y-3 w-3/5">
                 <Heading className="!font-semibold !text-gray-700">Course content</Heading>
                 <Accordion type="multiple">
                   {courseSlugInfo?.data?.sections?.map((section) => (
-                    <AccordionItem value={section.id.toString()} className="pb-0 border-x-[1px] border-t-[1px] border-slate-300">
+                    <AccordionItem
+                      value={section.id.toString()}
+                      className="pb-0 border-x-[1px] border-t-[1px] border-slate-300"
+                    >
                       <div className="flex justify-between h-[42px] items-center bg-slate-100 px-5 border-none">
                         <Text size="sm" className="!font-medium !text-gray-700">
                           {section.title}
@@ -167,6 +205,31 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                     </AccordionItem>
                   ))}
                 </Accordion>
+              </div>
+
+              <div className="space-y-3 w-3/5">
+                <Heading className="!font-semibold !text-gray-700">Description</Heading>
+                <div
+                  className="description text-[13px]"
+                  dangerouslySetInnerHTML={{ __html: courseSlugInfo?.data?.description! }}
+                ></div>
+              </div>
+
+              <div className="space-y-3 w-3/5">
+                <div className="flex items-center">
+                  <Rate className=" text-yellow-500 mr-2" count={1} defaultValue={1} />
+                  <Heading className="!font-semibold !text-gray-700 mr-1">
+                    {courseSlugInfo?.data?.averageRating} course rating
+                  </Heading>
+                  <Dot className="w-10 h-10 text-gray-700" />
+                  <Heading className="!font-semibold !text-gray-700">
+                    {courseSlugInfo?.data?.totalReviews! > 1
+                      ? `${courseSlugInfo?.data?.totalReviews} ratings`
+                      : `${courseSlugInfo?.data?.totalReviews} rating`}
+                  </Heading>
+                </div>
+
+                <div>{reviewLoading ? <></> : <Button variant={'outline'}>Show all reviews</Button>}</div>
               </div>
             </div>
           </div>
