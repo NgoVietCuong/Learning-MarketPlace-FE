@@ -157,4 +157,10 @@ export type CourseSlugInfo = Course & {
   totalStudents: number;
   totalReviews: number;
   averageRating: number;
+  totalVideoDuration: string;
+  totalArticles: number;
+  numberEachRatings: {
+    rate: number;
+    count: number
+  }[];
 }

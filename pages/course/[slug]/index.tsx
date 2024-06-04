@@ -5,7 +5,10 @@ import { GetServerSidePropsContext } from 'next';
 import { IoInformationCircle } from 'react-icons/io5';
 import { FaUser } from 'react-icons/fa';
 import { TbPlayerPlayFilled } from 'react-icons/tb';
-import { Globe, Layers, Dot, Loader2 } from 'lucide-react';
+import { Globe, Layers, Dot, Loader2, Infinity, MonitorPlay, Newspaper } from 'lucide-react';
+import { IoIosInfinite } from "react-icons/io";
+import { PiMonitorPlay } from "react-icons/pi";
+import { RiArticleLine } from "react-icons/ri";
 import { Rate } from 'antd';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
@@ -109,7 +112,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
               </div>
               <div className="relative">
                 <div className="max-w-sm bg-white mx-auto text-black absolute shadow-xl right-0 overflow-hidden">
-                  <div className="relative h-54 w-96">
+                  <div className="relative h-54 w-90">
                     {courseSlugInfo?.data?.videoPreview && (
                       <>
                         <Button
@@ -158,13 +161,11 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         {enrolling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Enroll course
                       </Button>
                     )}
-                    <div>
-                      <Text size="sm" className='!font-medium !text-gray-700'>This course includes</Text>
-                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
-                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
-                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
-                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
-                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
+                    <div className='flex flex-col gap-2'>
+                      <Text size="sm" className='!font-medium !text-gray-700'>This course includes:</Text>
+                      {courseSlugInfo?.data?.totalVideoDuration && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><PiMonitorPlay className='w-[18px] h-[18px] mr-2 text-gray-700' />{courseSlugInfo?.data?.totalVideoDuration} high quality video</Text>)}
+                      {courseSlugInfo?.data?.totalArticles && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><Newspaper className='w-4 h-4 mr-2 text-gray-700' />{courseSlugInfo?.data?.totalArticles} articles</Text>)}
+                      <Text size="tx" className='!text-gray-700 inline-flex items-center'><IoIosInfinite  className='w-[18px] h-[18px] mr-2 text-gray-700' />Full lifetime access</Text>
                     </div>
                   </div>
                 </div>
