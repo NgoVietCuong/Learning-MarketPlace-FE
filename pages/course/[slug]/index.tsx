@@ -134,13 +134,20 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                     )}
                     <Img src={courseSlugInfo?.data?.imagePreview!} />
                   </div>
-                  <div className="p-8 space-y-4 bg-white-primary">
+                  <div className="px-8 py-6 space-y-5 bg-white-primary">
                     {courseSlugInfo?.data?.hasEnrolled ? (
                       <Button size="lg" className="w-full bg-teal-secondary text-white-primary">
                         Go to course
                       </Button>
                     ) : courseSlugInfo?.data?.price ? (
-                      <Button>Buy now</Button>
+                      <div className='space-y-2'>
+                        <Heading size="6xl" as="h2" className="font-semibold text-gray-700">
+                          ${courseSlugInfo?.data?.price}
+                        </Heading>
+                        <Button size="lg" className="w-full bg-teal-secondary text-white-primary">
+                          Buy now
+                        </Button>
+                      </div>
                     ) : (
                       <Button
                         disabled={!courseSlugInfo}
@@ -151,6 +158,14 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         {enrolling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Enroll course
                       </Button>
                     )}
+                    <div>
+                      <Text size="sm" className='!font-medium !text-gray-700'>This course includes</Text>
+                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
+                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
+                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
+                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
+                      <Text size="tx" className='!text-gray-700'>Full lifetime access</Text>
+                    </div>
                   </div>
                 </div>
               </div>
