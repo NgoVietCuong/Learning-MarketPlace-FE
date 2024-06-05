@@ -14,7 +14,7 @@ export default function LearnLayout({ children }: LearnLayoutProps) {
       <main className="flex w-full flex-col items-center grow gap-[30px] bg-white-primary">
         {children}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </Auth>
   )
 }

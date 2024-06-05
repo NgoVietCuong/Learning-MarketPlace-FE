@@ -200,4 +200,8 @@
   .description ol+ul {
     margin-top: .8rem;
   }
+
+  .circle-progess .ant-progress-text {
+    color: white!important;
+  }
 }
