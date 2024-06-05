@@ -5,10 +5,9 @@ import { GetServerSidePropsContext } from 'next';
 import { IoInformationCircle } from 'react-icons/io5';
 import { FaUser } from 'react-icons/fa';
 import { TbPlayerPlayFilled } from 'react-icons/tb';
-import { Globe, Layers, Dot, Loader2, Infinity, MonitorPlay, Newspaper } from 'lucide-react';
+import { Globe, Layers, Dot, Loader2, Newspaper } from 'lucide-react';
 import { IoIosInfinite } from "react-icons/io";
 import { PiMonitorPlay } from "react-icons/pi";
-import { RiArticleLine } from "react-icons/ri";
 import { Rate } from 'antd';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
@@ -163,8 +162,8 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                     )}
                     <div className='flex flex-col gap-2'>
                       <Text size="sm" className='!font-medium !text-gray-700'>This course includes:</Text>
-                      {courseSlugInfo?.data?.totalVideoDuration && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><PiMonitorPlay className='w-[18px] h-[18px] mr-2 text-gray-700' />{courseSlugInfo?.data?.totalVideoDuration} high quality video</Text>)}
-                      {courseSlugInfo?.data?.totalArticles && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><Newspaper className='w-4 h-4 mr-2 text-gray-700' />{courseSlugInfo?.data?.totalArticles} articles</Text>)}
+                      {courseSlugInfo?.data?.totalVideoDuration && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><PiMonitorPlay className='w-[19px] h-[19px] mr-2 text-gray-700' />{courseSlugInfo?.data?.totalVideoDuration} high quality video</Text>)}
+                      {courseSlugInfo?.data?.totalArticles && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><Newspaper className='w-[17px] h-[17px] mr-2 text-gray-600' />{courseSlugInfo?.data?.totalArticles} articles</Text>)}
                       <Text size="tx" className='!text-gray-700 inline-flex items-center'><IoIosInfinite  className='w-[18px] h-[18px] mr-2 text-gray-700' />Full lifetime access</Text>
                     </div>
                   </div>
