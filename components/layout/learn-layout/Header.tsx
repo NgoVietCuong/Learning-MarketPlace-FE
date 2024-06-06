@@ -13,7 +13,7 @@ export default function LearnHeader() {
   return (
     <>
       <header className="w-full bg-blue_gray-primary shadow-lg">
-        <div className="w-[90%] flex mx-auto items-center justify-between gap-5 px-[150px] my-[10px]">
+        <div className="w-[95%] flex mx-auto items-center justify-between gap-5 my-[10px]">
           <div className="flex items-center justify-center gap-4 z-50">
             <div className="flex items-center justify-center md:w-full pr-2">
               <Img src="/images/img_refresh_cyan_a200.svg" alt="refresh_one" className="h-[44px] w-[44px] rounded-md" />

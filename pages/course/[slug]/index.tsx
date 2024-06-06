@@ -160,7 +160,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         {enrolling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Enroll course
                       </Button>
                     )}
-                    <div className='flex flex-col gap-2'>
+                    <div className='flex flex-col gap-3'>
                       <Text size="sm" className='!font-medium !text-gray-700'>This course includes:</Text>
                       {courseSlugInfo?.data?.totalVideoDuration && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><PiMonitorPlay className='w-[19px] h-[19px] mr-2 text-gray-700' />{courseSlugInfo?.data?.totalVideoDuration} high quality video</Text>)}
                       {courseSlugInfo?.data?.totalArticles && (<Text size="tx" className='!text-gray-700 inline-flex items-center'><Newspaper className='w-[17px] h-[17px] mr-2 text-gray-600' />{courseSlugInfo?.data?.totalArticles} articles</Text>)}

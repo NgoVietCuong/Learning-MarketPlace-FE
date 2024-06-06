@@ -13,6 +13,6 @@ const Img: React.FC<React.PropsWithChildren<ImgProps>> = ({
   alt = "testImg",
   ...restProps
 }) => {
-  return <img className={className} src={src} alt={alt} {...restProps} loading={"lazy"} />;
+  return <img className={className} src={src} alt={alt} {...restProps} />;
 };
 export { Img };
