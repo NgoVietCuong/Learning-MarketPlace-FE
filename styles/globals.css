@@ -186,7 +186,7 @@
     border-top: none;
   }
 
-  div[data-state] > div {
+  div[data-state][role='region'] > div {
     padding-bottom: 0px;
   }
 

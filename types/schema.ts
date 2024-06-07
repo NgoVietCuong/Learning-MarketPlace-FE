@@ -164,3 +164,15 @@ export type CourseSlugInfo = Course & {
     count: number
   }[];
 }
+
+// learn api schema
+export type LearnProgress = {
+  id: number;
+  userId: number;
+  courseId: number;
+  progressStatus: number;
+  course: CourseDetails;
+  review: Review | null;
+  createdAt: string;
+  updatedAt: string;
+}

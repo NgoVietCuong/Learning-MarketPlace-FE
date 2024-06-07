@@ -3,7 +3,7 @@ import { User } from '@/types/schema';
 import { Response } from '@/types/response';
 
 export default function useUser() {
-  const { data: user, isLoading, mutate: userMutate, error } = useSWR<Response<User>>('/user');
+  const { data: user, isLoading, mutate: userMutate } = useSWR<Response<User>>('/user');
   
   const getUserRoles = () => {
     if (!user || !user.data) return [];
