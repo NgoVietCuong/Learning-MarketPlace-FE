@@ -12,11 +12,11 @@ interface LearnHeaderProps {
 
 export default function LearnHeader({ slug }: LearnHeaderProps) {
   const router = useRouter();
-  const { learnProgress, isLoading } = useLearnProgress(slug);
+  const { learnProgress, learnLoading } = useLearnProgress(slug);
 
   return (
     <>
-      {isLoading ? (
+      {learnLoading ? (
         <></>
       ) : (
         <header className="w-full bg-blue_gray-primary shadow-lg">
@@ -40,7 +40,7 @@ export default function LearnHeader({ slug }: LearnHeaderProps) {
               <div className="w-[1px] h-[28px] bg-white-primary"></div>
               <div>
                 <Heading size="lg" className="!font-medium !text-white-primary">
-                  {learnProgress?.data?.course.title}
+                  {learnProgress?.data?.course?.title}
                 </Heading>
               </div>
             </div>

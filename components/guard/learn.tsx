@@ -1,26 +1,34 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useLearnProgress from '@/hooks/useLearnProgress';
+import useLessonProgress from '@/hooks/useLessonProgress';
 
 interface LearnProps {
   children: React.ReactNode;
   slug: string;
+  lessonId: number;
 }
 
-export default function Learn({ children, slug }: LearnProps) {
+export default function Learn({ children, slug, lessonId }: LearnProps) {
   const router = useRouter();
-  const { learnProgress, isLoading } = useLearnProgress(slug);
+  const { learnProgress, learnLoading } = useLearnProgress(slug);
+  const { lessonProgress, lessonLoading } = useLessonProgress(lessonId);
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     setIsChecking(true);
-    if (!isLoading && (!learnProgress || !learnProgress.data) && router.pathname !== `/course/${slug}`) {
+    if (!learnLoading && (!learnProgress || !learnProgress.data) && router.pathname !== `/course/${slug}`) {
+      router.push(`/course/${slug}`);
+      return;
+    }
+
+    if (!lessonLoading && (!lessonProgress || !lessonProgress.data) && router.pathname !== `/course/${slug}`) {
       router.push(`/course/${slug}`);
       return;
     }
 
     setIsChecking(false);
-  }, [router, learnProgress, isLoading]);
+  }, [router, learnProgress, learnLoading, lessonLoading]);
 
-  return <>{(isLoading || isChecking) ? null : children}</>;
+  return <>{(learnLoading || isChecking) ? null : children}</>;
 }

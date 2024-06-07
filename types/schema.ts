@@ -1,5 +1,5 @@
-import { IconNames } from "./common";
-import { LessonContentTypes } from "../constants/enums";
+import { IconNames } from './common';
+import { LessonContentTypes } from '../constants/enums';
 
 // auth api schema
 export type Token = {
@@ -93,7 +93,7 @@ export type Meta = {
   itemsPerPage: number;
   totalPages: number;
   currentPage: number;
-}
+};
 
 export type CourseList = {
   items: Course[];
@@ -112,7 +112,7 @@ export type Lesson = {
   isPublished: boolean;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export type Section = {
   id: number;
@@ -122,36 +122,35 @@ export type Section = {
   createdAt: string;
   updatedAt: string;
   lessons: Lesson[];
-}
+};
 
 export type CourseDetails = Course & {
   sections: Section[];
-}
+};
 
 // course review api schema
 export type Review = {
   id: number;
   enrollment: {
     id: number;
-    user: Pick<User, 'username' | 'avatar'>
+    user: Pick<User, 'username' | 'avatar'>;
   };
   rating: number;
   comment: string;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export type ReviewList = {
   items: Review[];
   meta: Meta;
 };
 
-
 // course api schema
 export type CourseSlugInfo = Course & {
   profile: InstructorProfile;
   sections: (Omit<Section, 'lessons'> & {
-    lessons: Pick<Lesson, 'id' | 'title' | 'contentType' | 'duration'>[]
+    lessons: Pick<Lesson, 'id' | 'title' | 'contentType' | 'duration'>[];
   })[];
   hasEnrolled: boolean;
   totalStudents: number;
@@ -161,18 +160,36 @@ export type CourseSlugInfo = Course & {
   totalArticles: number;
   numberEachRatings: {
     rate: number;
-    count: number
+    count: number;
   }[];
-}
+};
 
 // learn api schema
+export type LessonProgress = {
+  id: number;
+  enrollmentId: number;
+  lessonId: number;
+  isCompleted: boolean;
+  contentProgress: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type LessonProgressDetails = Lesson & {
+  lessonProgress: LessonProgress | null;
+}
+
 export type LearnProgress = {
   id: number;
   userId: number;
   courseId: number;
   progressStatus: number;
-  course: CourseDetails;
+  course: Course & {
+    sections: (Omit<Section, 'lessons'> & {
+      lessons: LessonProgressDetails[];
+    })[];
+  };
   review: Review | null;
   createdAt: string;
   updatedAt: string;
-}
+};

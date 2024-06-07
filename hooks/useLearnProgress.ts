@@ -1,9 +1,9 @@
-import useSWR from "swr";
-import { Response } from "@/types/response";
-import { LearnProgress } from "@/types/schema";
+import useSWR from 'swr';
+import { Response } from '@/types/response';
+import { LearnProgress } from '@/types/schema';
 
 export default function useLearnProgress(slug: string) {
-  const { data: learnProgress, isLoading } = useSWR<Response<LearnProgress>>(`/learning/${slug}`);
+  const { data: learnProgress, isLoading: learnLoading } = useSWR<Response<LearnProgress>>(`/learning/course/${slug}`);
 
-  return { learnProgress, isLoading };
+  return { learnProgress, learnLoading };
 }

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { IoIosCheckmarkCircle } from 'react-icons/io';
+import { FaRegCircle } from "react-icons/fa6";
 import { Text } from '@/components/ui/text';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import DynamicIcon from '@/components/dynamic-icon';
@@ -29,9 +30,9 @@ export default function LessonBar({ slug, lessonId }: LessonBarProps) {
         <div className="w-full overflow-y-scroll">
           <Accordion
             type="multiple"
-            defaultValue={learnProgress?.data?.course.sections.map((section) => section.id.toString())}
+            defaultValue={learnProgress?.data?.course?.sections.map((section) => section.id.toString())}
           >
-            {learnProgress?.data?.course.sections.map((section) => (
+            {learnProgress?.data?.course?.sections.map((section) => (
               <AccordionItem value={section.id.toString()} key={section.id}>
                 <div className="flex justify-between items-start bg-slate-100 px-4 h-[60px]">
                   <div className="flex flex-col gap-1.5 self-center">
@@ -48,13 +49,13 @@ export default function LessonBar({ slug, lessonId }: LessonBarProps) {
                 <AccordionContent>
                   {section.lessons.map((lesson) => (
                     <div className={`w-full flex gap-3 px-4 py-3 hover:bg-slate-200 cursor-pointer ${lesson.id === lessonId ? 'bg-slate-200' : ''}`} onClick={() => router.push(`/course/${slug}/learn/${lesson.id}`)}>
-                      <IoIosCheckmarkCircle className="w-5 h-5 text-blue-500" />
+                      {lesson?.lessonProgress?.isCompleted ? (<IoIosCheckmarkCircle className="w-5 h-5 text-blue-500" />) :  (<FaRegCircle className="mt-[1.5px] ml-[1.6px] w-[16.25px] h-[16.25px] text-blue-500" />)}
                       <div className="flex flex-col gap-1.5">
                         <Text size="tx" className="!font-normal !text-gray-700">
                           {lesson.title}
                         </Text>
-                        <Text size="xs" className="inline-flex items-center gap-2 !text-[11px] !text-gray-600">
-                          <DynamicIcon className="w-4 h-4 text-gray-500" iconName={ContentTypes[lesson.contentType]}  />
+                        <Text size="xs" className="inline-flex items-center gap-1 !text-[11px] !text-gray-600">
+                          <DynamicIcon className="w-[15px] h-[15px] text-gray-500" iconName={ContentTypes[lesson.contentType]}  />
                           {lesson.duration ? `${secondsToMinutes(lesson.duration)}` : 'read'}
                         </Text>
                       </div>

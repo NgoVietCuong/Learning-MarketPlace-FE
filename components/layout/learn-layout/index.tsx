@@ -13,7 +13,7 @@ interface LearnLayoutProps {
 export default function LearnLayout({ children, slug, lessonId }: LearnLayoutProps) {
   return (
     <Auth role={Roles.STUDENT}>
-      <Learn slug={slug}>
+      <Learn slug={slug} lessonId={lessonId}>
         <LearnHeader slug={slug} />
         <main className="flex w-full grow bg-white-primary box-border overflow-hidden">
           <div className="w-full flex flex-row">
