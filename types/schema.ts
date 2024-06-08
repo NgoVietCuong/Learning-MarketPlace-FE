@@ -162,6 +162,9 @@ export type CourseSlugInfo = Course & {
     rate: number;
     count: number;
   }[];
+  currentLesson: {
+    id: number;
+  };
 };
 
 // learn api schema
@@ -177,7 +180,7 @@ export type LessonProgress = {
 
 export type LessonProgressDetails = Lesson & {
   lessonProgress: LessonProgress | null;
-}
+};
 
 export type LearnProgress = {
   id: number;

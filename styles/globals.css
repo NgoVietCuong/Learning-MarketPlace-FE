@@ -204,4 +204,9 @@
   .circle-progess .ant-progress-text {
     color: white!important;
   }
+
+  .video-js .vjs-time-control,
+  .video-js .vjs-current-time {
+    display: block!important;
+}
 }

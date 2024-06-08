@@ -45,7 +45,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
     setEnrolling(true);
     const enrollCourseReponse = await learnApi.enrollCourse({ courseId: courseSlugInfo?.data?.id! });
     if (!enrollCourseReponse.error) {
-      router.push(`/course/${slug}/learn`);
+      router.push(`/course/${slug}/learn/${courseSlugInfo?.data?.currentLesson.id}`);
       toast({
         variant: 'success',
         description: `Enrolled course successfully!`,
@@ -138,7 +138,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                   </div>
                   <div className="px-8 py-6 space-y-5 bg-white-primary">
                     {courseSlugInfo?.data?.hasEnrolled ? (
-                      <Button size="lg" className="w-full bg-teal-secondary text-white-primary">
+                      <Button size="lg" className="w-full bg-teal-secondary text-white-primary" onClick={() => router.push(`/course/${slug}/learn/${courseSlugInfo?.data?.currentLesson.id}`)}>
                         Go to course
                       </Button>
                     ) : courseSlugInfo?.data?.price ? (

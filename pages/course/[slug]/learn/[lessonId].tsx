@@ -1,14 +1,12 @@
 import { GetServerSidePropsContext } from 'next';
-import { Worker, Viewer } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Loader2 } from 'lucide-react';
-import { Text } from '@/components/ui/text';
 import VideoPlayer from '@/components/video-player';
+import PdfViewer from '@/components/pdf-viewer';
 import LearnLayout from '@/components/layout/learn-layout';
 import useLessonProgress from '@/hooks/useLessonProgress';
+import useLearnProgress from '@/hooks/useLearnProgress';
 import { LessonContentTypes } from '@/constants/enums';
+import { learnApi } from '@/services/axios/learnApi';
 
 interface LearnCourseProps {
   slug: string;
@@ -16,11 +14,18 @@ interface LearnCourseProps {
 }
 
 export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
-  const { lessonProgress, lessonLoading } = useLessonProgress(lessonId);
+  const { lessonProgress, lessonLoading, lessonProgressMutate } = useLessonProgress(lessonId);
+  const { learnProgress, learnProgressMutate } = useLearnProgress(slug);
 
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const pdfUrl =
-    'https://res.cloudinary.com/dvz7322mp/raw/upload/v1717171846/hlm-dev/lesson-document/6/yojh32bdtja8nxl2qxwx.pdf';
+  const handleUpdateLearnpProgress = async (contentProgress: number) => {
+    await learnApi.updateProgress({
+      enrollmentId: learnProgress?.data?.id as number,
+      lessonId,
+      contentProgress
+    });
+    learnProgressMutate();
+    lessonProgressMutate();
+  }
 
   return (
     <div className={`grow flex flex-col items-center ${lessonLoading ? 'justify-center' : ''}`}>
@@ -37,14 +42,12 @@ export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
                     src: lessonProgress.data.content!,
                     type: 'application/x-mpegURL',
                   },
-                ],
+                ]
               }}
             />
           )}
           {lessonProgress?.data?.contentType === LessonContentTypes.DOCUMENT && (
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-              <Viewer fileUrl={lessonProgress.data.content!} plugins={[defaultLayoutPluginInstance]} defaultScale={1.5} theme="dark" />
-            </Worker>
+            <PdfViewer fileUrl={lessonProgress.data.content! as string} lessonProgress={lessonProgress} apiHandler={handleUpdateLearnpProgress} />
           )}
         </>
       )}

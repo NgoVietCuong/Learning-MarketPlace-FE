@@ -108,5 +108,5 @@ export type EnrollCourseBody = {
 export type UpdateProgressBody = {
   enrollmentId: number;
   lessonId: number;
-  progress: number;
+  contentProgress: number;
 }
