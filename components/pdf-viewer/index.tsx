@@ -19,20 +19,18 @@ export default function PdfViewer({ fileUrl, lessonProgress, apiHandler }: PdfVi
   let timeoutRef: NodeJS.Timeout | null = null;
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (viewerRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = viewerRef.current;
-        console.log(scrollTop, scrollHeight, clientHeight)
-        const scrollPosition = (scrollTop + clientHeight) / scrollHeight;
-        if (scrollPosition === 1) {
-          if (!lessonProgress?.data?.lessonProgress || !lessonProgress.data.lessonProgress.isCompleted) {            
-            if (timeoutRef) {
-              clearTimeout(timeoutRef);
-            }
-            timeoutRef = setTimeout(async () => {
-              await apiHandler(100);
-            }, 500);
+    const handleScroll = (viewerContainer: Element) => {
+      const { scrollTop, scrollHeight, clientHeight } = viewerContainer;
+
+      const scrollPosition = (scrollTop + clientHeight) / scrollHeight;
+      if (scrollPosition === 1) {
+        if (!lessonProgress?.data?.lessonProgress || !lessonProgress.data.lessonProgress.isCompleted) {            
+          if (timeoutRef) {
+            clearTimeout(timeoutRef);
           }
+          timeoutRef = setTimeout(async () => {
+            await apiHandler(100);
+          }, 300);
         }
       }
     };
@@ -40,19 +38,19 @@ export default function PdfViewer({ fileUrl, lessonProgress, apiHandler }: PdfVi
     setTimeout(() => {
       const viewerContainer = viewerRef.current?.querySelector('.rpv-core__inner-pages');
       if (viewerContainer) {
-        viewerContainer.addEventListener('scroll', handleScroll);
+        viewerContainer.addEventListener('scroll', () => handleScroll(viewerContainer));
       }
   
       return () => {
         if (viewerContainer) {
-          viewerContainer.removeEventListener('scroll', handleScroll);
+          viewerContainer.removeEventListener('scroll', () => handleScroll(viewerContainer));
         }
       };
     }, 800);
   }, [viewerRef]);
 
   return (
-    <div ref={viewerRef} style={{ width: '100%', overflow: 'auto' }}>
+    <div ref={viewerRef} style={{ width: '100%', height: '100%', overflow: 'auto' }}>
       <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
         <Viewer fileUrl={fileUrl} plugins={[defaultLayoutPluginInstance]} defaultScale={1.5} theme="dark" />
       </Worker>

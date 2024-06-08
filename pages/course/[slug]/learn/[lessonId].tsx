@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { Loader2 } from 'lucide-react';
 import VideoPlayer from '@/components/video-player';
@@ -16,6 +17,12 @@ interface LearnCourseProps {
 export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
   const { lessonProgress, lessonLoading, lessonProgressMutate } = useLessonProgress(lessonId);
   const { learnProgress, learnProgressMutate } = useLearnProgress(slug);
+
+  useEffect(() => {
+    if (lessonProgress && !lessonProgress.data?.lessonProgress) {
+      handleUpdateLearnpProgress(0);
+    }
+  }, [lessonProgress]);
 
   const handleUpdateLearnpProgress = async (contentProgress: number) => {
     await learnApi.updateProgress({
