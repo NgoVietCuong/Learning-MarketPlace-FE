@@ -19,9 +19,15 @@ node:
 # Install all dependencies in node container
 install:
 	docker compose exec node yarn install
-# Start program in node container
+# Start program in node container in dev mode
 dev:
 	docker compose exec node yarn dev
+# Build code
+buildNext:
+	docker compose exec node yarn build
+# Start program in node container in production mode
+start:
+	docker compose exec node yarn start
 # Setup project with docker container
 setup:
 	make build

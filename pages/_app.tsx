@@ -43,7 +43,7 @@ export default function App({ Component, pageProps }: Props) {
     };
   }, [router.events]);
 
-  const renderWithLayout = Component.getLayout || ((page: React.ReactNode) => <AppLayout>{page}</AppLayout>);
+  const renderWithLayout = Component.getLayout || ((page: React.ReactNode, pageProps: any) => <AppLayout {...pageProps}>{page}</AppLayout>);
 
   return (
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
@@ -56,7 +56,7 @@ export default function App({ Component, pageProps }: Props) {
       >
         <div className="w-full h-screen min-h-screen flex flex-col">
           <TopLoadingBar color="#00cbb8" ref={ref} height={2} transitionTime={200} loaderSpeed={300} />
-          {renderWithLayout(<Component {...pageProps} />)}
+          {renderWithLayout(<Component {...pageProps} />, pageProps)}
           <Toaster />
         </div>
       </SWRConfig>

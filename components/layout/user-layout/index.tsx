@@ -1,7 +1,7 @@
 import NavBar from '../NavBar';
 import Footer from '../Footer';
 import UserSideBar from './SideBar';
-import Auth from '../../auth';
+import Auth from '../../guard/auth';
 import { Roles } from '@/constants/enums';
 
 interface UserLayoutProps {

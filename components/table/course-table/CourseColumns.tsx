@@ -91,7 +91,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
     cell: ({ row }) => (
       <div className="flex gap-2">
         {(row.getValue('categories') as CategoryList).map((category) => (
-          <Badge variant={'info'}>
+          <Badge variant={'info'} key={category.id}>
             <Text className="!font-medium text-sky-600">{category.name}</Text>
           </Badge>
         ))}

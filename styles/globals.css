@@ -181,4 +181,32 @@
   .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
     color: white !important;
   }
+
+  div[data-state] ~ div[data-state] {
+    border-top: none;
+  }
+
+  div[data-state][role='region'] > div {
+    padding-bottom: 0px;
+  }
+
+  .description p+p,
+  .description p+ul, 
+  .description p+ol, 
+  .description ul+p, 
+  .description ul+ol, 
+  .description ol+ol, 
+  .description ol+p, 
+  .description ol+ul {
+    margin-top: .8rem;
+  }
+
+  .circle-progess .ant-progress-text {
+    color: white!important;
+  }
+
+  .video-js .vjs-time-control,
+  .video-js .vjs-current-time {
+    display: block!important;
+}
 }

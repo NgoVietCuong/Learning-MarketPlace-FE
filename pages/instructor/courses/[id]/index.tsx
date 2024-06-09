@@ -69,7 +69,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
       );
       setIsChanged(changed);
     }
-  }, [courseInfo]);
+  }, [courseInfo, courseDetails]);
 
   const handlePublishCourse = async () => {
     setPublishing(true);

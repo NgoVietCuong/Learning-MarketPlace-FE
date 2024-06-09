@@ -68,7 +68,7 @@ export default function InstructorCreateCourse({ categories }: InstructorCreateC
               <Heading size="4xl" className="text-gray-700 !font-medium">
                 Name your course
               </Heading>
-              <Text size="sm">What would you like to name your course? Don't worry, you can change it later.</Text>
+              <Text size="sm">What would you like to name your course? Don&apos;t worry, you can change it later.</Text>
             </div>
 
             <div className="flex flex-col gap-1 mb-[25px]">

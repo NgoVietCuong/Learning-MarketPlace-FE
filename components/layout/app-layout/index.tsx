@@ -1,6 +1,6 @@
 import NavBar from "../NavBar";
 import Footer from "../Footer";
-import Auth from "../../auth";
+import Auth from "../../guard/auth";
 
 interface AppLayoutProps {
   children: React.ReactNode;

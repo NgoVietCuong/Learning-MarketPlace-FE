@@ -1,4 +1,5 @@
 import * as LucideIcons from 'lucide-react';
+import { LessonContentTypes } from './enums';
 
 export const Statuses = [
   {
@@ -25,3 +26,8 @@ export const Types = [
     icon: 'DollarSign' as keyof typeof LucideIcons,
   },
 ];
+
+export const ContentTypes: { [key in LessonContentTypes]: keyof typeof LucideIcons } = {
+  [LessonContentTypes.VIDEO]: 'MonitorPlay',
+  [LessonContentTypes.DOCUMENT]: 'File',
+}

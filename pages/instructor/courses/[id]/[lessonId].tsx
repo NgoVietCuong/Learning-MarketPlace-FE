@@ -22,9 +22,7 @@ import { Lesson } from '@/types/schema';
 import { NumberOfLessonFields } from '@/constants/common';
 import { LessonContentTypes } from '@/constants/enums';
 import { uploadApi } from '@/services/axios/uploadApi';
-const { DOCUMENT, VIDEO } = LessonContentTypes;
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-import VideoPlayer from '@/components/video-player';
 
 interface InstructorLessonDetailsProps {
   courseId: number;
@@ -75,7 +73,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
 
       setNumberCompleted(NumberOfLessonFields - incompleteFields);
     }
-  }, [lessonInfo]);
+  }, [lessonInfo, lessonDetails]);
 
   const handlePublishLesson = async () => {
     setPublishing(true);
@@ -290,9 +288,6 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                         <SelectValue placeholder="Select content type" />
                       </SelectTrigger>
                       <SelectContent className="bg-white-primary">
-                        <SelectItem value="Text" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
-                          Text
-                        </SelectItem>
                         <SelectItem value="Video" className="text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                           Video
                         </SelectItem>
@@ -334,16 +329,6 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       </div>
                     )}
 
-                    {lessonInfo?.contentType === LessonContentTypes.TEXT && (
-                      <ReactQuill
-                        theme="snow"
-                        className="quill w-full"
-                        style={{ minHeight: '300px', maxHeight: '300px' }}
-                        value={lessonInfo?.content ? lessonInfo?.content : undefined}
-                        onChange={handleChangeContent}
-                      />
-                    )}
-
                     {lessonInfo?.contentType === LessonContentTypes.VIDEO && (
                       <UploadVideo
                         uploading={videoUploading}
@@ -355,7 +340,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       <Text
                         size="xs"
                         as="p"
-                        className={`text-red-400 font-medium ${lessonInfo?.contentType === LessonContentTypes.TEXT ? 'mt-[40px]' : ''}`}
+                        className="text-red-400 font-medium"
                       >
                         {contentError}
                       </Text>
@@ -364,7 +349,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                 </div>
               </div>
               <div
-                className={`flex flex-col gap-3 ${lessonInfo?.contentType === LessonContentTypes.TEXT && !contentError ? 'mt-[40px]' : ''}`}
+                className="flex flex-col gap-3"
               >
                 <div className="w-[32%] flex flex-col items-center p-0">
                   {saveError && <FailedAlert title={'Update lesson info failed'} message={saveError} />}
