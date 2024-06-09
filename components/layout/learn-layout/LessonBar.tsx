@@ -15,7 +15,7 @@ interface LessonBarProps {
 
 export default function LessonBar({ slug, lessonId }: LessonBarProps) {
   const router = useRouter();
-  const { learnProgress, isLoading } = useLearnProgress(slug);
+  const { learnProgress, learnLoading } = useLearnProgress(slug);
 
   return (
     <div className="flex flex-col min-w-[25%] w-[25%] h-[100%] z-5 border-l-[1px] border-gray-border">
@@ -24,7 +24,7 @@ export default function LessonBar({ slug, lessonId }: LessonBarProps) {
           Course content
         </Text>
       </div>
-      {isLoading ? (
+      {learnLoading ? (
         <></>
       ) : (
         <div className="w-full overflow-y-scroll">
@@ -48,7 +48,7 @@ export default function LessonBar({ slug, lessonId }: LessonBarProps) {
                 </div>
                 <AccordionContent>
                   {section.lessons.map((lesson) => (
-                    <div className={`w-full flex gap-3 px-4 py-3 hover:bg-slate-200 cursor-pointer ${lesson.id === lessonId ? 'bg-slate-200' : ''}`} onClick={() => router.push(`/course/${slug}/learn/${lesson.id}`)}>
+                    <div key={lesson.id} className={`w-full flex gap-3 px-4 py-3 hover:bg-slate-100 cursor-pointer ${lesson.id === lessonId ? 'bg-slate-200' : ''}`} onClick={() => router.push(`/course/${slug}/learn/${lesson.id}`)}>
                       {lesson?.lessonProgress?.isCompleted ? (<IoIosCheckmarkCircle className="w-5 h-5 text-blue-500" />) :  (<FaRegCircle className="mt-[1.5px] ml-[1.6px] w-[16.25px] h-[16.25px] text-blue-500" />)}
                       <div className="flex flex-col gap-1.5">
                         <Text size="tx" className="!font-normal !text-gray-700">

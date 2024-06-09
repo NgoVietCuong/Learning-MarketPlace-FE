@@ -42,6 +42,7 @@ export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
         <>
           {lessonProgress?.data?.contentType === LessonContentTypes.VIDEO && (
             <VideoPlayer
+              key={lessonProgress.data.id as number}
               className="w-full"
               options={{
                 sources: [
@@ -51,10 +52,12 @@ export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
                   },
                 ]
               }}
+              lessonProgress={lessonProgress}
+              apiHandler={handleUpdateLearnpProgress}
             />
           )}
           {lessonProgress?.data?.contentType === LessonContentTypes.DOCUMENT && (
-            <PdfViewer fileUrl={lessonProgress.data.content! as string} lessonProgress={lessonProgress} apiHandler={handleUpdateLearnpProgress} />
+            <PdfViewer key={lessonProgress.data.id as number} fileUrl={lessonProgress.data.content! as string} lessonProgress={lessonProgress} apiHandler={handleUpdateLearnpProgress} />
           )}
         </>
       )}
