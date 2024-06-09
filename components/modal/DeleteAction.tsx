@@ -55,7 +55,7 @@ export default function DeleteAction({ title, object, open, setOpen, mutate, red
         <DialogTitle className="text-2xl text-gray-700">{title}</DialogTitle>
         <DialogHeader className="w-full flex justify-start text-sm">
           <Text size="sm" className="text-left">
-            Are you sure you want to delete this {object}? You won't be able to undo it.
+            Are you sure you want to delete this {object}? You won&apos;t be able to undo it.
           </Text>
         </DialogHeader>
 

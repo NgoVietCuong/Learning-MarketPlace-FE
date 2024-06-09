@@ -134,7 +134,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         />
                       </>
                     )}
-                    <Img src={courseSlugInfo?.data?.imagePreview!} />
+                    <Img src={courseSlugInfo?.data?.imagePreview!} alt="course image preview" />
                   </div>
                   <div className="px-8 py-6 space-y-5 bg-white-primary">
                     {courseSlugInfo?.data?.hasEnrolled ? (
@@ -178,6 +178,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                 <Accordion type="multiple">
                   {courseSlugInfo?.data?.sections?.map((section) => (
                     <AccordionItem
+                      key={section.id as number}
                       value={section.id.toString()}
                       className="pb-0 border-x-[1px] border-t-[1px] border-slate-300"
                     >
@@ -203,7 +204,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                       </div>
                       <AccordionContent>
                         {section.lessons.map((lesson) => (
-                          <div className="flex justify-between items-center px-4 py-3">
+                          <div key={lesson.id as number} className="flex justify-between items-center px-4 py-3">
                             <div className="flex items-center gap-3">
                               <DynamicIcon
                                 iconName={ContentTypes[lesson.contentType]}

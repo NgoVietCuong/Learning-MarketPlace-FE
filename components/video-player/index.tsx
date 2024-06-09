@@ -52,9 +52,7 @@ const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options, lessonPr
 
         if (apiHandler) {
           player.on('ready', function() {
-            console.log("lessonProgress", lessonProgress)
             const contentProgress = lessonProgress?.data?.lessonProgress ? lessonProgress?.data?.lessonProgress?.contentProgress as number : 0;
-            console.log('contentProgress', contentProgress)
             const duration = lessonProgress?.data?.duration as number;
             const startTime = (contentProgress * 1.0 / 100) * duration;
             player.currentTime(startTime);

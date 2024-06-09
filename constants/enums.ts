@@ -6,6 +6,5 @@ export enum Roles {
 
 export enum LessonContentTypes {
   VIDEO = 'Video',
-  TEXT = 'Text',
   DOCUMENT = 'Document'
 }

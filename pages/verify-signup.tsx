@@ -77,7 +77,7 @@ export default function VerifySignUpPage({ queryEmail }: VerifySignUpPageProps) 
             <div className="w-[75%] flex flex-col items-center gap-3 py-10">
               <Heading className="text-gray-700">Enter verification code</Heading>
               <Text size="xs" as="p" className="text-center mb-[12px]">
-                We've sent a code to <span className="font-medium">email</span>
+                We&apos;ve sent a code to <span className="font-medium">email</span>
               </Text>
               <div className="flex flex-col items-center gap-3">
                 <InputOTP maxLength={6} value={code} onChange={(value) => setCode(value)}>
@@ -95,7 +95,7 @@ export default function VerifySignUpPage({ queryEmail }: VerifySignUpPageProps) 
                 </InputOTP>
               </div>
               <Text size="xs">
-                Didn't get a code?{' '}
+                Didn&apos;t get a code?{' '}
                 <Button
                   disabled={sending}
                   variant={'ghost'}

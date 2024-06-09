@@ -29,6 +29,5 @@ export const Types = [
 
 export const ContentTypes: { [key in LessonContentTypes]: keyof typeof LucideIcons } = {
   [LessonContentTypes.VIDEO]: 'MonitorPlay',
-  [LessonContentTypes.TEXT]: 'BookText',
   [LessonContentTypes.DOCUMENT]: 'File',
 }

@@ -13,7 +13,6 @@ interface LearnHeaderProps {
 export default function LearnHeader({ slug }: LearnHeaderProps) {
   const router = useRouter();
   const { learnProgress, learnLoading } = useLearnProgress(slug);
-  console.log('learnProgress', learnProgress)
 
   return (
     <>
