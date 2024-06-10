@@ -65,13 +65,10 @@ const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options, lessonPr
             const percentageTime = Math.round((currentTime / durationTime) * 100);
             if (percentageTime >= 80) {
               if (!lessonProgress?.data?.lessonProgress || !lessonProgress.data.lessonProgress.isCompleted) {
-                if (timeoutRef) {
-                  clearTimeout(timeoutRef);
-                }
-                timeoutRef = setTimeout(async () => {
+                setTimeout(async () => {
                   await apiHandler(percentageTime);
                   player.off('timeupdate');
-                }, 300);
+                }, 400);
               }
             }
           };
@@ -80,7 +77,9 @@ const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options, lessonPr
             const currentTime = player.currentTime() || 0;
             const durationTime = player.duration() || 0;
             const percentageTime = Math.round((currentTime / durationTime) * 100);
-            await apiHandler(percentageTime);
+            setTimeout(async () => {
+              await apiHandler(percentageTime);
+            }, 200)
           };
 
           handleRouteChangeRef.current = handleUpdateProgress;
@@ -113,9 +112,6 @@ const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options, lessonPr
         }
         router.events.off('routeChangeStart', handleRouteChangeRef.current!);
         window.removeEventListener('beforeunload', handleRouteChangeRef.current!);
-        if (timeoutRef) {
-          clearTimeout(timeoutRef);
-        }
       }
     }
   }, [options, router.events]);
