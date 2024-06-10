@@ -39,7 +39,7 @@ export default function LearnHeader({ slug }: LearnHeaderProps) {
               </div>
               <div className="w-[1px] h-[28px] bg-white-primary"></div>
               <div>
-                <Heading size="lg" className="!font-medium !text-white-primary">
+                <Heading size="lg" className="!font-medium !text-white-primary cursor-pointer" onClick={() => router.push(`/course/${slug}`)}>
                   {learnProgress?.data?.course?.title}
                 </Heading>
               </div>

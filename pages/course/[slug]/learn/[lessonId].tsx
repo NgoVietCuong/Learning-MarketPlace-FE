@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { Loader2 } from 'lucide-react';
 import VideoPlayer from '@/components/video-player';
@@ -18,13 +18,7 @@ export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
   const { lessonProgress, lessonLoading, lessonProgressMutate } = useLessonProgress(lessonId);
   const { learnProgress, learnProgressMutate } = useLearnProgress(slug);
 
-  useEffect(() => {
-    if (lessonProgress && !lessonProgress.data?.lessonProgress) {
-      handleUpdateLearnpProgress(0);
-    }
-  }, [lessonProgress]);
-
-  const handleUpdateLearnpProgress = async (contentProgress: number) => {
+  const handleUpdateLearnProgress = useCallback(async (contentProgress: number) => {
     await learnApi.updateProgress({
       enrollmentId: learnProgress?.data?.id as number,
       lessonId,
@@ -32,7 +26,13 @@ export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
     });
     learnProgressMutate();
     lessonProgressMutate();
-  }
+  }, [slug, lessonId]);
+
+  useEffect(() => {
+    if (lessonProgress && !lessonProgress.data?.lessonProgress) {
+      handleUpdateLearnProgress(0);
+    }
+  }, [lessonProgress, handleUpdateLearnProgress]);
 
   return (
     <div className={`grow flex flex-col items-center ${lessonLoading ? 'justify-center' : ''}`}>
@@ -53,11 +53,11 @@ export default function LearnCourse({ slug, lessonId }: LearnCourseProps) {
                 ]
               }}
               lessonProgress={lessonProgress}
-              apiHandler={handleUpdateLearnpProgress}
+              apiHandler={handleUpdateLearnProgress}
             />
           )}
           {lessonProgress?.data?.contentType === LessonContentTypes.DOCUMENT && (
-            <PdfViewer key={lessonProgress.data.id as number} fileUrl={lessonProgress.data.content! as string} lessonProgress={lessonProgress} apiHandler={handleUpdateLearnpProgress} />
+            <PdfViewer key={lessonProgress.data.id as number} fileUrl={lessonProgress.data.content! as string} lessonProgress={lessonProgress} apiHandler={handleUpdateLearnProgress} />
           )}
         </>
       )}

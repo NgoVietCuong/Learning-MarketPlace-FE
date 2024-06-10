@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { LogOut, Settings, UserRoundCheck, FilePenLine, User } from 'lucide-react';
+import { LogOut, Settings, UserRoundCheck, FilePenLine, User, BookMarked } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -40,16 +40,28 @@ export default function UserMenu() {
       <DropdownMenuContent className="w-56 bg-white-primary">
         <DropdownMenuLabel className="font-medium text-gray-800">My Account</DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-200" />
-        <DropdownMenuGroup>
-          <DropdownMenuItem
-            className="text-gray-700 cursor-pointer hover:bg-slate-100"
-            onClick={() => router.push('/user/account-settings')}
-          >
-            <Settings className="mr-2 h-4 w-4" />
-            Account settings
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator className="bg-slate-200" />
+        {hasRole(Roles.STUDENT) && (
+          <>
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                className="text-gray-700 cursor-pointer hover:bg-slate-100"
+                onClick={() => router.push('/user/my-learning')}
+              >
+                <BookMarked className="mr-2 h-4 w-4" />
+                My learning
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-gray-700 cursor-pointer hover:bg-slate-100"
+                onClick={() => router.push('/user/account-settings')}
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                Account settings
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator className="bg-slate-200" />
+          </>
+        )}
+
         {hasRole(Roles.INSTRUCTOR) && (
           <>
             <DropdownMenuGroup>

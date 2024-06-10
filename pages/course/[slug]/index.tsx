@@ -36,6 +36,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
   const { reviewList, reviewLoading } = useReviews(slug);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [enrolling, setEnrolling] = useState(false);
+  console.log("courseSlugInfo", courseSlugInfo)
 
   const handleEnrollCourse = async () => {
     if (!user || !user.data) {
@@ -51,7 +52,6 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
         description: `Enrolled course successfully!`,
       });
     }
-    setEnrolling(false);
   };
 
   return (
@@ -152,7 +152,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                       </div>
                     ) : (
                       <Button
-                        disabled={!courseSlugInfo}
+                        disabled={!courseSlugInfo || enrolling}
                         size="lg"
                         className="w-full bg-teal-secondary text-white-primary"
                         onClick={handleEnrollCourse}
