@@ -134,7 +134,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         />
                       </>
                     )}
-                    <Img src={courseSlugInfo?.data?.imagePreview!} alt="course image preview" />
+                    <Img className='w-full h-full' src={courseSlugInfo?.data?.imagePreview!} alt="course image preview" />
                   </div>
                   <div className="px-8 py-6 space-y-5 bg-white-primary">
                     {courseSlugInfo?.data?.hasEnrolled ? (
