@@ -36,7 +36,6 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
   const { reviewList, reviewLoading } = useReviews(slug);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [enrolling, setEnrolling] = useState(false);
-  console.log("courseSlugInfo", courseSlugInfo)
 
   const handleEnrollCourse = async () => {
     if (!user || !user.data) {
@@ -90,7 +89,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                 <Text size="sm" className="text-white-primary inline-flex items-center gap-1">
                   <FaUser className="w-[14px] h-[14px]" />
                   Created by:{' '}
-                  <Link href="#" className="text-sky-500 underline">
+                  <Link href={`/instructor/${courseSlugInfo?.data?.profile.slug}`} className="text-sky-500 underline">
                     {courseSlugInfo?.data?.profile.displayName}
                   </Link>
                 </Text>
@@ -174,7 +173,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
           <div className="w-full p-0">
             <div className="container px-16 py-14 space-y-10">
               <div className="space-y-3 w-3/5">
-                <Heading className="!font-semibold !text-gray-700">Course content</Heading>
+                <Heading size='4xl' className="!font-semibold !text-gray-800">Course content</Heading>
                 <Accordion type="multiple">
                   {courseSlugInfo?.data?.sections?.map((section) => (
                     <AccordionItem
@@ -224,7 +223,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
               </div>
 
               <div className="space-y-3 w-3/5">
-                <Heading className="!font-semibold !text-gray-700">Description</Heading>
+                <Heading size='4xl' className="!font-semibold !text-gray-800">Description</Heading>
                 <div
                   className="description text-[13px]"
                   dangerouslySetInnerHTML={{ __html: courseSlugInfo?.data?.description! }}
@@ -234,11 +233,11 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
               <div className="space-y-3 w-3/5">
                 <div className="flex items-center">
                   <Rate className=" text-yellow-500 mr-2" count={1} defaultValue={1} />
-                  <Heading className="!font-semibold !text-gray-700 mr-1">
+                  <Heading size='4xl' className="!font-semibold !text-gray-800 mr-1">
                     {courseSlugInfo?.data?.averageRating} course rating
                   </Heading>
                   <Dot className="w-10 h-10 text-gray-700" />
-                  <Heading className="!font-semibold !text-gray-700">
+                  <Heading  size='4xl' className="!font-semibold !text-gray-800">
                     {courseSlugInfo?.data?.totalReviews! > 1
                       ? `${courseSlugInfo?.data?.totalReviews} ratings`
                       : `${courseSlugInfo?.data?.totalReviews} rating`}

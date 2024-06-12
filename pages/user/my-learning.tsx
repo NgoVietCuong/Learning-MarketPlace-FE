@@ -18,7 +18,7 @@ export default function MyLearning() {
       {!isLoading && (
         <div className="w-full h-full bg-slate-100">
           <div className="container h-full flex flex-col mx-auto gap-5 px-16 py-14">
-            <Heading size="5xl" className="!text-gray-700">
+            <Heading size="5xl" className="!text-gray-800">
               My learning
             </Heading>
             <Tabs defaultValue="In progress" className="w-full">

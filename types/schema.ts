@@ -52,6 +52,13 @@ export type InstructorProfile = {
   updatedAt: string;
 };
 
+export type InstructorSlugInfo = InstructorProfile & {
+  totalStudents: number;
+  totalReviews: number;
+  averageRating: number;
+  courses: Omit<Course, 'categories>'>[];
+}
+
 // category schema
 export type Category = {
   id: number;
