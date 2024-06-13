@@ -55,12 +55,12 @@ export type InstructorProfile = {
 export type InstructorSlugInfo = InstructorProfile & {
   totalStudents: number;
   totalReviews: number;
-  averageRating: number;
+  averageRating: string;
   courses: (Omit<Course, 'categories>'> & {
     totalVideoDuration: string;
     totalArticles: number;
     totalReviews: number;
-    averageRating: number;
+    averageRating: string;
   })[];
 }
 
@@ -167,7 +167,7 @@ export type CourseSlugInfo = Course & {
   hasEnrolled: boolean;
   totalStudents: number;
   totalReviews: number;
-  averageRating: number;
+  averageRating: string;
   totalVideoDuration: string;
   totalArticles: number;
   numberEachRatings: {

@@ -32,7 +32,7 @@ export default function InstructorInfo({ slug }: InstructorInfoProps) {
         <div className="w-full h-full bg-white-primary">
           <div className="w-full bg-sky-900">
             <div className="container px-20 py-14 flex gap-5">
-              <Avatar className="h-32 w-32">
+              <Avatar className="h-[7.5rem] w-[7.5rem]">
                 <AvatarImage src={instructorSlugInfo?.data?.picture ? instructorSlugInfo?.data?.picture : undefined} />
                 <AvatarFallback className="bg-slate-300 text-white-primary text-center font-medium text-sm">
                   <User className="w-16 h-16" />
@@ -62,15 +62,15 @@ export default function InstructorInfo({ slug }: InstructorInfoProps) {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {true && <Link href={'https://www.youtube.com/'} target='_blank'><Text size="sm" className='!text-white-primary !font-medium inline-flex items-center bg-teal-secondary px-4 py-2 rounded-md'><FaTwitter className="w-[16px] h-[16px] mr-1" />Twitter</Text></Link>}
-                  {true && <Link href={'https://www.youtube.com/'} target='_blank'><Text size="sm" className='!text-white-primary !font-medium inline-flex items-center bg-teal-secondary px-4 py-2 rounded-md'><FaLinkedinIn className="w-[16px] h-[16px] mr-1" />Linkedin</Text></Link>}
-                  {true && <Link href={'https://www.youtube.com/'} target='_blank'><Text size="sm" className='!text-white-primary !font-medium inline-flex items-center bg-teal-secondary px-4 py-2 rounded-md'><FaYoutube className="w-[16px] h-[16px] mr-1" />Youtube</Text></Link>}
+                  {instructorSlugInfo?.data?.twitterLink && <Link href={instructorSlugInfo?.data?.twitterLink} target='_blank'><Text size="tx" className='!text-white-primary !font-medium inline-flex items-center bg-teal-secondary px-4 py-1.5 rounded-md'><FaTwitter className="w-[14px] h-[14px] mr-1.5" />Twitter</Text></Link>}
+                  {instructorSlugInfo?.data?.linkedinLink && <Link href={instructorSlugInfo?.data?.linkedinLink} target='_blank'><Text size="tx" className='!text-white-primary !font-medium inline-flex items-center bg-teal-secondary px-4 h-[34px] rounded-md'><FaLinkedinIn className="w-[14px] h-[14px] mr-1.5" />Linkedin</Text></Link>}
+                  {instructorSlugInfo?.data?.youtubeLink && <Link href={instructorSlugInfo?.data?.youtubeLink} target='_blank'><Text size="tx" className='!text-white-primary !font-medium inline-flex items-center bg-teal-secondary px-4 h-[34px] rounded-md'><FaYoutube className="w-[14px] h-[14px] mr-1.5" />Youtube</Text></Link>}
                 </div>
               </div>
             </div>
           </div>
           <div className="w-full p-0">
-            <div className="container px-20 py-14 space-y-10">
+            <div className="container px-20 py-10 space-y-10">
               <div className="space-y-3 w-3/5">
                 <Heading size="4xl" className="!font-semibold !text-gray-800">
                   About me
@@ -113,7 +113,7 @@ export default function InstructorInfo({ slug }: InstructorInfoProps) {
                             disabled
                             allowHalf
                             className="text-xs text-yellow-500 mr-2 custom-rate"
-                            defaultValue={course.averageRating}
+                            defaultValue={Number(course.averageRating)}
                           />
                           <Text size="xs" className="!text-gray-500">{`(${course.totalReviews})`}</Text>
                         </div>

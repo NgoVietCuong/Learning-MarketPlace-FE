@@ -198,7 +198,7 @@
   .description ol+ol, 
   .description ol+p, 
   .description ol+ul {
-    margin-top: .8rem;
+    margin-top: .7rem;
   }
 
   .circle-progess .ant-progress-text {

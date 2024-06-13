@@ -18,7 +18,7 @@ export default function MyLearning() {
     <Auth role={Roles.STUDENT}>
       {!isLoading && (
         <div className="w-full h-full bg-slate-100">
-          <div className="container h-full flex flex-col mx-auto gap-5 px-16 py-14">
+          <div className="container h-full flex flex-col mx-auto gap-5 px-20 py-10">
             <Heading size="5xl" className="!text-gray-800">
               My learning
             </Heading>
@@ -35,14 +35,13 @@ export default function MyLearning() {
                 {myCourses?.data?.inProgressCourses.map((item) => (
                   <div
                     key={item.id}
-                    className="max-w-[290px] bg-white overflow-hidden rounded-md space-y-3 shadow-md cursor-pointer"
-                    onClick={() => router.push(`/course/${item.course.slug}`)}
+                    className="max-w-[290px] bg-white overflow-hidden rounded-md space-y-3 shadow-md"
                   >
                     <div>
                       <Img className="w-full h-full" src={item.course.imagePreview!} alt="course image preview" />
                     </div>
                     <div className="space-y-1 px-4">
-                      <Text size="sm" className="!font-medium !text-gray-700">
+                      <Text size="sm" className="!font-medium cursor-pointer !text-gray-700 hover:!text-sky-600" onClick={() => router.push(`/course/${item.course.slug}`)}>
                         {item.course.title}
                       </Text>
                       <Text size="xs" className="!text-gray-500">
@@ -62,6 +61,7 @@ export default function MyLearning() {
                         variant={'ghost'}
                         size="sm"
                         className="p-0 h-fit !font-medium text-xs text-teal-secondary"
+                        onClick={() => console.log('ahihi')}
                       >
                         {item.review ? 'Your rating' : 'Leave a rating'}
                       </Button>

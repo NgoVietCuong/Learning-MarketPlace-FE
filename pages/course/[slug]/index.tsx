@@ -13,6 +13,7 @@ import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
+import { Progress } from "@/components/ui/progress"
 import { useToast } from '@/components/ui/use-toast';
 import DynamicIcon from '@/components/dynamic-icon';
 import CoursePreview from '@/components/modal/CoursePreview';
@@ -60,7 +61,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
       ) : (
         <>
           <div className="w-full bg-sky-900">
-            <div className="container grid grid-cols-2 text-white px-16 py-14">
+            <div className="container grid grid-cols-2 text-white px-20 py-14">
               <div className="flex flex-col gap-3">
                 <Heading size="8xl" as="h2" className="font-semibold text-white-primary">
                   {courseSlugInfo?.data?.title}
@@ -71,7 +72,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                     {courseSlugInfo?.data?.averageRating}
                   </Text>
                   <Rate
-                    defaultValue={courseSlugInfo?.data?.averageRating}
+                    defaultValue={Number(courseSlugInfo?.data?.averageRating)}
                     allowHalf
                     disabled
                     className="text-sm text-yellow-500 mr-2 custom-rate"
@@ -110,7 +111,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
               </div>
               <div className="relative">
                 <div className="max-w-sm bg-white mx-auto text-black absolute shadow-xl right-0 overflow-hidden">
-                  <div className="relative h-54 w-90">
+                  <div className="relative h-[12.375rem] w-[22rem]">
                     {courseSlugInfo?.data?.videoPreview && (
                       <>
                         <Button
@@ -171,7 +172,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
             </div>
           </div>
           <div className="w-full p-0">
-            <div className="container px-16 py-14 space-y-10">
+            <div className="container px-20 py-10 space-y-10">
               <div className="space-y-3 w-3/5">
                 <Heading size='4xl' className="!font-semibold !text-gray-800">Course content</Heading>
                 <Accordion type="multiple">
@@ -230,7 +231,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                 ></div>
               </div>
 
-              <div className="space-y-3 w-3/5">
+              <div className="space-y-3 w-full">
                 <div className="flex items-center">
                   <Rate className=" text-yellow-500 mr-2" count={1} defaultValue={1} />
                   <Heading size='4xl' className="!font-semibold !text-gray-800 mr-1">
@@ -245,6 +246,19 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                 </div>
 
                 <div>{reviewLoading ? <></> : <Button variant={'outline'}>Show all reviews</Button>}</div>
+                <div className='flex'>
+                  <div className="flex flex-col w-1/4">
+                    <Text>Overall rating</Text>
+                    <Rate />
+
+                    <div className="flex items-center gap-3">
+                      <Text>5</Text>
+                      <Progress />
+                      <Text>3</Text>
+                    </div>
+                  </div>
+                  <div className="flex flex-col w-3/4"></div>
+                </div>
               </div>
             </div>
           </div>
