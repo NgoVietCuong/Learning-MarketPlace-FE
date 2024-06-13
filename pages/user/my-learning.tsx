@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import useMyCourses from '@/hooks/useMyCourses';
 import { Roles } from '@/constants/enums';
 
 export default function MyLearning() {
+  const router = useRouter();
   const { myCourses, isLoading } = useMyCourses();
 
   return (
@@ -34,7 +35,8 @@ export default function MyLearning() {
                 {myCourses?.data?.inProgressCourses.map((item) => (
                   <div
                     key={item.id}
-                    className="max-w-[280px] bg-white overflow-hidden rounded-md space-y-3 shadow-md cursor-pointer"
+                    className="max-w-[290px] bg-white overflow-hidden rounded-md space-y-3 shadow-md cursor-pointer"
+                    onClick={() => router.push(`/course/${item.course.slug}`)}
                   >
                     <div>
                       <Img className="w-full h-full" src={item.course.imagePreview!} alt="course image preview" />
@@ -43,7 +45,9 @@ export default function MyLearning() {
                       <Text size="sm" className="!font-medium !text-gray-700">
                         {item.course.title}
                       </Text>
-                      <Text size="xs" className="!text-gray-500">{item.course.profile.displayName}</Text>
+                      <Text size="xs" className="!text-gray-500">
+                        {item.course.profile.displayName}
+                      </Text>
                     </div>
 
                     <div
@@ -54,7 +58,13 @@ export default function MyLearning() {
                         className="text-xs text-yellow-500 mr-2 custom-rate"
                         defaultValue={item.review ? item.review.rating : 0}
                       />
-                       <Button variant={"ghost"} size="sm" className='p-0 h-fit !font-medium text-xs text-teal-secondary'>{item.review ? 'Your rating' : 'Leave a rating'}</Button>
+                      <Button
+                        variant={'ghost'}
+                        size="sm"
+                        className="p-0 h-fit !font-medium text-xs text-teal-secondary"
+                      >
+                        {item.review ? 'Your rating' : 'Leave a rating'}
+                      </Button>
                     </div>
 
                     <div className="space-y-1 px-4 pb-4">
@@ -67,7 +77,7 @@ export default function MyLearning() {
                 ))}
               </TabsContent>
               <TabsContent value="Completed" className="w-full gap-x-8 gap-y-6 flex flex-wrap">
-              {myCourses?.data?.completedCourses.map((item) => (
+                {myCourses?.data?.completedCourses.map((item) => (
                   <div
                     key={item.id}
                     className="max-w-[280px] bg-white overflow-hidden rounded-md space-y-3 shadow-md cursor-pointer"
@@ -79,7 +89,9 @@ export default function MyLearning() {
                       <Text size="sm" className="!font-medium !text-gray-700">
                         {item.course.title}
                       </Text>
-                      <Text size="xs" className="!text-gray-500">{item.course.profile.displayName}</Text>
+                      <Text size="xs" className="!text-gray-500">
+                        {item.course.profile.displayName}
+                      </Text>
                     </div>
 
                     <div
@@ -90,7 +102,13 @@ export default function MyLearning() {
                         className="text-xs text-yellow-500 mr-2 custom-rate"
                         defaultValue={item.review ? item.review.rating : 0}
                       />
-                       <Button variant={"ghost"} size="sm" className='p-0 h-fit !font-medium text-xs text-teal-secondary'>{item.review ? 'Your rating' : 'Leave a rating'}</Button>
+                      <Button
+                        variant={'ghost'}
+                        size="sm"
+                        className="p-0 h-fit !font-medium text-xs text-teal-secondary"
+                      >
+                        {item.review ? 'Your rating' : 'Leave a rating'}
+                      </Button>
                     </div>
 
                     <div className="space-y-1 px-4 pb-4">

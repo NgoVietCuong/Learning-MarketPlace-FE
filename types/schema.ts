@@ -56,7 +56,12 @@ export type InstructorSlugInfo = InstructorProfile & {
   totalStudents: number;
   totalReviews: number;
   averageRating: number;
-  courses: Omit<Course, 'categories>'>[];
+  courses: (Omit<Course, 'categories>'> & {
+    totalVideoDuration: string;
+    totalArticles: number;
+    totalReviews: number;
+    averageRating: number;
+  })[];
 }
 
 // category schema
