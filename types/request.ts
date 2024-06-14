@@ -110,3 +110,12 @@ export type UpdateProgressBody = {
   lessonId: number;
   contentProgress: number;
 }
+
+// course review request
+export type CreateReviewBody = {
+  enrollmentId: number;
+  rating: number;
+  comment: number;
+}
+
+export type UpdateReviewBody = Partial<CreateReviewBody>;
