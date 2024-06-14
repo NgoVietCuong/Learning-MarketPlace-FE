@@ -52,6 +52,18 @@ export type InstructorProfile = {
   updatedAt: string;
 };
 
+export type InstructorSlugInfo = InstructorProfile & {
+  totalStudents: number;
+  totalReviews: number;
+  averageRating: string;
+  courses: (Omit<Course, 'categories>'> & {
+    totalVideoDuration: string;
+    totalArticles: number;
+    totalReviews: number;
+    averageRating: string;
+  })[];
+}
+
 // category schema
 export type Category = {
   id: number;
@@ -155,7 +167,7 @@ export type CourseSlugInfo = Course & {
   hasEnrolled: boolean;
   totalStudents: number;
   totalReviews: number;
-  averageRating: number;
+  averageRating: string;
   totalVideoDuration: string;
   totalArticles: number;
   numberEachRatings: {
@@ -168,15 +180,25 @@ export type CourseSlugInfo = Course & {
 };
 
 // learn api schema
-export type MyCourses = {
+export type MyCourse = {
   id: number;
   userId: number;
   courseId: number;
   progressStatus: number;
   createdAt: string;
   updatedAt: string;
-  course: Course
-}[];
+  course: (Omit<Course, 'instructorId'> & {
+    profile: {
+      displayName: string;
+    }
+  });
+  review: Review | null;
+};
+
+export type MyCourses = {
+  inProgressCourses: MyCourse[];
+  completedCourses: MyCourse[];
+}
 
 export type LessonProgress = {
   id: number;
