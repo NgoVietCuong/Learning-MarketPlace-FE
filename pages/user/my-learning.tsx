@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
@@ -7,16 +8,26 @@ import { Progress } from '@/components/ui/progress';
 import { Rate } from 'antd';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Auth from '@/components/guard/auth';
+import RatingProvider from '@/components/modal/RatingProvider';
 import useMyCourses from '@/hooks/useMyCourses';
 import { Roles } from '@/constants/enums';
+import { MyCourse } from '@/types/schema';
+import { reviewApi } from '@/services/axios/reviewApi';
 
 export default function MyLearning() {
   const router = useRouter();
-  const { myCourses, isLoading } = useMyCourses();
+  const { myCourses, myCoursesLoading, myCoursesMutate } = useMyCourses();
+  const [open, setOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<MyCourse | null>(null);
+
+  const handleOpenRatingModal = (course: MyCourse) => {
+    setSelectedCourse(course);
+    setOpen(true);
+  };
 
   return (
     <Auth role={Roles.STUDENT}>
-      {!isLoading && (
+      {!myCoursesLoading && (
         <div className="w-full h-full bg-slate-100">
           <div className="container h-full flex flex-col mx-auto gap-5 px-20 py-10">
             <Heading size="5xl" className="!text-gray-800">
@@ -33,15 +44,16 @@ export default function MyLearning() {
               </TabsList>
               <TabsContent value="In progress" className="w-full gap-x-8 gap-y-6 flex flex-wrap">
                 {myCourses?.data?.inProgressCourses.map((item) => (
-                  <div
-                    key={item.id}
-                    className="max-w-[290px] bg-white overflow-hidden rounded-md space-y-3 shadow-md"
-                  >
+                  <div key={item.id} className="max-w-[290px] bg-white overflow-hidden rounded-md space-y-3 shadow-md">
                     <div>
                       <Img className="w-full h-full" src={item.course.imagePreview!} alt="course image preview" />
                     </div>
                     <div className="space-y-1 px-4">
-                      <Text size="sm" className="!font-medium cursor-pointer !text-gray-700 hover:!text-sky-600" onClick={() => router.push(`/course/${item.course.slug}`)}>
+                      <Text
+                        size="sm"
+                        className="!font-medium cursor-pointer !text-gray-700 hover:!text-sky-600"
+                        onClick={() => router.push(`/course/${item.course.slug}`)}
+                      >
                         {item.course.title}
                       </Text>
                       <Text size="xs" className="!text-gray-500">
@@ -55,15 +67,15 @@ export default function MyLearning() {
                       <Rate
                         disabled
                         className="text-xs text-yellow-500 mr-2 custom-rate"
-                        defaultValue={item.review ? item.review.rating : 0}
+                        value={item.review ? item.review.rating : 0}
                       />
                       <Button
                         variant={'ghost'}
                         size="sm"
                         className="p-0 h-fit !font-medium text-xs text-teal-secondary"
-                        onClick={() => console.log('ahihi')}
+                        onClick={() => handleOpenRatingModal(item)}
                       >
-                        {item.review ? 'Your rating' : 'Leave a rating'}
+                        {item.review ? 'Edit your rating' : 'Leave a rating'}
                       </Button>
                     </div>
 
@@ -106,8 +118,9 @@ export default function MyLearning() {
                         variant={'ghost'}
                         size="sm"
                         className="p-0 h-fit !font-medium text-xs text-teal-secondary"
+                        onClick={() => handleOpenRatingModal(item)}
                       >
-                        {item.review ? 'Your rating' : 'Leave a rating'}
+                        {item.review ? 'Edit your rating' : 'Leave a rating'}
                       </Button>
                     </div>
 
@@ -125,6 +138,21 @@ export default function MyLearning() {
           </div>
         </div>
       )}
+      <RatingProvider
+        open={open}
+        setOpen={setOpen}
+        header={selectedCourse?.review ? 'Edit your rating' : 'Rate this course'}
+        mutate={myCoursesMutate}
+        reviewId={selectedCourse?.review?.id}
+        enrollmentId={selectedCourse?.id!}
+        apiHandler={
+          selectedCourse?.review
+            ? (body) => reviewApi.updateReview(selectedCourse?.review?.id!, body)
+            : reviewApi.createReview
+        }
+        ratingValue={selectedCourse?.review?.rating}
+        commentValue={selectedCourse?.review?.comment}
+      />
     </Auth>
   );
 }
