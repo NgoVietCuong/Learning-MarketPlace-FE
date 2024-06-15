@@ -228,3 +228,9 @@ export type LearnProgress = {
   createdAt: string;
   updatedAt: string;
 };
+
+// admin api schema
+export type UserList = {
+  items: User[];
+  meta: Meta;
+};
