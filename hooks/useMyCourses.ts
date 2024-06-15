@@ -3,7 +3,7 @@ import { Response } from '@/types/response';
 import { MyCourses } from '@/types/schema';
 
 export default function useMyCourses() {
-  const { data: myCourses, isLoading } = useSWR<Response<MyCourses>>('learning/my-courses');
+  const { data: myCourses, isLoading: myCoursesLoading, mutate: myCoursesMutate } = useSWR<Response<MyCourses>>('learning/my-courses');
 
-  return { myCourses, isLoading };
+  return { myCourses, myCoursesLoading, myCoursesMutate };
 }

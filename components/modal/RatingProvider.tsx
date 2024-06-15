@@ -1,8 +1,6 @@
 import { Loader2 } from 'lucide-react';
 import { Dispatch, useState, SetStateAction, useEffect, ChangeEvent  } from 'react';
 import { Rate } from 'antd';
-import { Text } from '../ui/text';
-import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
@@ -19,9 +17,11 @@ interface RatingProviderProps {
   ratingValue?: number;
   commentValue?: string;
   enrollmentId: number;
+  reviewId?: number;
 }
 
-export default function RatingProvider({ open, setOpen, header, apiHandler, mutate, ratingValue, commentValue }: RatingProviderProps) {
+export default function RatingProvider({ open, setOpen, header, apiHandler, mutate, ratingValue, commentValue, reviewId, enrollmentId }: RatingProviderProps) {
+  const { toast } = useToast();
   const [rating, setRating] = useState(ratingValue);
   const [comment, setComment] = useState(commentValue);
   const [saving, setSaving] = useState(false);
@@ -37,7 +37,25 @@ export default function RatingProvider({ open, setOpen, header, apiHandler, muta
 
   const handleSave = async () => {
     setSaving(true);
+    let saveResponse;
+    if (reviewId) {
+      saveResponse = await apiHandler({ rating, comment });
+    } else {
+      saveResponse = await apiHandler({ rating, comment, enrollmentId });
+    }
 
+    if (saveResponse.error) {
+      const messages = saveResponse.message;
+      if (typeof messages === 'string') setSaveError(messages);
+      else setSaveError(messages[0]);
+    } else {
+      mutate();
+      toast({
+        variant: 'success',
+        description: `Saved rating successfully!`,
+      });
+      setOpen(false);
+    }
     setSaving(false);
   }
 
@@ -51,6 +69,7 @@ export default function RatingProvider({ open, setOpen, header, apiHandler, muta
             <Textarea
               placeholder="Write about your own personal experience taking this course."
               className="min-h-[100px]"
+              value={comment}
               onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setComment(event.target.value)}
             />
           </div>

@@ -60,7 +60,7 @@ export default function LearnHeader({ slug }: LearnHeaderProps) {
                   className="text-tx !text-white-primary"
                   onClick={() => setOpen(true)}
                 >
-                  <Rate className="text-sm text-gray-400 mr-2" count={1} defaultValue={1} />
+                  <Rate className={`text-sm ${learnProgress?.data?.review ? 'text-yellow-400' : 'text-gray-400'} mr-2`} count={1} defaultValue={1} />
                   {learnProgress?.data?.review ? 'Edit your rating' : 'Leave a rating'}
                 </Button>
                 <Text size="tx" className="!font-medium !text-white-primary inline-flex items-center gap-2">
@@ -80,10 +80,11 @@ export default function LearnHeader({ slug }: LearnHeaderProps) {
             setOpen={setOpen}
             header={learnProgress?.data?.review ? 'Edit your rating' : 'Rate this course'}
             mutate={learnProgressMutate}
-            apiHandler={reviewApi.createReview}
+            reviewId={learnProgress?.data?.review?.id}
             enrollmentId={learnProgress?.data?.id!}
-            ratingValue={learnProgress?.data?.review ? learnProgress?.data?.review?.rating : undefined}
-            commentValue={learnProgress?.data?.review ? learnProgress?.data?.review?.comment : undefined}
+            apiHandler={learnProgress?.data?.review ? (body) => reviewApi.updateReview(learnProgress?.data?.review?.id!, body) : reviewApi.createReview}
+            ratingValue={learnProgress?.data?.review?.rating}
+            commentValue={learnProgress?.data?.review?.comment}
           />
         </>
       )}
