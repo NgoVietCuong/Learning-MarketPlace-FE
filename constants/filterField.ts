@@ -1,7 +1,7 @@
 import * as LucideIcons from 'lucide-react';
 import { LessonContentTypes } from './enums';
 
-export const Statuses = [
+export const CourseStatuses = [
   {
     value: 'Published',
     label: 'Published',
@@ -14,7 +14,7 @@ export const Statuses = [
   },
 ];
 
-export const Types = [
+export const CourseTypes = [
   {
     value: 'Free',
     label: 'Free',
@@ -27,7 +27,31 @@ export const Types = [
   },
 ];
 
+export const UserStatues = [
+  {
+    value: 'Active',
+    label: 'Active',
+    icon: 'CircleCheck' as keyof typeof LucideIcons,
+  },
+  {
+    value: 'InActive',
+    label: 'InActive',
+    icon: 'Ban' as keyof typeof LucideIcons,
+  },
+];
+
+export const UserRoles = [
+  {
+    value: 'Student',
+    label: 'Student',
+  },
+  {
+    value: 'Instructor',
+    label: 'Instructor',
+  },
+];
+
 export const ContentTypes: { [key in LessonContentTypes]: keyof typeof LucideIcons } = {
   [LessonContentTypes.VIDEO]: 'MonitorPlay',
   [LessonContentTypes.DOCUMENT]: 'File',
-}
+};

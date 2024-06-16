@@ -111,7 +111,7 @@ export type UpdateProgressBody = {
   contentProgress: number;
 }
 
-// course review request
+// course review body request
 export type CreateReviewBody = {
   enrollmentId: number;
   rating: number;
@@ -119,3 +119,8 @@ export type CreateReviewBody = {
 }
 
 export type UpdateReviewBody = Partial<CreateReviewBody>;
+
+// admin body request
+export type ChangeUserStatusBody = {
+  isActive: boolean;
+}

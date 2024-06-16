@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { LogOut, Settings, UserRoundCheck, FilePenLine, User, BookMarked } from 'lucide-react';
+import { LogOut, Settings, UserRoundCheck, FilePenLine, User, BookMarked, UserCog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -83,7 +83,20 @@ export default function UserMenu() {
             <DropdownMenuSeparator className="bg-slate-200" />
           </>
         )}
-
+        {hasRole(Roles.ADMIN) && (
+          <>
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                className="text-gray-700 cursor-pointer hover:bg-slate-100"
+                onClick={() => router.push('/admin')}
+              >
+                <UserCog className="mr-2 h-4 w-4 text-gray-700 " />
+                User management
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator className="bg-slate-200" />
+          </>
+        )}
         <DropdownMenuItem className="text-gray-700 cursor-pointer hover:bg-slate-100" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           Log out
