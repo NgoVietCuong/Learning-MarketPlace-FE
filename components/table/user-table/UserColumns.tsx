@@ -1,12 +1,15 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { FilePenLine, Trash2, CircleCheck, Ban, CircleOff } from 'lucide-react';
+import { CircleCheck, Ban, UserRoundCheck, UserRoundX } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import ChangeUserStatus from '@/components/modal/ChangeUserStatus';
 import { User, Role } from '@/types/schema';
 import useUserList from '@/hooks/userUserList';
+import { adminApi } from '@/services/axios/adminApi';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData, TValue> {
@@ -58,7 +61,7 @@ export const UserColumns: ColumnDef<User>[] = [
         </div>
       ) : (
         <div className="flex gap-1 items-center">
-          <Ban className="w-4 h-4 text-red-500" />
+          <Ban className="w-[15px] h-[15px] text-red-500" />
           <Text size="sm" as="p" className="!text-gray-600">
             Inactive
           </Text>
@@ -91,15 +94,52 @@ export const UserColumns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => {
       const router = useRouter();
+      const { toast } = useToast();
       const { userListMutate } = useUserList();
-      const [open, setOpen] = useState(false);
+      const [banOpen, setBanOpen] = useState(false);
+      const [unbanOpen, setUnbanOpen] = useState(false);
 
       return (
         <div className="flex flex-start">
-          <Button size="sm" variant="outline" className="h-[32px] my-[2px] text-red-500 border-red-500 !py-0 active:scale-[98%]">
-            <CircleOff className="w-[16px] h-[16px] text-red-500 mr-2" />
-            Ban
-          </Button>
+          {row.getValue('isActive') ? (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-[32px] my-[2px] text-red-500 border-red-500 !py-0 active:scale-[98%]"
+              onClick={() => setBanOpen(true)}
+            >
+              <UserRoundX className="w-[16px] h-[16px] text-red-500 mr-2" />
+              Ban
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-[32px] my-[2px] text-teal-500 border-teal-500 !py-0 active:scale-[98%]"
+              onClick={() => setUnbanOpen(true)}
+            >
+              <UserRoundCheck className="w-[16px] h-[16px] text-teal-500 mr-2" />
+              Unban
+            </Button>
+          )}
+          <ChangeUserStatus
+            open={banOpen}
+            setOpen={setBanOpen}
+            title={'Ban User?'}
+            action={'Ban'}
+            message={'Are you sure you want to ban this user? This user won\'t be able to login, view courses or study anymore.'}
+            mutate={userListMutate}
+            apiHandler={() => adminApi.changeUserStatus(row.original.id, { isActive: false })}
+          />
+          <ChangeUserStatus
+            open={unbanOpen}
+            setOpen={setUnbanOpen}
+            title={'Unban User?'}
+            action={'Unban'}
+            message={'Are you sure you want to unban this user? This user will be able to login, view courses and study again.'}
+            mutate={userListMutate}
+            apiHandler={() => adminApi.changeUserStatus(row.original.id, { isActive: true })}
+          />
         </div>
       );
     },

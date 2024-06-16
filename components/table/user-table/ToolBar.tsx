@@ -27,10 +27,10 @@ export function UserToolbar<TData>({ table, data }: DataTableToolbarProps<TData>
           className="max-w-sm !text-xs"
         />
         {table.getColumn('isActive') && (
-          <DataTableFacetedFilter column={table.getColumn('status')} title="Status" options={UserStatues} />
+          <DataTableFacetedFilter column={table.getColumn('isActive')} title="Status" options={UserStatues} />
         )}
         {table.getColumn('roles') && (
-          <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={UserRoles} />
+          <DataTableFacetedFilter column={table.getColumn('roles')} title="Role" options={UserRoles} />
         )}
         {isFiltered && (
           <Button variant="ghost" onClick={() => table.resetColumnFilters()} className="h-8 px-2 lg:px-3">

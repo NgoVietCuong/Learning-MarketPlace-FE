@@ -91,7 +91,7 @@ export default function UserMenu() {
                 onClick={() => router.push('/admin')}
               >
                 <UserCog className="mr-2 h-4 w-4 text-gray-700 " />
-                Admin dashboard
+                User management
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="bg-slate-200" />
