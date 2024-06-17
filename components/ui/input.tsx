@@ -30,7 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div
-        className={`input flex items-center justify-center self-stretch gap-2 text-gray-primary text-base border-gray-border border border-solid rounded-md ${sizes[size] || ''}`}
+        className={`input flex items-center justify-center self-stretch gap-2 text-gray-primary text-base border-gray-border border border-solid rounded-md ${sizes[size] || ''} ${className}`}
       >
         {!!prefix && prefix}
         <input
