@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
-import { Check, Search } from 'lucide-react';
+import { Check, Search, Loader2 } from 'lucide-react';
 import { Rate } from 'antd';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
@@ -8,40 +9,48 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
-import { Command, CommandList, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Command, CommandList, CommandGroup, CommandItem } from '@/components/ui/command';
 import useCategories from '@/hooks/useCategories';
+import useCourseExplorerList from '@/hooks/useCourseExplorer';
 import { cn } from '@/lib/utils';
 
 interface CoursesProps {
   search: string | null;
-  category: string | null;
+  categoryId: number | null;
   level: string | null;
   price: string | null;
 }
 
-export default function Courses({ search, category, level, price }: CoursesProps) {
-  console.log(search);
+export default function Courses({ search, categoryId, level, price }: CoursesProps) {
   const router = useRouter();
   const { categoryList } = useCategories();
+  const [levelValue, setLevelValue] = useState(level);
+  const [priceValue, setPriceValue] = useState(price);
+  const [searchValue, setSearchValue] = useState(search);
+  const [categoryValue, setCategoryValue] = useState(categoryId);
+  const { courseExplorerList, isLoading } = useCourseExplorerList(search, categoryId, level, price);
+  console.log('courseExplorerList', courseExplorerList);
 
   return (
-    <div className="w-full h-full bg-slate-100">
-      <div className="container w-full h-300px">
-        <div className="container flex flex-col mx-auto gap-16 px-16 py-10">
-          <div className="flex justify-center items-center gap-2">
-            <Input
-              type="text"
-              placeholder="Filter courses..."
-              prefix={<Search size={16} color="#6b7280" />}
-              className=" w-1/2 !bg-white-primary"
-            />
-            <Button>Search</Button>
+    <div className="w-full overflow-y-hidden">
+      <div className="w-full h-[250px] bg-[url('/images/img_background.jpg')] bg-center">
+        <div className="container mx-auto gap-16 px-16 py-10">
+          <div className="w-full h-full flex flex-col items-center gap-5">
+            <Heading className="text-white-primary !font-medium">Discover our courses</Heading>
+            <div className="w-full flex justify-center items-center gap-2">
+              <Input
+                type="text"
+                placeholder="Search courses..."
+                prefix={<Search size={16} color="#6b7280" />}
+                className="w-1/2 !bg-white-primary border-none"
+              />
+              <Button className="!h-[38px] bg-sky-600">Search</Button>
+            </div>
           </div>
         </div>
       </div>
-      <div className="container h-full flex flex-col mx-auto gap-16 px-16 py-10">
-        <div className="w-full h-full flex gap-5">
+      <div className="container h-full flex flex-col mx-auto gap-16 px-16 py-12">
+        <div className="w-full h-full flex gap-6">
           <div className="flex flex-col w-1/4 gap-3">
             <div>
               <Heading size="2xl" className="!font-medium">
@@ -139,112 +148,76 @@ export default function Courses({ search, category, level, price }: CoursesProps
             </div>
           </div>
           <div className="w-3/4">
-            {/* <div className="w-full h-full flex justify-center items-center">
-              <Text size='s'>No courses found</Text>
-            </div> */}
-            <div className="flex flex-col gap-4">
-              <div className="flex justify-between">
-                <div className="flex gap-4">
-                  <Img
-                    className="max-w-[256px]"
-                    src={
-                      'https://res.cloudinary.com/dvz7322mp/image/upload/v1716472694/hlm-dev/course-image/3/dswbkusmxo5z0zodpjbn.jpg'
-                    }
-                    alt="course image"
-                  />
-                  <div className="flex flex-col gap-1">
-                    <div className="flex flex-col gap-0.5">
-                      <Text size="sm" className="!font-medium !text-gray-700 !text-[15px]">
-                        Javascript for beginner 2024
-                      </Text>
-                      <Text size="tx" className="!text-gray-700 !text-[13.5px]">
-                        Learn javascript online and supercharge your web design with this Javascript for beginners
-                        training course.
-                      </Text>
-                      <Text size="xs">Ngo Cuong</Text>
-                    </div>
-
-                    <div className="flex flex-col gap-0.5">
-                      <div className="flex items-center gap-2">
-                        <Text size="tx" className="text-gray-700 !font-medium !text-[14px]">
-                          3.4
-                        </Text>
-                        <Rate
-                          disabled
-                          allowHalf
-                          className="text-xs text-yellow-500 mr-2 custom-rate"
-                          defaultValue={3}
-                        />
-                        <Text size="xs" className="!text-gray-500">{`(399)`}</Text>
-                      </div>
-                      <div className="flex gap-2.5">
-                        {/* {course.totalVideoDuration && ( */}
-                        <Text size="xs" className="!text-gray-600">
-                          2 video
-                        </Text>
-                        {/* )} */}
-                        {/* {course.totalArticles > 0 && ( */}
-                        <Text size="xs" className="!text-gray-600">
-                          3 articles
-                        </Text>
-                        {/* )} */}
-                        <Text size="xs" className="!text-gray-600">
-                          Basic
-                        </Text>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Text className="!font-medium !text-teal-500 !text-[15px]">12$</Text>
+            {isLoading && (
+              <div className="w-full h-full flex justify-center items-center">
+                <Loader2 className="h-10 w-10 animate-spin" />
               </div>
-              <Separator className="bg-slate-300" />
-              <div className="flex justify-between">
-                <div className="flex gap-4">
-                  <Img
-                    className="max-w-[256px]"
-                    src={
-                      'https://res.cloudinary.com/dvz7322mp/image/upload/v1716472694/hlm-dev/course-image/3/dswbkusmxo5z0zodpjbn.jpg'
-                    }
-                    alt="course image"
-                  />
-                  <div className="flex flex-col gap-1">
-                    <Text size="sm" className="!font-medium !text-gray-700 !text-[15px]">
-                      Javascript for beginner 2024
-                    </Text>
-                    <Text size="tx" className="!text-gray-700 !text-[13.5px]">
-                      Learn javascript online and supercharge your web
-                    </Text>
-                    <Text size="xs">Ngo Cuong</Text>
-                    <div className={`flex items-center gap-2`}>
-                      <Text size="tx" className="text-gray-700 !font-medium !text-[14px]">
-                        3.4
-                      </Text>
-                      <Rate disabled allowHalf className="text-xs text-yellow-500 mr-2 custom-rate" defaultValue={3} />
-                      <Text size="xs" className="!text-gray-500">{`(399)`}</Text>
-                    </div>
-
-                    <div className="flex gap-2.5">
-                      {/* {course.totalVideoDuration && ( */}
-                      <Text size="xs" className="!text-gray-500">
-                        2 video
-                      </Text>
-                      {/* )} */}
-                      {/* {course.totalArticles > 0 && ( */}
-                      <Text size="xs" className="!text-gray-500">
-                        3 articles
-                      </Text>
-                      {/* )} */}
-                      <Text size="xs" className="!text-gray-500">
-                        Basic
-                      </Text>
-                    </div>
-                  </div>
-                </div>
-
-                <Text className="!font-medium !text-teal-500 !text-[15px]">12$</Text>
+            )}
+            {courseExplorerList && courseExplorerList.data?.items?.length! === 0 && (
+              <div className="w-full h-full flex justify-center items-center">
+                <Text size="s">No courses found</Text>
               </div>
-            </div>
+            )}
+            {courseExplorerList && courseExplorerList.data?.items?.length! > 0 && (
+              <div className="flex flex-col gap-4">
+                {courseExplorerList.data?.items?.map((course, index) => (
+                  <>
+                    <div
+                      key={course.id}
+                      className="flex justify-between cursor-pointer"
+                      onClick={() => router.push(`/course/${course.slug}`)}
+                    >
+                      <div className="flex gap-4">
+                        <Img className="max-w-[256px] rounded" src={course.imagePreview as string} alt="course image" />
+                        <div className="flex flex-col gap-2">
+                          <div className="flex flex-col gap-0.5">
+                            <Text size="sm" className="!font-medium !text-gray-700 !text-[15px]">
+                              {course.title}
+                            </Text>
+                            <Text size="tx" className="!text-gray-700 !text-[13.5px]">
+                              {course.overview}
+                            </Text>
+                            <Text size="xs">{course.profile.displayName}</Text>
+                          </div>
+
+                          <div className="flex flex-col gap-0.5">
+                            <div className="flex items-center gap-2">
+                              <Text size="tx" className="text-gray-700 !font-medium !text-[14px]">
+                                {course.averageRating}
+                              </Text>
+                              <Rate
+                                disabled
+                                allowHalf
+                                className="text-xs text-yellow-500 mr-2 custom-rate"
+                                defaultValue={Number(course.averageRating)}
+                              />
+                              <Text size="xs" className="!text-gray-500">({course.totalReviews})</Text>
+                            </div>
+                            <div className="flex gap-2.5">
+                              {course.totalVideoDuration && (
+                                <Text size="xs" className="!text-gray-600">
+                                  {course.totalVideoDuration} video
+                                </Text>
+                              )}
+                              {course.totalArticles > 0 && (
+                                <Text size="xs" className="!text-gray-600">
+                                  {course.totalArticles} articles
+                                </Text>
+                              )}
+                              <Text size="xs" className="!text-gray-600">
+                                {course.level}
+                              </Text>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <Text className="!font-medium !text-teal-500 !text-[15px]">12$</Text>
+                    </div>
+                    {index + 1 < courseExplorerList.data?.items?.length! && <Separator className="bg-slate-200" />}
+                  </>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -254,12 +227,12 @@ export default function Courses({ search, category, level, price }: CoursesProps
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { query } = context;
-  const { search, category, level, price } = query;
+  const { search, categoryId, level, price } = query;
 
   return {
     props: {
       search: search || null,
-      category: category || null,
+      category: categoryId || null,
       level: level || null,
       price: price || null,
     },

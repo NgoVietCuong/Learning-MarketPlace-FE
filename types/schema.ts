@@ -158,7 +158,7 @@ export type ReviewList = {
   meta: Meta;
 };
 
-// course api schema
+// course explorer api schema
 export type CourseSlugInfo = Course & {
   profile: InstructorProfile;
   sections: (Omit<Section, 'lessons'> & {
@@ -177,6 +177,19 @@ export type CourseSlugInfo = Course & {
   currentLesson: {
     id: number;
   };
+};
+
+export type CourseExplorerList = {
+  items: (Omit<Course, 'categories>'> & {
+    profile: {
+      displayName: string;
+    }
+    totalVideoDuration: string;
+    totalArticles: number;
+    totalReviews: number;
+    averageRating: string;
+  })[];
+  meta: Meta;
 };
 
 // learn api schema

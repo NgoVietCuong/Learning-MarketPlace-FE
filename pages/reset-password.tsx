@@ -98,7 +98,6 @@ export default function ResetPassword({ isValid, email, code }: ResetPasswordPro
                       type="password"
                       id="password"
                       placeholder="Enter your password"
-                      className="mb-[5px] pr-[100px]"
                       prefix={<FiLock size={20} color="#6b7280" />}
                       suffix={
                         <Button variant={'ghost'} className="p-0" onClick={handleViewPassword}>

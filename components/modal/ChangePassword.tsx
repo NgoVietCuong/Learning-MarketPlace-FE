@@ -141,7 +141,6 @@ export default function ChangePassword({ userMutate }: ChangePasswordProps) {
                 type="password"
                 id="current_password"
                 placeholder="Enter your current password"
-                className="mb-[5px] pr-[100px]"
                 prefix={<FiLock size={20} color="#6b7280" />}
                 suffix={
                   <Button variant={'ghost'} className="p-0" onClick={handleViewPassword}>
@@ -165,7 +164,6 @@ export default function ChangePassword({ userMutate }: ChangePasswordProps) {
                 type="password"
                 id="new_password"
                 placeholder="Enter your new password"
-                className="mb-[5px] pr-[100px]"
                 prefix={<FiLock size={20} color="#6b7280" />}
                 suffix={
                   <Button variant={'ghost'} className="p-0" onClick={handleViewNewPassword}>
@@ -189,7 +187,6 @@ export default function ChangePassword({ userMutate }: ChangePasswordProps) {
                 type="password"
                 id="confirm_password"
                 placeholder="Confirm your password"
-                className="mb-[5px] pr-[100px]"
                 prefix={<FiCheckSquare size={20} color="#6b7280" />}
                 suffix={
                   <Button variant={'ghost'} className="p-0" onClick={handleViewConfirmPassword}>
