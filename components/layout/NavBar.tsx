@@ -38,11 +38,6 @@ export default function NavBar() {
                   Courses
                 </Text>
               </Link>
-              <Link href="/course/javascript-for-beginner">
-                <Text size="sm" as="p" className="font-medium text-gray-700 hover:text-teal-primary">
-                  Test course
-                </Text>
-              </Link>
               <Link href="/about-us">
                 <Text size="sm" as="p" className="font-medium text-gray-700 hover:text-teal-primary">
                   About Us

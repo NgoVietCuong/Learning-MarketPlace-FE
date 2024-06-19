@@ -23,7 +23,7 @@ export default function Home() {
               <Text className="text-white-primary">
                 HoaLearn is a great platform that will teach you in a more interesting way
               </Text>
-              {user ? (
+              {user && user.data ? (
                 <div className="w-full flex items-center gap-2">
                   <Input
                     type="text"

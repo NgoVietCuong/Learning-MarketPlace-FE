@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { Check, Search, Loader2 } from 'lucide-react';
 import { Rate } from 'antd';
+import { cn } from '@/lib/utils';
+import { ParsedUrlQueryInput } from 'querystring';
 import { Img } from '@/components/ui/img';
 import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
@@ -10,26 +12,95 @@ import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Command, CommandList, CommandGroup, CommandItem } from '@/components/ui/command';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import useCategories from '@/hooks/useCategories';
 import useCourseExplorerList from '@/hooks/useCourseExplorer';
-import { cn } from '@/lib/utils';
+import { UnknownCategoryId } from '@/constants/common';
 
 interface CoursesProps {
   search: string | null;
-  categoryId: number | null;
+  categoryId: string | null;
   level: string | null;
   price: string | null;
+  page: string | null;
 }
 
-export default function Courses({ search, categoryId, level, price }: CoursesProps) {
+interface Query extends ParsedUrlQueryInput {
+  search?: string;
+  categoryId?: string;
+  level?: string;
+  price?: string;
+  page?: string;
+}
+
+export default function Courses({ search, categoryId, level, price, page }: CoursesProps) {
   const router = useRouter();
   const { categoryList } = useCategories();
-  const [levelValue, setLevelValue] = useState(level);
-  const [priceValue, setPriceValue] = useState(price);
   const [searchValue, setSearchValue] = useState(search);
-  const [categoryValue, setCategoryValue] = useState(categoryId);
-  const { courseExplorerList, isLoading } = useCourseExplorerList(search, categoryId, level, price);
-  console.log('courseExplorerList', courseExplorerList);
+  const { courseExplorerList, isLoading } = useCourseExplorerList(search, categoryId, level, price, page);
+
+  const handleSearchCourse = (value: string | null) => {
+    if (value && value.trim()) router.push(`/courses?search=${value}`);
+    else router.push('/courses');
+  };
+
+  const handleChooseLevel = (value: string) => {
+    const query: Query = {};
+    if (search) query.search = search;
+    if (value !== level) query.level = value;
+    if (categoryId) query.categoryId = categoryId;
+    if (price) query.price = price;
+    router.push({
+      pathname: '/courses',
+      query: query,
+    });
+  };
+
+  const handleChoosePrice = (value: string) => {
+    const query: Query = {};
+    if (search) query.search = search;
+    if (level) query.level = level;
+    if (categoryId) query.categoryId = categoryId;
+    if (value !== price) query.price = value;
+    router.push({
+      pathname: '/courses',
+      query: query,
+    });
+  };
+
+  const handleChooseCategory = (value: string) => {
+    const query: Query = {};
+    if (search) query.search = search;
+    if (level) query.level = level;
+    if (value !== categoryId) query.categoryId = value;
+    if (price) query.price = price;
+    router.push({
+      pathname: '/courses',
+      query: query,
+    });
+  };
+
+  const handleChangePage = (value: number) => {
+    const query: Query = {};
+    if (search) query.search = search;
+    if (level) query.level = level;
+    if (categoryId) query.categoryId = categoryId;
+    if (price) query.price = price;
+    if (value.toString() !== page) query.page = value.toString();
+    else query.page = page;
+    router.push({
+      pathname: '/courses',
+      query: query,
+    });
+  };
 
   return (
     <div className="w-full overflow-y-hidden">
@@ -43,8 +114,12 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
                 placeholder="Search courses..."
                 prefix={<Search size={16} color="#6b7280" />}
                 className="w-1/2 !bg-white-primary border-none"
+                value={searchValue ? searchValue : undefined}
+                onChange={(value: string) => setSearchValue(value)}
               />
-              <Button className="!h-[38px] bg-sky-600">Search</Button>
+              <Button className="!h-[38px] bg-sky-600" onClick={() => handleSearchCourse(searchValue)}>
+                Search
+              </Button>
             </div>
           </div>
         </div>
@@ -59,34 +134,38 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
               <Command>
                 <CommandList>
                   <CommandGroup>
-                    <CommandItem className="text-[13px]">
+                    <CommandItem className="text-[13px]" onSelect={handleChooseLevel}>
                       <Check
                         className={cn(
                           'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
+                          level === 'Beginner' ? 'text-teal-500' : 'text-white-primary',
                         )}
                       />
                       Beginner
                     </CommandItem>
-                    <CommandItem className="text-[13px]">
+                    <CommandItem className="text-[13px]" onSelect={handleChooseLevel}>
                       <Check
                         className={cn(
                           'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
+                          level === 'Intermediate' ? 'text-teal-500' : 'text-white-primary',
                         )}
                       />
-                      Intermidate
+                      Intermediate
                     </CommandItem>
-                    <CommandItem className="text-[13px]">
+                    <CommandItem className="text-[13px]" onSelect={handleChooseLevel}>
                       <Check
                         className={cn(
                           'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
+                          level === 'Advanced' ? 'text-teal-500' : 'text-white-primary',
                         )}
                       />
                       Advanced
                     </CommandItem>
-                    <CommandItem className="text-[13px]">
+                    <CommandItem className="text-[13px]" onSelect={handleChooseLevel}>
                       <Check
                         className={cn(
-                          'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
+                          'mr-2 h-4 w-4 border bg-white-primary border-slate-300 rounded-[2px]',
+                          level === 'All levels' ? 'text-teal-500' : 'text-white-primary',
                         )}
                       />
                       All levels
@@ -103,18 +182,20 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
               <Command>
                 <CommandList>
                   <CommandGroup>
-                    <CommandItem className="text-[13px]">
+                    <CommandItem className="text-[13px]" onSelect={handleChoosePrice}>
                       <Check
                         className={cn(
                           'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
+                          price === 'Free' ? 'text-teal-500' : 'text-white-primary',
                         )}
                       />
                       Free
                     </CommandItem>
-                    <CommandItem className="text-[13px]">
+                    <CommandItem className="text-[13px]" onSelect={handleChoosePrice}>
                       <Check
                         className={cn(
                           'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
+                          price === 'Paid' ? 'text-teal-500' : 'text-white-primary',
                         )}
                       />
                       Paid
@@ -132,16 +213,24 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
                 <CommandList>
                   <CommandGroup>
                     {categoryList &&
-                      categoryList!.data!.map((category) => (
-                        <CommandItem className="text-[13px]">
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
-                            )}
-                          />
-                          {category.name}
-                        </CommandItem>
-                      ))}
+                      categoryList!
+                        .data!.filter((category) => category.id !== UnknownCategoryId)
+                        .map((category) => (
+                          <CommandItem
+                            key={category.id}
+                            value={category.id.toString()}
+                            className="text-[13px]"
+                            onSelect={handleChooseCategory}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4 text-teal-500 border bg-white-primary border-slate-300 rounded-[2px]',
+                                categoryId === category.id.toString() ? 'text-teal-500' : 'text-white-primary',
+                              )}
+                            />
+                            {category.name}
+                          </CommandItem>
+                        ))}
                   </CommandGroup>
                 </CommandList>
               </Command>
@@ -149,12 +238,12 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
           </div>
           <div className="w-3/4">
             {isLoading && (
-              <div className="w-full h-full flex justify-center items-center">
+              <div className="w-full flex justify-center items-center">
                 <Loader2 className="h-10 w-10 animate-spin" />
               </div>
             )}
             {courseExplorerList && courseExplorerList.data?.items?.length! === 0 && (
-              <div className="w-full h-full flex justify-center items-center">
+              <div className="w-full flex justify-center items-center">
                 <Text size="s">No courses found</Text>
               </div>
             )}
@@ -164,7 +253,7 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
                   <>
                     <div
                       key={course.id}
-                      className="flex justify-between cursor-pointer"
+                      className="flex justify-between cursor-pointer gap-5"
                       onClick={() => router.push(`/course/${course.slug}`)}
                     >
                       <div className="flex gap-4">
@@ -191,7 +280,9 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
                                 className="text-xs text-yellow-500 mr-2 custom-rate"
                                 defaultValue={Number(course.averageRating)}
                               />
-                              <Text size="xs" className="!text-gray-500">({course.totalReviews})</Text>
+                              <Text size="xs" className="!text-gray-500">
+                                ({course.totalReviews})
+                              </Text>
                             </div>
                             <div className="flex gap-2.5">
                               {course.totalVideoDuration && (
@@ -211,12 +302,47 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
                           </div>
                         </div>
                       </div>
-                      <Text className="!font-medium !text-teal-500 !text-[15px]">12$</Text>
+                      <Text className="!font-medium !text-teal-500 !text-[15px]">
+                        {course.price ? `$${course.price}` : 'Free'}
+                      </Text>
                     </div>
                     {index + 1 < courseExplorerList.data?.items?.length! && <Separator className="bg-slate-200" />}
                   </>
                 ))}
               </div>
+            )}
+            {courseExplorerList && courseExplorerList.data?.meta?.totalPages! > 1 && (
+              <Pagination className="mt-7">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      className={`${!page || page === '1' ? 'pointer-events-none opacity-30' : ''} cursor-pointer`}
+                      onClick={() => handleChangePage(Number(page) - 1)}
+                    />
+                  </PaginationItem>
+                  {page && Number(page) >= 2 && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+                  <PaginationItem>
+                    <PaginationLink className='underline'>{page ? page : 1}</PaginationLink>
+                  </PaginationItem>
+                  {(!page ||
+                    page === '1' ||
+                    (page && courseExplorerList.data?.meta?.totalPages! - Number(page!) > 1)) && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+                  <PaginationItem>
+                    <PaginationNext
+                      className={`${page && Number(page) === courseExplorerList.data?.meta?.totalPages ? 'pointer-events-none opacity-30' : ''} cursor-pointer`}
+                      onClick={() => handleChangePage(page ? Number(page) + 1 : 2)}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             )}
           </div>
         </div>
@@ -227,14 +353,15 @@ export default function Courses({ search, categoryId, level, price }: CoursesPro
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { query } = context;
-  const { search, categoryId, level, price } = query;
+  const { search, categoryId, level, price, page } = query;
 
   return {
     props: {
       search: search || null,
-      category: categoryId || null,
+      categoryId: categoryId || null,
       level: level || null,
       price: price || null,
+      page: page || null,
     },
   };
 }
