@@ -152,7 +152,6 @@ export default function EditProfile() {
                     size="sm"
                     type="text"
                     placeholder="Enter your display name"
-                    className="mb-[5px] pr-[100px]"
                     value={profileData?.displayName ? profileData?.displayName : undefined}
                     onChange={handleChangeDisplayName}
                   />
@@ -170,7 +169,6 @@ export default function EditProfile() {
                     size="sm"
                     type="text"
                     placeholder="Enter your headline"
-                    className="mb-[5px] pr-[100px]"
                     value={profileData?.introduction ? profileData?.introduction : undefined}
                     onChange={handleChangeHeadline}
                   />
@@ -207,7 +205,6 @@ export default function EditProfile() {
                     size="sm"
                     type="text"
                     placeholder="http://www.twitter.com/username"
-                    className="mb-[5px] pr-[100px]"
                     value={profileData?.twitterLink ? profileData?.twitterLink : undefined}
                     onChange={handleChangeTwitterLink}
                   />
@@ -220,7 +217,6 @@ export default function EditProfile() {
                     size="sm"
                     type="text"
                     placeholder="http://www.linkedin.com/username"
-                    className="mb-[5px] pr-[100px]"
                     value={profileData?.linkedinLink ? profileData?.linkedinLink : undefined}
                     onChange={handleChangeLinkedinLink}
                   />
@@ -233,7 +229,6 @@ export default function EditProfile() {
                     size="sm"
                     type="text"
                     placeholder="http://www.youtube.com/username"
-                    className="mb-[5px] pr-[100px]"
                     value={profileData?.youtubeLink ? profileData?.youtubeLink : undefined}
                     onChange={handleChangeYoutubeLink}
                   />

@@ -222,7 +222,6 @@ export default function CourseInfo({
                 size="sm"
                 type="text"
                 placeholder="Enter course title"
-                className="mb-[5px] pr-[100px]"
                 value={courseInfo?.title ? courseInfo?.title : undefined}
                 onChange={handleChangeCourseTitle}
               />
@@ -240,7 +239,6 @@ export default function CourseInfo({
                 size="sm"
                 type="text"
                 placeholder="Enter course overview"
-                className="mb-[5px] pr-[100px]"
                 value={courseInfo?.overview ? courseInfo?.overview : undefined}
                 onChange={handleChangeOverview}
               />
@@ -277,7 +275,6 @@ export default function CourseInfo({
                 size="sm"
                 type="number"
                 placeholder="Enter course price"
-                className="mb-[5px] pr-[100px]"
                 prefix={<BsCurrencyDollar size={16} color="#6b7280" />}
                 value={typeof courseInfo?.price === 'number' ? courseInfo?.price.toString() : undefined}
                 onChange={handleChangePrice}

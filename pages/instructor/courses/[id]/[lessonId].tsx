@@ -265,7 +265,6 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                       size="sm"
                       type="text"
                       placeholder="Enter course title"
-                      className="mb-[5px] pr-[100px]"
                       value={lessonInfo?.title ? lessonInfo?.title : undefined}
                       onChange={handleChangeLessonTitle}
                     />

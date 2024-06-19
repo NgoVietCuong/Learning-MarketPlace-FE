@@ -5,7 +5,7 @@ import InstructorLayout from '@/components/layout/instructor-layout';
 import useCourseList from '@/hooks/useCourseList';
 
 export default function InstructorCourses() {
-  const { courseList, isLoading, courseListMutate } = useCourseList();
+  const { courseList, isLoading } = useCourseList();
 
   return (
     <div className="grow flex justify-center items-center">
