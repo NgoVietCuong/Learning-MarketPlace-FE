@@ -18,6 +18,7 @@ import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
 import DynamicIcon from '@/components/dynamic-icon';
 import CoursePreview from '@/components/modal/CoursePreview';
+import PayPalCheckoutButton from '@/components/ui/paypal-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import useUser from '@/hooks/useUser';
@@ -175,6 +176,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         {enrolling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Enroll course
                       </Button>
                     )}
+                    <PayPalCheckoutButton />
                     <div className="flex flex-col gap-3">
                       <Text size="sm" className="!font-medium !text-gray-700">
                         This course includes:

@@ -9,6 +9,7 @@ import { axiosClient } from '@/services/axios';
 import AppLayout from '@/components/layout/app-layout';
 import { Toaster } from '@/components/ui/toaster';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import TopLoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 
 type Props = AppProps & {
@@ -43,23 +44,26 @@ export default function App({ Component, pageProps }: Props) {
     };
   }, [router.events]);
 
-  const renderWithLayout = Component.getLayout || ((page: React.ReactNode, pageProps: any) => <AppLayout {...pageProps}>{page}</AppLayout>);
+  const renderWithLayout =
+    Component.getLayout || ((page: React.ReactNode, pageProps: any) => <AppLayout {...pageProps}>{page}</AppLayout>);
 
   return (
-    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
-      <SWRConfig
-        value={{
-          fetcher: (url: string) => axiosClient.get(url),
-          revalidateOnFocus: false,
-          shouldRetryOnError: false,
-        }}
-      >
-        <div className="w-full h-screen min-h-screen flex flex-col">
-          <TopLoadingBar color="#00cbb8" ref={ref} height={2} transitionTime={200} loaderSpeed={300} />
-          {renderWithLayout(<Component {...pageProps} />, pageProps)}
-          <Toaster />
-        </div>
-      </SWRConfig>
-    </GoogleOAuthProvider>
+    <PayPalScriptProvider options={{ 'clientId': process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string }}>
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
+        <SWRConfig
+          value={{
+            fetcher: (url: string) => axiosClient.get(url),
+            revalidateOnFocus: false,
+            shouldRetryOnError: false,
+          }}
+        >
+          <div className="w-full h-screen min-h-screen flex flex-col">
+            <TopLoadingBar color="#00cbb8" ref={ref} height={2} transitionTime={200} loaderSpeed={300} />
+            {renderWithLayout(<Component {...pageProps} />, pageProps)}
+            <Toaster />
+          </div>
+        </SWRConfig>
+      </GoogleOAuthProvider>
+    </PayPalScriptProvider>
   );
 }
