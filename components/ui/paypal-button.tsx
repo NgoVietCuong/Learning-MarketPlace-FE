@@ -1,24 +1,18 @@
 import { PayPalButtons } from '@paypal/react-paypal-js';
+import { paymentApi } from '@/services/axios/paymentApi';
+import { Response } from '@/types/response';
 
 export default function PayPalCheckoutButton(props: any) {
+
   return <PayPalButtons 
     style={{ color: 'blue', tagline: false, layout: 'horizontal', height: 40 }}
-    createOrder={(data, actions) => {
-      return actions.order.create({
-        intent: 'CAPTURE',
-        purchase_units: [{
-          description: 'ahihi',
-          amount: {
-            currency_code: 'USD',
-            value: '100',
-          },
-        }],
-      });
+    createOrder={async (data, actions) => {
+      const payment = await paymentApi.createPayment();
+      return payment?.data?.orderId!;
     }}
     onApprove={async (data, actions) => {
-      console.log("mlem mlem")
-      const order = await actions.order!.capture();
-      console.log('order', order);
+      const order = await paymentApi.executePayment({ orderId: data.orderID })
+      console.log('order', order)
     }}
     onError={(error) => {
       console.log('error', error);

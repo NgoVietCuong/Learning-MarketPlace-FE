@@ -247,3 +247,8 @@ export type UserList = {
   items: User[];
   meta: Meta;
 };
+
+// payment api schema
+export type CreatePayment = {
+  orderId: string;
+}

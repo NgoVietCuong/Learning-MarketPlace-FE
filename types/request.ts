@@ -100,6 +100,7 @@ export type UpdateLessonBody = CreateLessonBody & {
   duration: number | null;
 };
 
+
 // learn body request
 export type EnrollCourseBody = {
   courseId: number;
@@ -111,6 +112,7 @@ export type UpdateProgressBody = {
   contentProgress: number;
 }
 
+
 // course review body request
 export type CreateReviewBody = {
   enrollmentId: number;
@@ -120,7 +122,14 @@ export type CreateReviewBody = {
 
 export type UpdateReviewBody = Partial<CreateReviewBody>;
 
+
 // admin body request
 export type ChangeUserStatusBody = {
   isActive: boolean;
+}
+
+
+// payment body request
+export type ExecutePaymentBody = {
+  orderId: string;
 }
