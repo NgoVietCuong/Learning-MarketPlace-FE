@@ -249,6 +249,10 @@ export type UserList = {
 };
 
 // payment api schema
+export type OnboardMerchant = {
+  actionUrl: string;
+}
+
 export type CreatePayment = {
   orderId: string;
 }

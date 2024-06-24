@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { BookCopy, Gauge, Settings, FilePenLine } from 'lucide-react';
+import { BookCopy, Gauge, Settings, FilePenLine, Wallet } from 'lucide-react';
 import { Text } from '@/components/ui/text';
 
 export default function InstructorSideBar() {
@@ -59,16 +59,16 @@ export default function InstructorSideBar() {
             </Text>
           </Link>
           <Link
-            href="/instructor/settings"
-            className={`py-2 px-2 rounded-md inline-flex items-center hover:bg-slate-100 ${isSelected('/instructor/settings') ? '!bg-teal-secondary' : 'bg-white-primary'}`}
+            href="/instructor/wallet"
+            className={`py-2 px-2 rounded-md inline-flex items-center hover:bg-slate-100 ${isSelected('/instructor/wallet') ? '!bg-teal-secondary' : 'bg-white-primary'}`}
           >
             <Text
               size="sm"
               as="p"
-              className={`${isSelected('/instructor/settings') ? '!text-white-primary' : 'text-gray-700'} inline-flex items-center font-medium`}
+              className={`${isSelected('/instructor/wallet') ? '!text-white-primary' : 'text-gray-700'} inline-flex items-center font-medium`}
             >
-              <Settings className="mr-4 h-5 w-5" />
-              Settings
+              <Wallet className="mr-4 h-5 w-5" />
+              Wallet
             </Text>
           </Link>
         </div>
