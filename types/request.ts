@@ -130,6 +130,10 @@ export type ChangeUserStatusBody = {
 
 
 // payment body request
+export type OnboardMerchantBody = {
+  paypalEmail: string;
+}
+
 export type ExecutePaymentBody = {
   orderId: string;
 }
