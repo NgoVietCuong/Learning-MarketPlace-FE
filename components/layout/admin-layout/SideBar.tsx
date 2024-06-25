@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Gauge } from 'lucide-react';
+import { Gauge, Undo2 } from 'lucide-react';
 import { Text } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
 
 export default function AdminSideBar() {
   const router = useRouter();
@@ -17,7 +18,18 @@ export default function AdminSideBar() {
 
   return (
     <div className="min-w-[260px] w-[260px] h-[100%] z-5 bg-white-primary shadow-lg">
-      <div className="w-full h-full flex flex-col px-4 py-4 justify-between">
+      <div className="w-full h-full flex flex-col px-4 py-4 space-y-1">
+        <div className="flex items-center justify-between">
+          <Button
+            size="sm"
+            variant="ghost"
+            className="px-2 text-teal-secondary flex items-center"
+            onClick={() => router.push('/')}
+          >
+            <Undo2 className="w-[16px] h-[16px] text-teal-secondary mr-2" />
+            Home page
+          </Button>
+        </div>
         <div className="flex flex-col gap-1">
           <Link
             href="/admin"

@@ -48,6 +48,7 @@ export type InstructorProfile = {
   twitterLink: string | null;
   linkedinLink: string | null;
   youtubeLink: string | null;
+  paypalEmail: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -247,3 +248,12 @@ export type UserList = {
   items: User[];
   meta: Meta;
 };
+
+// payment api schema
+export type OnboardMerchant = {
+  actionUrl: string;
+}
+
+export type CreatePayment = {
+  orderId: string;
+}

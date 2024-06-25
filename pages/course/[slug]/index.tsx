@@ -18,6 +18,7 @@ import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/components/ui/use-toast';
 import DynamicIcon from '@/components/dynamic-icon';
 import CoursePreview from '@/components/modal/CoursePreview';
+import PayPalCheckoutButton from '@/components/ui/paypal-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import useUser from '@/hooks/useUser';
@@ -36,7 +37,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
   const { toast } = useToast();
   const { user } = useUser();
   const [rating, setRating] = useState<number | undefined>();
-  const { courseSlugInfo, courseSlugLoading } = useCourseSlug(slug);
+  const { courseSlugInfo, courseSlugLoading, courseSlugMutate } = useCourseSlug(slug);
   const { reviewList } = useReviews(slug, rating);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [enrolling, setEnrolling] = useState(false);
@@ -157,13 +158,11 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                         Go to course
                       </Button>
                     ) : courseSlugInfo?.data?.price ? (
-                      <div className="space-y-2">
-                        <Heading size="6xl" as="h2" className="font-semibold text-gray-700">
+                      <div className="space-y-3">
+                        <Heading size="5xl" as="h2" className="font-semibold text-gray-700">
                           ${courseSlugInfo?.data?.price}
                         </Heading>
-                        <Button size="lg" className="w-full bg-teal-secondary text-white-primary">
-                          Buy now
-                        </Button>
+                        <PayPalCheckoutButton courseId={courseSlugInfo.data.id} mutate={courseSlugMutate} />
                       </div>
                     ) : (
                       <Button
