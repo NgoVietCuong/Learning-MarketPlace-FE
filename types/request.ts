@@ -134,6 +134,10 @@ export type OnboardMerchantBody = {
   paypalEmail: string;
 }
 
+export type CreatePaymentBody = {
+  courseId: number;
+}
+
 export type ExecutePaymentBody = {
   orderId: string;
 }
