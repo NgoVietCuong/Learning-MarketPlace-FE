@@ -48,6 +48,7 @@ export type InstructorProfile = {
   twitterLink: string | null;
   linkedinLink: string | null;
   youtubeLink: string | null;
+  paypalEmail: string | null;
   createdAt: string;
   updatedAt: string;
 };
