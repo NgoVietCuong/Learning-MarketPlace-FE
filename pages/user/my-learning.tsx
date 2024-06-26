@@ -80,9 +80,9 @@ export default function MyLearning() {
                     </div>
 
                     <div className="space-y-1 px-4 pb-4">
-                      <Progress value={33} className="w-full" />
+                      <Progress value={item.progressStatus} className="w-full" />
                       <Text size="xs" className="!text-gray-700">
-                        33%
+                        {item.progressStatus}%
                       </Text>
                     </div>
                   </div>
@@ -125,9 +125,9 @@ export default function MyLearning() {
                     </div>
 
                     <div className="space-y-1 px-4 pb-4">
-                      <Progress value={33} className="w-full" />
+                      <Progress value={item.progressStatus} className="w-full" />
                       <Text size="xs" className="!text-gray-700">
-                        33%
+                        {item.progressStatus}%
                       </Text>
                     </div>
                   </div>
