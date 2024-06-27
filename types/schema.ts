@@ -63,7 +63,27 @@ export type InstructorSlugInfo = InstructorProfile & {
     totalReviews: number;
     averageRating: string;
   })[];
-}
+};
+
+export type InstructorDashboard = {
+  totalStudents: number;
+  totalReviews: number;
+  averageRating: string;
+  totalIncome: number | null;
+  totalCourses: number;
+  numberOfPaidCourses: number;
+  numberOfPublishedCourses: number;
+  paymentList: Payment[];
+  incomeEachMonth: {
+    month: string;
+    income: number;
+  }[];
+  topIncomeCourses: {
+    id: number;
+    title: string;
+    amount: number;
+  }[];
+};
 
 // category schema
 export type Category = {
@@ -184,7 +204,7 @@ export type CourseExplorerList = {
   items: (Omit<Course, 'categories>'> & {
     profile: {
       displayName: string;
-    }
+    };
     totalVideoDuration: string;
     totalArticles: number;
     totalReviews: number;
@@ -201,18 +221,18 @@ export type MyCourse = {
   progressStatus: number;
   createdAt: string;
   updatedAt: string;
-  course: (Omit<Course, 'instructorId'> & {
+  course: Omit<Course, 'instructorId'> & {
     profile: {
       displayName: string;
-    }
-  });
+    };
+  };
   review: Review | null;
 };
 
 export type MyCourses = {
   inProgressCourses: MyCourse[];
   completedCourses: MyCourse[];
-}
+};
 
 export type LessonProgress = {
   id: number;
@@ -252,8 +272,19 @@ export type UserList = {
 // payment api schema
 export type OnboardMerchant = {
   actionUrl: string;
-}
+};
 
 export type CreatePayment = {
   orderId: string;
-}
+};
+
+export type Payment = {
+  id: number;
+  userId: number;
+  course: Course;
+  paypalOrderId: string;
+  status: string;
+  amount: number;
+  createdAt: string;
+  updatedAt: string;
+};
