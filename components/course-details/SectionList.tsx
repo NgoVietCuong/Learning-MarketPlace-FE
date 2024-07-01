@@ -17,6 +17,7 @@ interface SectionListProps {
 }
 
 export default function SectionList({ sections, courseId }: SectionListProps) {
+  console.log('sections', sections)
   const { courseDetailsMutate } = useCourseDetails(courseId);
   const [createOpen, setCreateOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -57,7 +58,7 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
                       {section.title}
                     </Text>
                     <Button variant={'ghost'} className="p-0" onClick={() => handleEditClick(section.id)}>
-                      <PenLine className="w-4 h-4 text-gray-400" />
+                      <PenLine className="w-4 h-4 text-gray-400 hover:text-gray-600" />
                     </Button>
                   </div>
                   <div className="flex items-center gap-3">
@@ -87,7 +88,7 @@ export default function SectionList({ sections, courseId }: SectionListProps) {
       </Accordion>
       <Button
         size="sm"
-        className="max-w-fit bg-teal-secondary text-white-primary active:scale-95"
+        className="max-w-fit bg-teal-secondary text-white-primary active:scale-95 mt-1"
         onClick={() => setCreateOpen(!createOpen)}
       >
         Add Section

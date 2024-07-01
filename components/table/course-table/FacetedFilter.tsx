@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import { CheckIcon } from '@radix-ui/react-icons';
 import { CirclePlus } from 'lucide-react';
 import { Column } from '@tanstack/react-table';
@@ -35,8 +36,10 @@ export function DataTableFacetedFilter<TData, TValue>({
   title,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
+  const router = useRouter();
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
+  
 
   return (
     <Popover>
@@ -81,10 +84,12 @@ export function DataTableFacetedFilter<TData, TValue>({
                   <CommandItem
                     key={option.value}
                     onSelect={() => {
+                      console.log('isSelected', isSelected, option.value)
                       if (isSelected) {
                         selectedValues.delete(option.value);
                       } else {
                         selectedValues.add(option.value);
+                        console.log('selectedValues', selectedValues)
                       }
                       const filterValues = Array.from(selectedValues);
                       column?.setFilterValue(filterValues.length ? filterValues : undefined);

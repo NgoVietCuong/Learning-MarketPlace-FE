@@ -29,13 +29,13 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
           className="max-w-sm !text-xs"
         />
         {table.getColumn('isPublished') && (
-          <DataTableFacetedFilter column={table.getColumn('status')} title="Status" options={CourseStatuses} />
+          <DataTableFacetedFilter key={'status'} column={table.getColumn('isPublished')} title="Status" options={CourseStatuses} />
         )}
         {table.getColumn('price') && (
-          <DataTableFacetedFilter column={table.getColumn('type')} title="Type" options={CourseTypes} />
+          <DataTableFacetedFilter key={'price'} column={table.getColumn('price')} title="Type" options={CourseTypes} />
         )}
         {(!categoryLoading && table.getColumn('categories')) && (
-          <DataTableFacetedFilter column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({
+          <DataTableFacetedFilter key={'category'} column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({
             label: category.name,
             value: category.name,
             icon: category.icon

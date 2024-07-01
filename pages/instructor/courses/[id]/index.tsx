@@ -20,9 +20,10 @@ import { UnknownCategoryId, NumberOfCourseFields } from '@/constants/common';
 
 interface InstructorCourseDetailsProps {
   id: number;
+  tab: string | null;
 }
 
-export default function InstructorCourseDetails({ id }: InstructorCourseDetailsProps) {
+export default function InstructorCourseDetails({ id, tab }: InstructorCourseDetailsProps) {
   const router = useRouter();
   const { toast } = useToast();
   const { courseListMutate } = useCourseList();
@@ -137,16 +138,16 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                   </div>
                 </div>
               </div>
-              <Tabs defaultValue="Course Info" className="w-full">
+              <Tabs defaultValue={tab ? tab : 'course-info'} className="w-full">
                 <TabsList className="bg-slate-200 py-2 mb-2">
-                  <TabsTrigger value="Course Info" className="px-4">
+                  <TabsTrigger value="course-info" className="px-4" onClick={() => router.push(`/instructor/courses/${id}?tab=course-info`)}>
                     Course Info
                   </TabsTrigger>
-                  <TabsTrigger value="Sections" className="px-4">
+                  <TabsTrigger value="sections" className="px-4" onClick={() => router.push(`/instructor/courses/${id}?tab=sections`)}>
                     Sections
                   </TabsTrigger>
                 </TabsList>
-                <TabsContent value="Course Info" className="flex flex-col gap-3">
+                <TabsContent value="course-info" className="flex flex-col gap-3">
                   {courseInfo && (
                     <CourseInfo
                       courseInfo={courseInfo!}
@@ -157,8 +158,8 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
                     />
                   )}
                 </TabsContent>
-                <TabsContent value="Sections" className="flex flex-col gap-3">
-                  {sections && <SectionList sections={sections} courseId={id} />}
+                <TabsContent value="sections" className="flex flex-col gap-3">
+                  {sections.length && <SectionList sections={sections} courseId={id} />}
                 </TabsContent>
               </Tabs>
             </>
@@ -171,7 +172,7 @@ export default function InstructorCourseDetails({ id }: InstructorCourseDetailsP
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const {
-    query: { id },
+    query: { id, tab },
   } = context;
 
   const idNumber = Number(id);
@@ -188,6 +189,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       id: idNumber,
+      tab: tab ? tab : null
     },
   };
 }

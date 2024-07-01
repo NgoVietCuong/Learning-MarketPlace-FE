@@ -44,7 +44,7 @@ export default function MyLearning() {
               </TabsList>
               <TabsContent value="In progress" className="w-full gap-x-8 gap-y-6 flex flex-wrap">
                 {myCourses?.data?.inProgressCourses.map((item) => (
-                  <div key={item.id} className="max-w-[290px] bg-white overflow-hidden rounded-md space-y-3 shadow-md">
+                  <div key={item.id} className="max-w-[290px] bg-white-primary overflow-hidden rounded-md space-y-3 shadow-md">
                     <div>
                       <Img className="w-full h-full" src={item.course.imagePreview!} alt="course image preview" />
                     </div>
@@ -92,7 +92,7 @@ export default function MyLearning() {
                 {myCourses?.data?.completedCourses.map((item) => (
                   <div
                     key={item.id}
-                    className="max-w-[280px] bg-white overflow-hidden rounded-md space-y-3 shadow-md cursor-pointer"
+                    className="max-w-[280px] bg-white-primary overflow-hidden rounded-md space-y-3 shadow-md cursor-pointer"
                   >
                     <div>
                       <Img className="w-full h-full" src={item.course.imagePreview!} alt="course image preview" />

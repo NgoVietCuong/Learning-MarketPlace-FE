@@ -219,7 +219,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                   size="sm"
                   variant="ghost"
                   className="p-0 text-gray-400 hover:text-gray-700"
-                  onClick={() => router.push(`/instructor/courses/${courseId}`)}
+                  onClick={() => router.push(`/instructor/courses/${courseId}?tab=sections`)}
                 >
                   <ArrowLeft className="w-4 h-4 mr-1" />
                   Back to course

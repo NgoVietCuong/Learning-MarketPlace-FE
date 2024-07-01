@@ -1,11 +1,16 @@
+import { GetServerSidePropsContext } from 'next';
 import { Heading } from '@/components/ui/heading';
 import CourseTable from '@/components/table/course-table';
 import { CourseColumns } from '@/components/table/course-table/CourseColumns';
 import InstructorLayout from '@/components/layout/instructor-layout';
 import useCourseList from '@/hooks/useCourseList';
 
-export default function InstructorCourses() {
-  const { courseList, isLoading } = useCourseList();
+interface InstructorCoursesProps {
+  page: string | null;
+}
+
+export default function InstructorCourses({ page }: InstructorCoursesProps) {
+  const { courseList, isLoading } = useCourseList(page);
 
   return (
     <div className="grow flex justify-center items-center">
@@ -19,6 +24,17 @@ export default function InstructorCourses() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { query } = context;
+  const { page } = query;
+
+  return {
+    props: {
+      page: page ? page : null
+    }
+  }
 }
 
 InstructorCourses.getLayout = function (page: React.ReactNode) {

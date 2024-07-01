@@ -28,9 +28,14 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
   const table = useReactTable({
     data,
     columns,
+    state: {
+      columnFilters
+    },
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    
   });
 
   return (
@@ -89,7 +94,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.previousPage()}
+              onClick={() => router.push('/instructor/courses?page=1')}
               disabled={meta.currentPage === 1}
             >
               <ChevronsLeft className="w-5 h-5 text-gray-700" />
@@ -98,7 +103,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.previousPage()}
+              onClick={() => router.push(`/instructor/courses?page=${meta.currentPage - 1}`)}
               disabled={meta.currentPage === 1}
             >
               <ChevronLeft className="w-4 h-4 text-gray-700" />
@@ -107,7 +112,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.nextPage()}
+              onClick={() => router.push(`/instructor/courses?page=${meta.currentPage + 1}`)}
               disabled={meta.currentPage === meta.totalPages}
             >
               <ChevronRight className="w-4 h-4 text-gray-700" />
@@ -116,7 +121,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.nextPage()}
+              onClick={() => router.push(`/instructor/courses?page=${meta.totalPages}`)}
               disabled={meta.currentPage === meta.totalPages}
             >
               <ChevronsRight className="w-5 h-5 text-gray-700" />

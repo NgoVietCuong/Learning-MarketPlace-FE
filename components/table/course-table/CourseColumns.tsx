@@ -116,7 +116,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
           <Button
             variant={'ghost'}
             className="p-2 hover:bg-slate-200"
-            onClick={() => router.push(`/instructor/courses/${row.original.id}`)}
+            onClick={() => router.push(`/instructor/courses/${row.original.id}?tab=course-info`)}
           >
             <FilePenLine className="w-[17px] h-[17px] text-gray-600" />
           </Button>

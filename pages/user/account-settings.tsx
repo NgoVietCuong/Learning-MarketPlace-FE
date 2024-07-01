@@ -65,7 +65,7 @@ export default function AccountSettings() {
             </div>
             {!hasRole(Roles.INSTRUCTOR) && (
               <Button
-                className="!text-teal-secondary active:scale-[98%] border-[1px] border-teal-secondary"
+                className="!text-teal-secondary active:scale-[98%] border-[1px] border-teal-secondary bg-white-primary"
                 onClick={handleBecomeInstructor}
               >
                 {loading ? (
