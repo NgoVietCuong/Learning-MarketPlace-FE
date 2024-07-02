@@ -10,9 +10,15 @@ import useCategories from '@/hooks/useCategories';
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   data: TData[];
+  filter: {
+    search: string | null;
+    status: string | null;
+    type: string | null;
+    categoryId: string | null;
+  };
 }
 
-export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TData>) {
+export function CourseToolbar<TData>({ table, data, filter }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
   const { categoryList, categoryLoading } = useCategories();
 
@@ -29,15 +35,15 @@ export function CourseToolbar<TData>({ table, data }: DataTableToolbarProps<TDat
           className="max-w-sm !text-xs"
         />
         {table.getColumn('isPublished') && (
-          <DataTableFacetedFilter key={'status'} column={table.getColumn('isPublished')} title="Status" options={CourseStatuses} />
+          <DataTableFacetedFilter queryField={'status'} filter={filter} column={table.getColumn('isPublished')} title="Status" options={CourseStatuses} />
         )}
         {table.getColumn('price') && (
-          <DataTableFacetedFilter key={'price'} column={table.getColumn('price')} title="Type" options={CourseTypes} />
+          <DataTableFacetedFilter queryField={'type'} filter={filter} column={table.getColumn('price')} title="Type" options={CourseTypes} />
         )}
         {(!categoryLoading && table.getColumn('categories')) && (
-          <DataTableFacetedFilter key={'category'} column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({
+          <DataTableFacetedFilter queryField={'categoryId'} filter={filter} column={table.getColumn('categories')} title="Categories" options={categoryList!.data!.map(category => ({
             label: category.name,
-            value: category.name,
+            value: category.id.toString(),
             icon: category.icon
           }))} />
         )}

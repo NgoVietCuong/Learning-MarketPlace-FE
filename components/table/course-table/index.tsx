@@ -20,29 +20,44 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   meta: Meta;
+  filter: {
+    search: string | null;
+    status: string | null;
+    type: string | null;
+    categoryId: string | null;
+  };
 }
 
-export default function CourseTable<TData, Tavlue>({ columns, data, meta }: DataTableProps<TData, Tavlue>) {
+export default function CourseTable<TData, Tavlue>({ columns, data, meta, filter }: DataTableProps<TData, Tavlue>) {
   const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
     state: {
-      columnFilters
+      columnFilters,
     },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    
   });
+
+  const handleChangePage = (page: number) => {
+    const currentQuery = router.query;
+    currentQuery.page = page.toString();
+    router.push({ query: currentQuery })
+  }
 
   return (
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
-        <CourseToolbar table={table} data={data}/>
-        <Button size="base" className="text-white-primary bg-teal-secondary active:scale-[98%]" onClick={() => router.push("/instructor/courses/create")}>
+        <CourseToolbar table={table} data={data} filter={filter} />
+        <Button
+          size="base"
+          className="text-white-primary bg-teal-secondary active:scale-[98%]"
+          onClick={() => router.push('/instructor/courses/create')}
+        >
           <Plus className="mr-1 w-4 h-4 text-white-primary" />
           Add Course
         </Button>
@@ -55,7 +70,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
                 {headerGroup.headers.map((header) => {
                   const className = header.column.columnDef.meta?.className;
                   return (
-                    <TableHead key={header.id} className={className ? className: ''}>
+                    <TableHead key={header.id} className={className ? className : ''}>
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
@@ -112,7 +127,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta }: Data
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => router.push(`/instructor/courses?page=${meta.currentPage + 1}`)}
+              onClick={() => handleChangePage(meta.currentPage + 1)}
               disabled={meta.currentPage === meta.totalPages}
             >
               <ChevronRight className="w-4 h-4 text-gray-700" />

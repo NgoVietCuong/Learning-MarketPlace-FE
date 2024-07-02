@@ -108,7 +108,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
     ),
     cell: ({ row }) => {
       const router = useRouter();
-      const { courseListMutate } = useCourseList();
+      const { courseListMutate } = useCourseList(null, null, null, null, null);
       const [open, setOpen] = useState(false);
 
       return (
