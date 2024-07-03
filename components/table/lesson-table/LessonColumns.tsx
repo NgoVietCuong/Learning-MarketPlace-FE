@@ -6,7 +6,7 @@ import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
 import DeleteAction from '@/components/modal/DeleteAction';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
-import useCourseDetails from '@/hooks/useCourseDetails';
+import useCourseDetails from '@/hooks/fetch-data/useCourseDetails';
 import { Lesson } from '@/types/schema';
 
 interface ActionsProps {

@@ -16,7 +16,7 @@ import CourseInfoSkeleton from '@/components/skeleton/CourseInfoSkeleton';
 import DeleteAction from '@/components/modal/DeleteAction';
 import UploadFile from '@/components/upload/UploadFile';
 import UploadVideo from '@/components/upload/UploadVideo';
-import useLessonDetails from '@/hooks/useLesson';
+import useLessonDetails from '@/hooks/fetch-data/useLesson';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Lesson } from '@/types/schema';
 import { NumberOfLessonFields } from '@/constants/common';

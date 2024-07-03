@@ -6,7 +6,7 @@ import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import RatingProvider from '@/components/modal/RatingProvider';
-import useLearnProgress from '@/hooks/useLearnProgress';
+import useLearnProgress from '@/hooks/fetch-data/useLearnProgress';
 import { reviewApi } from '@/services/axios/reviewApi';
 
 interface LearnHeaderProps {

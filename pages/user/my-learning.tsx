@@ -9,7 +9,7 @@ import { Rate } from 'antd';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Auth from '@/components/guard/auth';
 import RatingProvider from '@/components/modal/RatingProvider';
-import useMyCourses from '@/hooks/useMyCourses';
+import useMyCourses from '@/hooks/fetch-data/useMyCourses';
 import { Roles } from '@/constants/enums';
 import { MyCourse } from '@/types/schema';
 import { reviewApi } from '@/services/axios/reviewApi';

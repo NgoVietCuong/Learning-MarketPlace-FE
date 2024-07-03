@@ -109,7 +109,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta, filter
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => router.push('/instructor/courses?page=1')}
+              onClick={() => handleChangePage(1)}
               disabled={meta.currentPage === 1}
             >
               <ChevronsLeft className="w-5 h-5 text-gray-700" />
@@ -118,7 +118,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta, filter
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => router.push(`/instructor/courses?page=${meta.currentPage - 1}`)}
+              onClick={() => handleChangePage(meta.currentPage - 1)}
               disabled={meta.currentPage === 1}
             >
               <ChevronLeft className="w-4 h-4 text-gray-700" />
@@ -136,7 +136,7 @@ export default function CourseTable<TData, Tavlue>({ columns, data, meta, filter
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => router.push(`/instructor/courses?page=${meta.totalPages}`)}
+              onClick={() => handleChangePage(meta.totalPages)}
               disabled={meta.currentPage === meta.totalPages}
             >
               <ChevronsRight className="w-5 h-5 text-gray-700" />

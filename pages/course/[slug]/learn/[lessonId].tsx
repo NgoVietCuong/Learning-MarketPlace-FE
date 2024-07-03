@@ -4,8 +4,8 @@ import { Loader2 } from 'lucide-react';
 import VideoPlayer from '@/components/video-player';
 import PdfViewer from '@/components/pdf-viewer';
 import LearnLayout from '@/components/layout/learn-layout';
-import useLessonProgress from '@/hooks/useLessonProgress';
-import useLearnProgress from '@/hooks/useLearnProgress';
+import useLessonProgress from '@/hooks/fetch-data/useLessonProgress';
+import useLearnProgress from '@/hooks/fetch-data/useLearnProgress';
 import { LessonContentTypes } from '@/constants/enums';
 import { learnApi } from '@/services/axios/learnApi';
 

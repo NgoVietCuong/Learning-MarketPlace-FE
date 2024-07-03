@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import DeleteAction from '@/components/modal/DeleteAction';
 import { CategoryList, Course } from '@/types/schema';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
-import useCourseList from '@/hooks/useCourseList';
+import useCourseList from '@/hooks/fetch-data/useCourseList';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData, TValue> {
@@ -16,7 +16,7 @@ declare module '@tanstack/react-table' {
   }
 }
 
-export const CourseColumns: ColumnDef<Course>[] = [
+export const CourseColumns = (mutate: () => void): ColumnDef<Course>[] => [
   {
     accessorKey: 'title',
     header: () => (
@@ -108,7 +108,6 @@ export const CourseColumns: ColumnDef<Course>[] = [
     ),
     cell: ({ row }) => {
       const router = useRouter();
-      const { courseListMutate } = useCourseList(null, null, null, null, null);
       const [open, setOpen] = useState(false);
 
       return (
@@ -128,7 +127,7 @@ export const CourseColumns: ColumnDef<Course>[] = [
             object={'course'}
             open={open}
             setOpen={setOpen}
-            mutate={courseListMutate}
+            mutate={mutate}
             apiHandler={() => instructorCourseApi.deleteCourse(row.original.id)}
           />
         </div>

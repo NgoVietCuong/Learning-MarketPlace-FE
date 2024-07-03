@@ -14,7 +14,7 @@ import { Text } from '@/components/ui/text';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import useInstructorSlug from '@/hooks/useInstructorSlug';
+import useInstructorSlug from '@/hooks/fetch-data/useInstructorSlug';
 
 interface InstructorInfoProps {
   slug: string;

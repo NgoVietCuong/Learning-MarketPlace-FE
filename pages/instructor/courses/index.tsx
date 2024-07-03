@@ -3,7 +3,7 @@ import { Heading } from '@/components/ui/heading';
 import CourseTable from '@/components/table/course-table';
 import { CourseColumns } from '@/components/table/course-table/CourseColumns';
 import InstructorLayout from '@/components/layout/instructor-layout';
-import useCourseList from '@/hooks/useCourseList';
+import useCourseList from '@/hooks/fetch-data/useCourseList';
 
 interface InstructorCoursesProps {
   page: string | null;
@@ -14,8 +14,7 @@ interface InstructorCoursesProps {
 }
 
 export default function InstructorCourses({ page, type, status, search, categoryId }: InstructorCoursesProps) {
-  const { courseList, isLoading } = useCourseList(page, type, status, search, categoryId);
-  console.log('courseList', courseList)
+  const { courseList, isLoading, courseListMutate } = useCourseList(page, type, status, search, categoryId);
 
   return (
     <div className="grow flex justify-center items-center">
@@ -24,7 +23,7 @@ export default function InstructorCourses({ page, type, status, search, category
           <Heading className="!font-medium">Courses</Heading>
           {!isLoading && (
             <CourseTable
-              columns={CourseColumns}
+              columns={CourseColumns(courseListMutate)}
               data={courseList!.data!.items}
               meta={courseList!.data!.meta}
               filter={{search, status, type, categoryId}}

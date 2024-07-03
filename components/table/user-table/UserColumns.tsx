@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import ChangeUserStatus from '@/components/modal/ChangeUserStatus';
 import { User, Role } from '@/types/schema';
-import useUserList from '@/hooks/userUserList';
+import useUserList from '@/hooks/fetch-data/userUserList';
 import { adminApi } from '@/services/axios/adminApi';
 
 declare module '@tanstack/react-table' {
@@ -17,7 +17,7 @@ declare module '@tanstack/react-table' {
   }
 }
 
-export const UserColumns: ColumnDef<User>[] = [
+export const UserColumns = (mutate: () => void): ColumnDef<User>[] => [
   {
     accessorKey: 'username',
     header: () => (
@@ -95,7 +95,6 @@ export const UserColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const router = useRouter();
       const { toast } = useToast();
-      const { userListMutate } = useUserList();
       const [banOpen, setBanOpen] = useState(false);
       const [unbanOpen, setUnbanOpen] = useState(false);
 
@@ -128,7 +127,7 @@ export const UserColumns: ColumnDef<User>[] = [
             title={'Ban User?'}
             action={'Ban'}
             message={'Are you sure you want to ban this user? This user won\'t be able to login, view courses or study anymore.'}
-            mutate={userListMutate}
+            mutate={mutate}
             apiHandler={() => adminApi.changeUserStatus(row.original.id, { isActive: false })}
           />
           <ChangeUserStatus
@@ -137,7 +136,7 @@ export const UserColumns: ColumnDef<User>[] = [
             title={'Unban User?'}
             action={'Unban'}
             message={'Are you sure you want to unban this user? This user will be able to login, view courses and study again.'}
-            mutate={userListMutate}
+            mutate={mutate}
             apiHandler={() => adminApi.changeUserStatus(row.original.id, { isActive: true })}
           />
         </div>

@@ -7,7 +7,7 @@ import LessonTable from '../table/lesson-table';
 import { LessonColumns } from '../table/lesson-table/LessonColumns';
 import DeleteAction from '../modal/DeleteAction';
 import TitleProvider from '../modal/TitleProvider';
-import useCourseDetails from '@/hooks/useCourseDetails';
+import useCourseDetails from '@/hooks/fetch-data/useCourseDetails';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Section } from '@/types/schema';
 

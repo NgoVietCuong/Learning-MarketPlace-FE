@@ -14,7 +14,7 @@ export default function useCourseList(
     isLoading,
     mutate: courseListMutate,
   } = useSWR<Response<CourseList>>(
-    `/instructor/course/list?${page ? `?page=${page}` : ''}${type ? `&type=${type}` : ''}${status ? `&status=${status}` : ''}${categoryId ? `&categoryId=${categoryId}` : ''}${search ? `&search=${search}` : ''}`,
+    `/instructor/course/list?${page ? `page=${page}` : ''}${type ? `&type=${type}` : ''}${status ? `&status=${status}` : ''}${categoryId ? `&categoryId=${categoryId}` : ''}${search ? `&search=${search}` : ''}`,
   );
 
   return { courseList, isLoading, courseListMutate };

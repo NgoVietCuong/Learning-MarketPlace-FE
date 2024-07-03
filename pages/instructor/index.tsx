@@ -8,7 +8,7 @@ import InstructorLayout from '@/components/layout/instructor-layout';
 import { PaymentTable } from '@/components/table/payment-table';
 import { TopCourseIncomeTable } from '@/components/table/top-course-income-table';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import useInstructorDashboard from '@/hooks/useInstructorDashboard';
+import useInstructorDashboard from '@/hooks/fetch-data/useInstructorDashboard';
 
 export default function InstructorDashboard() {
   const { dashboard, isLoading } = useInstructorDashboard();

@@ -12,7 +12,7 @@ import { Loader2 } from 'lucide-react';
 import FailedAlert from '@/components/alert/Failed';
 import EmailProvider from '@/components/modal/EmailProvider';
 import { authApi } from '@/services/axios/authApi';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/fetch-data/useUser';
 
 export default function Login() {
   const router = useRouter();

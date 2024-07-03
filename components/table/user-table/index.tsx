@@ -20,23 +20,38 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   meta: Meta;
+  filter: {
+    search: string | null;
+    isActive: string | null;
+    role: string | null;
+  }
 }
 
-export default function UserTable<TData, Tavlue>({ columns, data, meta }: DataTableProps<TData, Tavlue>) {
+export default function UserTable<TData, Tavlue>({ columns, data, meta, filter }: DataTableProps<TData, Tavlue>) {
   const router = useRouter();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data,
     columns,
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
 
+  const handleChangePage = (page: number) => {
+    const currentQuery = router.query;
+    currentQuery.page = page.toString();
+    router.push({ query: currentQuery })
+  }
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
-        <UserToolbar table={table} data={data}/>
+        <UserToolbar table={table} data={data} filter={filter}/>
       </div>
       <div className="rounded-md border border-gray-300">
         <Table>
@@ -85,7 +100,7 @@ export default function UserTable<TData, Tavlue>({ columns, data, meta }: DataTa
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.previousPage()}
+              onClick={() => handleChangePage(1)}
               disabled={meta.currentPage === 1}
             >
               <ChevronsLeft className="w-5 h-5 text-gray-700" />
@@ -94,7 +109,7 @@ export default function UserTable<TData, Tavlue>({ columns, data, meta }: DataTa
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.previousPage()}
+              onClick={() => handleChangePage(meta.currentPage - 1)}
               disabled={meta.currentPage === 1}
             >
               <ChevronLeft className="w-4 h-4 text-gray-700" />
@@ -103,7 +118,7 @@ export default function UserTable<TData, Tavlue>({ columns, data, meta }: DataTa
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.nextPage()}
+              onClick={() => handleChangePage(meta.currentPage + 1)}
               disabled={meta.currentPage === meta.totalPages}
             >
               <ChevronRight className="w-4 h-4 text-gray-700" />
@@ -112,7 +127,7 @@ export default function UserTable<TData, Tavlue>({ columns, data, meta }: DataTa
               variant="outline"
               size="sm"
               className="h-8 w-8 p-1"
-              onClick={() => table.nextPage()}
+              onClick={() => handleChangePage(meta.totalPages)}
               disabled={meta.currentPage === meta.totalPages}
             >
               <ChevronsRight className="w-5 h-5 text-gray-700" />

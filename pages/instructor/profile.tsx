@@ -11,7 +11,7 @@ import InstructorLayout from '@/components/layout/instructor-layout';
 import ChangePhoto from '@/components/modal/ChangePhoto';
 import { instructorApi } from '@/services/axios/instructorApi';
 import { InstructorProfile } from '@/types/schema';
-import useProfile from '@/hooks/useProfile';
+import useProfile from '@/hooks/fetch-data/useProfile';
 import FailedAlert from '@/components/alert/Failed';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 

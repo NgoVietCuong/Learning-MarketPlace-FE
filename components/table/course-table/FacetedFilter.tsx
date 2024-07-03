@@ -56,7 +56,6 @@ export function DataTableFacetedFilter<TData, TValue>({
   const router = useRouter();
   const facets = column?.getFacetedUniqueValues();
   const selectedValue = filter[`${queryField}`];
-  const selectedValues = new Set(column?.getFilterValue() as string[]);
 
   const handleSearchCourses = (value: string | undefined) => {
     const query: Query = {};
@@ -115,21 +114,15 @@ export function DataTableFacetedFilter<TData, TValue>({
                     key={option.value}
                     onSelect={() => {
                       if (isSelected) {
-                        selectedValues.delete(option.value);
                         handleSearchCourses(undefined);
                       } else {
-                        if (!selectedValues.has(option.value)) {
-                          selectedValues.add(option.value);
-                          handleSearchCourses(option.value);
-                        }
+                        handleSearchCourses(option.value);
                       }
-                      const filterValues = Array.from(selectedValues);
-                      column?.setFilterValue(filterValues.length ? filterValues : undefined);
                     }}
                   >
                     <div
                       className={cn(
-                        'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                        'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary cursor-pointer',
                         isSelected ? 'bg-primary text-primary-foreground' : 'opacity-50 [&_svg]:invisible',
                       )}
                     >
@@ -151,13 +144,13 @@ export function DataTableFacetedFilter<TData, TValue>({
                 );
               })}
             </CommandGroup>
-            {selectedValues.size > 0 && (
+            {selectedValue && (
               <>
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
-                    onSelect={() => column?.setFilterValue(undefined)}
-                    className="justify-center text-center"
+                    onSelect={() => handleSearchCourses(undefined)}
+                    className="justify-center text-center cursor-pointer text-sm"
                   >
                     Clear filters
                   </CommandItem>

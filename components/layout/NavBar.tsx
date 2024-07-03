@@ -5,7 +5,7 @@ import { Text } from '@/components/ui/text';
 import { Heading } from '@/components/ui/heading';
 import HeaderSkeleton from '@/components/skeleton/HeaderSkeleton';
 import UserMenu from '@/components/menu/UserMenu';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/fetch-data/useUser';
 
 export default function NavBar() {
   const router = useRouter();
