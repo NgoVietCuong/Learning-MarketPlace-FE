@@ -5,7 +5,7 @@ import { Text } from '@/components/ui/text';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/fetch-data/useUser';
 
 export default function Home() {
   const { user } = useUser();
@@ -24,15 +24,15 @@ export default function Home() {
                 HoaLearn is a great platform that will teach you in a more interesting way
               </Text>
               {user && user.data ? (
-                <div className="w-full flex items-center gap-2">
-                  <Input
-                    type="text"
-                    placeholder="Search courses..."
-                    prefix={<Search size={16} color="#6b7280" />}
-                    className="!bg-white-primary border-none grow"
-                  />
-                  <Button className="!h-[38px] bg-sky-600">Search</Button>
-                </div>
+                <Link href="/user/my-learning">
+                  <Text
+                    size="sm"
+                    as="p"
+                    className="max-w-max px-[15px] py-[10px] text-teal-600 bg-white-primary rounded-md shadow-lg active:scale-95"
+                  >
+                    My learning
+                  </Text>
+                </Link>
               ) : (
                 <Link href="/sign-up">
                   <Text

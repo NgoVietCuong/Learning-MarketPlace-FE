@@ -36,7 +36,6 @@ const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options, lessonPr
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const playerRef = useRef<videojs.Player | null>(null);
   const handleRouteChangeRef = useRef<() => void>();
-  let timeoutRef: NodeJS.Timeout | null = null;
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -82,7 +81,14 @@ const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options, lessonPr
             }, 200)
           };
 
-          handleRouteChangeRef.current = handleUpdateProgress;
+          const handleRouteChange = async () => {
+            const currentTime = player.currentTime() || 0;
+            const durationTime = player.duration() || 0;
+            const percentageTime = Math.round((currentTime / durationTime) * 100);
+            await apiHandler(percentageTime);
+          }
+
+          handleRouteChangeRef.current = handleRouteChange;
 
           player.on('play', () => {
             player.on('timeupdate', handleUpdateTime);

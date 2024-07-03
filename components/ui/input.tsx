@@ -34,6 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       >
         {!!prefix && prefix}
         <input
+          autoFocus
           type={type}
           className="text-sm text-gray-700 grow"
           onChange={handleChange}

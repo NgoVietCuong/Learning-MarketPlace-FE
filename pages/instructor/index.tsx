@@ -8,7 +8,7 @@ import InstructorLayout from '@/components/layout/instructor-layout';
 import { PaymentTable } from '@/components/table/payment-table';
 import { TopCourseIncomeTable } from '@/components/table/top-course-income-table';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import useInstructorDashboard from '@/hooks/useInstructorDashboard';
+import useInstructorDashboard from '@/hooks/fetch-data/useInstructorDashboard';
 
 export default function InstructorDashboard() {
   const { dashboard, isLoading } = useInstructorDashboard();
@@ -78,7 +78,7 @@ export default function InstructorDashboard() {
                             size={[130, 130]}
                             strokeColor="#3b82f6"
                             type="circle"
-                            percent={(dashboard.data.numberOfPublishedCourses * 100) / dashboard.data.totalCourses}
+                            percent={Number(((dashboard.data.numberOfPublishedCourses * 100) / dashboard.data.totalCourses).toFixed(2))}
                           />
                           <Text size="sm" className="inline-flex items-center gap-2 mt-1">
                             <div className="w-[16px] h-[16px] rounded-md bg-blue-500"></div>Published
@@ -92,7 +92,7 @@ export default function InstructorDashboard() {
                             size={[130, 130]}
                             strokeColor="#14b8a6"
                             type="circle"
-                            percent={(dashboard.data.numberOfPaidCourses * 100) / dashboard.data.totalCourses}
+                            percent={Number(((dashboard.data.numberOfPaidCourses * 100) / dashboard.data.totalCourses).toFixed(2))}
                           />
                           <Text size="sm" className="inline-flex items-center gap-2 mt-1">
                             <div className="w-[16px] h-[16px] rounded-md bg-teal-500"></div>Paid

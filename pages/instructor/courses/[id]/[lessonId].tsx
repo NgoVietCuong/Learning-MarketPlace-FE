@@ -16,7 +16,7 @@ import CourseInfoSkeleton from '@/components/skeleton/CourseInfoSkeleton';
 import DeleteAction from '@/components/modal/DeleteAction';
 import UploadFile from '@/components/upload/UploadFile';
 import UploadVideo from '@/components/upload/UploadVideo';
-import useLessonDetails from '@/hooks/useLesson';
+import useLessonDetails from '@/hooks/fetch-data/useLesson';
 import { instructorCourseApi } from '@/services/axios/instructorCourseApi';
 import { Lesson } from '@/types/schema';
 import { NumberOfLessonFields } from '@/constants/common';
@@ -219,7 +219,7 @@ export default function InstructorLessonDetails({ courseId, lessonId }: Instruct
                   size="sm"
                   variant="ghost"
                   className="p-0 text-gray-400 hover:text-gray-700"
-                  onClick={() => router.push(`/instructor/courses/${courseId}`)}
+                  onClick={() => router.push(`/instructor/courses/${courseId}?tab=sections`)}
                 >
                   <ArrowLeft className="w-4 h-4 mr-1" />
                   Back to course

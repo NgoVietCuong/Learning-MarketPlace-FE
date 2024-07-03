@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/fetch-data/useUser';
 import { Roles } from '@/constants/enums';
 
 interface AuthProps {

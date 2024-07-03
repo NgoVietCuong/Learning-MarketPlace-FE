@@ -3,13 +3,13 @@ import { LessonContentTypes } from './enums';
 
 export const CourseStatuses = [
   {
-    value: 'Published',
     label: 'Published',
+    value: 'Published',
     icon: 'CircleCheck' as keyof typeof LucideIcons,
   },
   {
-    value: 'Unpublished',
     label: 'Unpublished',
+    value: 'Unpublished',
     icon: 'CircleAlert' as keyof typeof LucideIcons,
   },
 ];
@@ -29,12 +29,12 @@ export const CourseTypes = [
 
 export const UserStatues = [
   {
-    value: 'Active',
+    value: 'true',
     label: 'Active',
     icon: 'CircleCheck' as keyof typeof LucideIcons,
   },
   {
-    value: 'InActive',
+    value: 'false',
     label: 'InActive',
     icon: 'Ban' as keyof typeof LucideIcons,
   },
@@ -42,12 +42,12 @@ export const UserStatues = [
 
 export const UserRoles = [
   {
-    value: 'Student',
     label: 'Student',
+    value: 'STUDENT',
   },
   {
-    value: 'Instructor',
     label: 'Instructor',
+    value: 'INSTRUCTOR',
   },
 ];
 

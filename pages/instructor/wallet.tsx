@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import InstructorLayout from '@/components/layout/instructor-layout';
 import { paymentApi } from '@/services/axios/paymentApi';
-import useProfile from '@/hooks/useProfile';
+import useProfile from '@/hooks/fetch-data/useProfile';
 
 export default function InstructorSettings() {
   const { profile } = useProfile();

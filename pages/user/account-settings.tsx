@@ -14,7 +14,7 @@ import UserLayout from '@/components/layout/user-layout';
 import ChangePhoto from '@/components/modal/ChangePhoto';
 import ChangePassword from '@/components/modal/ChangePassword';
 import { userApi } from '@/services/axios/userApi';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/fetch-data/useUser';
 import { Roles } from '@/constants/enums';
 
 export default function AccountSettings() {
@@ -65,7 +65,7 @@ export default function AccountSettings() {
             </div>
             {!hasRole(Roles.INSTRUCTOR) && (
               <Button
-                className="!text-teal-secondary active:scale-[98%] border-[1px] border-teal-secondary"
+                className="!text-teal-secondary active:scale-[98%] border-[1px] border-teal-secondary bg-white-primary"
                 onClick={handleBecomeInstructor}
               >
                 {loading ? (

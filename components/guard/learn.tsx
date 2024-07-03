@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useLearnProgress from '@/hooks/useLearnProgress';
-import useLessonProgress from '@/hooks/useLessonProgress';
+import useLearnProgress from '@/hooks/fetch-data/useLearnProgress';
+import useLessonProgress from '@/hooks/fetch-data/useLessonProgress';
 
 interface LearnProps {
   children: React.ReactNode;

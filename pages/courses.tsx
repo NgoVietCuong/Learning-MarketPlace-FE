@@ -21,8 +21,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import useCategories from '@/hooks/useCategories';
-import useCourseExplorerList from '@/hooks/useCourseExplorer';
+import useCategories from '@/hooks/fetch-data/useCategories';
+import useCourseExplorerList from '@/hooks/fetch-data/useCourseExplorer';
 import { UnknownCategoryId } from '@/constants/common';
 
 interface CoursesProps {
@@ -116,6 +116,9 @@ export default function Courses({ search, categoryId, level, price, page }: Cour
                 className="w-1/2 !bg-white-primary border-none"
                 value={searchValue ? searchValue : undefined}
                 onChange={(value: string) => setSearchValue(value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleSearchCourse(searchValue)
+                }}
               />
               <Button className="!h-[38px] bg-sky-600" onClick={() => handleSearchCourse(searchValue)}>
                 Search

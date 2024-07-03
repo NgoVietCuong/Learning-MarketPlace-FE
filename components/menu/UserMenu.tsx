@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { authApi } from '@/services/axios/authApi';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/fetch-data/useUser';
 import { Roles } from '@/constants/enums';
 
 export default function UserMenu() {

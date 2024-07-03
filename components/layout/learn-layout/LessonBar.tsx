@@ -4,7 +4,7 @@ import { FaRegCircle } from "react-icons/fa6";
 import { Text } from '@/components/ui/text';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import DynamicIcon from '@/components/dynamic-icon';
-import useLearnProgress from '@/hooks/useLearnProgress';
+import useLearnProgress from '@/hooks/fetch-data/useLearnProgress';
 import { ContentTypes } from '@/constants/filterField';
 import { secondsToMinutes } from '@/utils/timeConverter';
 

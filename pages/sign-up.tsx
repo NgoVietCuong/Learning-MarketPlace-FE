@@ -11,7 +11,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Loader2 } from 'lucide-react';
 import FailedAlert from '@/components/alert/Failed';
 import { authApi } from '@/services/axios/authApi';
-import useUser from '@/hooks/useUser';
+import useUser from '@/hooks/fetch-data/useUser';
 
 export default function SignUp() {
   const router = useRouter();
@@ -55,11 +55,9 @@ export default function SignUp() {
 
   const handleSignUp = async () => {
     let hasError = false;
-    const spaceRegex = /\s/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (username.trim() === '') (hasError = true), setUsernameError('Username cannot be empty');
-    else if (spaceRegex.test(username)) (hasError = true), setUsernameError('Username cannot contain spaces');
     else (hasError = false), setUsernameError('');
 
     if (email.trim() === '') (hasError = true), setEmailError('Email cannot be empty');
@@ -82,12 +80,12 @@ export default function SignUp() {
       email,
       password,
     });
-    setLoading(false);
 
     if (signUpResponse.error) {
       const messages = signUpResponse.message;
       if (typeof messages === 'string') setApiError(messages);
       else setApiError(messages[0]);
+      setLoading(false);
     } else {
       router.push({ pathname: '/verify-signup', query: { email: encodeURIComponent(email) } });
     }
