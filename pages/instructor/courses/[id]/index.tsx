@@ -26,7 +26,7 @@ interface InstructorCourseDetailsProps {
 export default function InstructorCourseDetails({ id, tab }: InstructorCourseDetailsProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const { courseListMutate } = useCourseList();
+  const { courseListMutate } = useCourseList(null, null, null, null, null);
   const { courseDetails, isLoading, courseDetailsMutate } = useCourseDetails(id);
   const [open, setOpen] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
