@@ -17,7 +17,6 @@ interface SectionListProps {
 }
 
 export default function SectionList({ sections, courseId }: SectionListProps) {
-  console.log('sections', sections)
   const { courseDetailsMutate } = useCourseDetails(courseId);
   const [createOpen, setCreateOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
