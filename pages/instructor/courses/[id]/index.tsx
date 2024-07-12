@@ -159,7 +159,7 @@ export default function InstructorCourseDetails({ id, tab }: InstructorCourseDet
                   )}
                 </TabsContent>
                 <TabsContent value="sections" className="flex flex-col gap-3">
-                  {sections.length && <SectionList sections={sections} courseId={id} />}
+                  <SectionList sections={sections} courseId={id} />
                 </TabsContent>
               </Tabs>
             </>
