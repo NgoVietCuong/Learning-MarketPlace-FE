@@ -85,7 +85,9 @@ const VideoPlayer: React.FC<IVideoPlayerProps> = ({ className, options, lessonPr
             const currentTime = player.currentTime() || 0;
             const durationTime = player.duration() || 0;
             const percentageTime = Math.round((currentTime / durationTime) * 100);
-            await apiHandler(percentageTime);
+            setTimeout(async () => {
+              await apiHandler(percentageTime);
+            }, 100)
           }
 
           handleRouteChangeRef.current = handleRouteChange;

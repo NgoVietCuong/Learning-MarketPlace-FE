@@ -184,7 +184,7 @@ export default function CourseSlugDetails({ slug }: CourseSlugDetailsProps) {
                           {courseSlugInfo?.data?.totalVideoDuration} high quality video
                         </Text>
                       )}
-                      {courseSlugInfo?.data?.totalArticles && (
+                      {courseSlugInfo?.data?.totalArticles && courseSlugInfo?.data?.totalArticles > 0 && (
                         <Text size="tx" className="!text-gray-700 inline-flex items-center">
                           <Newspaper className="w-[17px] h-[17px] mr-2 text-gray-600" />
                           {courseSlugInfo?.data?.totalArticles} articles

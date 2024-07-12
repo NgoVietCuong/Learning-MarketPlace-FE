@@ -98,7 +98,11 @@ export default function MyLearning() {
                       <Img className="w-full h-full" src={item.course.imagePreview!} alt="course image preview" />
                     </div>
                     <div className="space-y-1 px-4">
-                      <Text size="sm" className="!font-medium !text-gray-700">
+                      <Text
+                        size="sm"
+                        className="!font-medium cursor-pointer !text-gray-700 hover:!text-sky-600"
+                        onClick={() => router.push(`/course/${item.course.slug}`)}
+                      >
                         {item.course.title}
                       </Text>
                       <Text size="xs" className="!text-gray-500">
